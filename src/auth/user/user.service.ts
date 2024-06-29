@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { createUserDto } from './DTO/create_user.dto';
 import * as bcrypt from 'bcrypt';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { createUserDto } from './dto/create_user.dto';
 
 @Injectable()
 export class UserService {
@@ -27,8 +27,23 @@ export class UserService {
       throw error;
     }
   }
-
+  // gerar hash
   generateHash(password: string) {
     return bcrypt.hashSync(password, 10);
+  }
+
+  // pesquisar um usuario
+  findOne(IdOfUser: number | string) {
+    try {
+      return this.prismaService.nato_user.findFirst({
+        where: {
+          ...(typeof IdOfUser === 'number'
+            ? { id: IdOfUser }
+            : { username: IdOfUser }),
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 }
