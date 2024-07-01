@@ -32,18 +32,11 @@ export class UserService {
     return bcrypt.hashSync(password, 10);
   }
 
-  // pesquisar um usuario
-  findOne(IdOfUser: number | string) {
-    try {
-      return this.prismaService.nato_user.findFirst({
-        where: {
-          ...(typeof IdOfUser === 'number'
-            ? { id: IdOfUser }
-            : { username: IdOfUser }),
-        },
-      });
-    } catch (error) {
-      throw error;
-    }
+  findOne(UserId: number | string) {
+    return this.prismaService.nato_user.findFirst({
+      where: {
+        ...(typeof UserId === 'number' ? { id: UserId } : { username: UserId }),
+      },
+    });
   }
 }

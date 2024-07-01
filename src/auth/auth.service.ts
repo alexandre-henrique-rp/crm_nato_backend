@@ -7,29 +7,39 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
-    private jwtservice: JwtService,
+    private userservice: UserService,
+    private jwtService: JwtService,
   ) {}
 
-  async login(dados: LoginDto) {
-    try {
-      const user = await this.userService.findOne(dados.username);
-      if (!user || !(await bcrypt.compare(dados.password, user.password_key))) {
-        throw new Error('Usuário ou senha inválidos');
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password_key, password, ...results } = user;
-
-      return {
-        acess_token: this.jwtservice.sign(results),
-      };
-    } catch (error) {
-      throw error;
+  async Login(data: LoginDto) {
+    const user = await this.userservice.findOne(data.username);
+    if (!user) {
+      throw new Error('Usuário e senha incorretos');
     }
-  }
+    const isValid = bcrypt.compareSync(data.password, user.password_key);
+    if (!isValid) {
+      throw new Error('Usuário e senha incorretos');
+    }
 
-  // gerar hash
-  generateHash(password: string) {
-    return bcrypt.hashSync(password, 10);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password_key, password, ...datauser } = user;
+    const result = {
+      token: this.jwtService.sign(datauser),
+      user: {
+        id: user.id,
+        username: user.username,
+        nome: user.nome,
+        cpf: user.cpf,
+        telefone: user.telefone,
+        email: user.email,
+        construtora: JSON.parse(user.construtora),
+        empreendimento: JSON.parse(user.empreendimento),
+        hierarquia: JSON.parse(user.hierarquia),
+        cargo: user.cargo,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    };
+    return result;
   }
 }
