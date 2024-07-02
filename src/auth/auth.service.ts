@@ -12,34 +12,38 @@ export class AuthService {
   ) {}
 
   async Login(data: LoginDto) {
-    const user = await this.userservice.findOne(data.username);
-    if (!user) {
-      throw new Error('Usuário e senha incorretos');
-    }
-    const isValid = bcrypt.compareSync(data.password, user.password_key);
-    if (!isValid) {
-      throw new Error('Usuário e senha incorretos');
-    }
+    try {
+      const user = await this.userservice.findOne(data.username);
+      if (!user) {
+        throw new Error('Usuário e senha incorretos');
+      }
+      const isValid = bcrypt.compareSync(data.password, user.password_key);
+      if (!isValid) {
+        throw new Error('Usuário e senha incorretos');
+      }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password_key, password, ...datauser } = user;
-    const result = {
-      token: this.jwtService.sign(datauser),
-      user: {
-        id: user.id,
-        username: user.username,
-        nome: user.nome,
-        cpf: user.cpf,
-        telefone: user.telefone,
-        email: user.email,
-        construtora: JSON.parse(user.construtora),
-        empreendimento: JSON.parse(user.empreendimento),
-        hierarquia: JSON.parse(user.hierarquia),
-        cargo: user.cargo,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      },
-    };
-    return result;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password_key, password, ...datauser } = user;
+      const result = {
+        token: this.jwtService.sign(datauser),
+        user: {
+          id: user.id,
+          username: user.username,
+          nome: user.nome,
+          cpf: user.cpf,
+          telefone: user.telefone,
+          email: user.email,
+          construtora: JSON.parse(user.construtora),
+          empreendimento: JSON.parse(user.empreendimento),
+          hierarquia: user.hierarquia,
+          cargo: user.cargo,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        },
+      };
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 }

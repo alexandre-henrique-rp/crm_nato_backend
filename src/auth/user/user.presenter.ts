@@ -13,7 +13,7 @@ export class UserPresenter {
       nome: this.user.nome,
       construtora: JSON.parse(this.user.construtora),
       empreendimento: JSON.parse(this.user.empreendimento),
-      hierarquia: JSON.parse(this.user.hierarquia),
+      hierarquia: this.user.hierarquia,
       cargo: this.user.cargo,
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt,

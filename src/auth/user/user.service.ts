@@ -20,23 +20,103 @@ export class UserService {
           nome: dados.nome,
           construtora: JSON.stringify(dados.construtora),
           empreendimento: JSON.stringify(dados.empreendimento),
-          hierarquia: JSON.stringify(dados.hierarquia),
+          hierarquia: dados.hierarquia,
         },
       });
     } catch (error) {
       throw error;
     }
   }
+
+  findOne(UserId: number | string) {
+    try {
+      return this.prismaService.nato_user.findFirst({
+        where: {
+          ...(typeof UserId === 'number'
+            ? { id: UserId }
+            : { username: UserId }),
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  findAll() {
+    try {
+      return this.prismaService.nato_user.findMany();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  update(id: number, data: any) {
+    try {
+      return this.prismaService.nato_user.update({
+        where: {
+          id,
+        },
+        data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  delete(id: number) {
+    try {
+      return this.prismaService.nato_user.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  findByCpf(cpf: string) {
+    try {
+      return this.prismaService.nato_user.findFirst({
+        where: {
+          cpf,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  findByid(username: string) {
+    try {
+      return this.prismaService.nato_user.findFirst({
+        where: {
+          username,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  updatePassword(id: number, password: string) {
+    try {
+      return this.prismaService.nato_user.update({
+        where: {
+          id,
+        },
+        data: {
+          password: password,
+          password_key: this.generateHash(password),
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // gerar hash
   generateHash(password: string) {
     return bcrypt.hashSync(password, 10);
-  }
-
-  findOne(UserId: number | string) {
-    return this.prismaService.nato_user.findFirst({
-      where: {
-        ...(typeof UserId === 'number' ? { id: UserId } : { username: UserId }),
-      },
-    });
   }
 }

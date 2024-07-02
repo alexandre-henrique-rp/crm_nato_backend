@@ -329,6 +329,7 @@ model nato_empresas {
   tipo                          String?                         @db.VarChar(100)
   createdAt                     DateTime                        @default(now()) @db.DateTime(0)
   updatedAt                     DateTime?                       @db.DateTime(0)
+  nato_empreendimento           nato_empreendimento[]
   nato_solicitacoes_certificado nato_solicitacoes_certificado[]
 }
 
@@ -342,7 +343,7 @@ model nato_solicitacoes_certificado {
   corretor       Int?
   construtora    Int?
   telefone       String?        @db.VarChar(100)
-  dt_nascimento  DateTime?      @db.DateTime(0)
+  dt_nascimento  DateTime?      @db.Date
   ass_doc        Boolean?       @default(false)
   link_doc       String?        @db.Text
   id_fcw         Int?
@@ -350,6 +351,12 @@ model nato_solicitacoes_certificado {
   alert          String?        @db.VarChar(100)
   enpreedimento  Int?
   cnh            String?        @db.VarChar(100)
+  ativo          Boolean        @default(true)
+  upload         String?        @db.LongText
+  relacionamento String?        @db.LongText
+  createdAt      DateTime       @default(now()) @db.DateTime(0)
+  updatedAt      DateTime?      @db.DateTime(0)
+  nato_alerta    nato_alerta[]
   fcweb          fcweb?         @relation(fields: [id_fcw], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_fcweb_FK")
   nato_empresas  nato_empresas? @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_nato_empresas_FK")
   nato_user      nato_user?     @relation(fields: [corretor], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_nato_user_FK")
@@ -365,7 +372,7 @@ model nato_user {
   password                      String                          @db.VarChar(100)
   password_key                  String                          @db.VarChar(100)
   telefone                      String?                         @db.VarChar(100)
-  email                         String?                         @db.VarChar(100)
+  email                         String?                         @unique(map: "nato_user_unique_2") @db.VarChar(100)
   cpf                           String                          @unique(map: "nato_user_unique_1") @db.VarChar(100)
   nome                          String?                         @db.VarChar(100)
   empreendimento                String?                         @db.LongText
@@ -628,4 +635,39 @@ model voucher {
   estatos    String @db.VarChar(150)
   dt_resgate Int
   id_fcw     String @db.VarChar(150)
+}
+
+model nato_alerta {
+  id                            Int                            @id @default(autoincrement())
+  titulo                        String?                        @db.VarChar(100)
+  texto                         String?                        @db.Text
+  solicitacao_id                Int?
+  corretor                      String?                        @db.LongText
+  tipo                          String?                        @db.VarChar(100)
+  tag                           String?                        @db.VarChar(100)
+  empreendimento                Int
+  createdAt                     DateTime                       @default(now()) @db.DateTime(0)
+  updatedAt                     DateTime?                      @db.DateTime(0)
+  nato_empreendimento           nato_empreendimento            @relation(fields: [empreendimento], references: [id], onUpdate: Restrict, map: "nato_alerta_nato_empreendimento_FK")
+  nato_solicitacoes_certificado nato_solicitacoes_certificado? @relation(fields: [solicitacao_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_alerta_nato_solicitacoes_certificado_FK")
+
+  @@index([empreendimento], map: "nato_alerta_nato_empreendimento_FK")
+  @@index([solicitacao_id], map: "nato_alerta_nato_solicitacoes_certificado_FK")
+}
+
+model nato_empreendimento {
+  id            Int            @id @default(autoincrement())
+  nome          String?        @db.VarChar(100)
+  construtora   Int?
+  dt_inicio     DateTime?      @db.Date
+  dt_fim        DateTime?      @db.Date
+  uf            String?        @db.VarChar(100)
+  cidade        String?        @db.VarChar(100)
+  chave         String?        @db.LongText
+  createdAt     DateTime       @default(now()) @db.DateTime(0)
+  updatedAt     DateTime?      @db.DateTime(0)
+  nato_alerta   nato_alerta[]
+  nato_empresas nato_empresas? @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_empreendimento_nato_empresas_FK")
+
+  @@index([construtora], map: "nato_empreendimento_nato_empresas_FK")
 }
