@@ -666,6 +666,8 @@ model nato_empreendimento {
   chave         String?        @db.LongText
   createdAt     DateTime       @default(now()) @db.DateTime(0)
   updatedAt     DateTime?      @db.DateTime(0)
+  vendedores    String?        @db.LongText
+  ativo         Boolean?       @default(true)
   nato_alerta   nato_alerta[]
   nato_empresas nato_empresas? @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_empreendimento_nato_empresas_FK")
 

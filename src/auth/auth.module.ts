@@ -5,6 +5,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { SolicitacaoModule } from './solicitacao/solicitacao.module';
+import { EmpresaModule } from './empresa/empresa.module';
+import { EmpreendimentoModule } from './empreendimento/empreendimento.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { SolicitacaoModule } from './solicitacao/solicitacao.module';
       global: true,
     }),
     SolicitacaoModule,
+    EmpresaModule,
+    EmpreendimentoModule,
   ],
   controllers: [UserController, AuthController],
   providers: [UserService, AuthService],

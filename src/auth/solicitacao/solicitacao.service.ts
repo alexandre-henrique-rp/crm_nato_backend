@@ -5,16 +5,63 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SolicitacaoService {
   constructor(private prismaService: PrismaService) {}
 
-  async findAll(userId: number | string, hierarquia: string) {
+  async findAll(userId: number, hierarquia: string) {
     try {
-      return await this.prismaService.nato_solicitacao.findMany({
-        where: {
-          ...(hierarquia === 'USER' ? { corretor: userId, ativo: true } : {}),
-        },
-        include: {
-          corretor: true,
-        },
+      const req =
+        await this.prismaService.nato_solicitacoes_certificado.findMany({
+          where: {
+            ...(hierarquia === 'USER' ? { corretor: userId, ativo: true } : {}),
+          },
+          select: {
+            id: true,
+            nome: true,
+            obs: true,
+            dt_solicitacao: true,
+            enpreedimento: true,
+            construtora: true,
+            corretor: true,
+            id_fcw: true,
+            createdAt: true,
+            updatedAt: true,
+            ativo: true,
+          },
+        });
+
+      const data = req.map(async (item) => {
+        const consulta = await this.prismaService.nato_user.findFirst({
+          where: {
+            id: item.corretor,
+          },
+          select: {
+            id: true,
+            nome: true,
+          },
+        });
+
+        const consultaFcw =
+          item.id_fcw &&
+          (await this.prismaService.fcweb.findFirst({
+            where: {
+              id: item.id_fcw,
+            },
+            select: {
+              id: true,
+              andamento: true,
+              dt_agenda: true,
+              hr_agenda: true,
+              valorcd: true,
+              estatos_pgto: true,
+            },
+          }));
+
+        return {
+          ...item,
+          corretor: { ...consulta },
+          ...(item.id_fcw && { fcweb: { ...consultaFcw } }),
+        };
       });
+
+      return Promise.all(data);
     } catch (error) {
       return error;
     }
@@ -22,29 +69,68 @@ export class SolicitacaoService {
 
   async findOne(id: number, userId: number, hierarquia: string) {
     try {
+      const Parans =
+        hierarquia === 'USER'
+          ? { id: id, corretor: userId, ativo: true }
+          : { id: id };
+
       const req =
         await this.prismaService.nato_solicitacoes_certificado.findFirst({
-          where: {
-            ...(hierarquia === 'USER'
-              ? { id: id, corretor: userId, ativo: true }
-              : { id: id }),
-          },
+          where: Parans,
         });
+
+      if (!req) {
+        throw new Error('Request not found');
+      }
 
       const req2 = await this.prismaService.nato_user.findFirst({
         where: {
           id: req.corretor,
         },
+        select: {
+          id: true,
+          nome: true,
+        },
       });
+
+      const fichaCadastro =
+        req.id_fcw &&
+        (await this.prismaService.fcweb.findFirst({
+          where: {
+            id: req.id_fcw,
+          },
+          select: {
+            id: true,
+            andamento: true,
+            dt_agenda: true,
+            hr_agenda: true,
+            valorcd: true,
+            estatos_pgto: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        }));
+
+      const relacionamento = JSON.parse(req.relacionamento);
+      const dataRelacionamento = await Promise.all(
+        relacionamento.map(async (item: any) => {
+          return this.GetRelacionamento(item);
+        }),
+      );
 
       const data = {
         ...req,
         corretor: {
           ...req2,
         },
+        ...(req.id_fcw && { fcweb: { ...fichaCadastro } }),
+        ...(req.relacionamento !== '[]' && {
+          relacionamento: dataRelacionamento,
+        }),
       };
       return data;
     } catch (error) {
+      console.error(error);
       return error;
     }
   }
@@ -67,7 +153,7 @@ export class SolicitacaoService {
             enpreedimento: data.enpreedimento,
             construtora: data.construtora,
             dt_solicitacao: new Date().toISOString(),
-            corretor: data.userId,
+            corretor: data.corretor,
           },
         },
       );
@@ -80,12 +166,11 @@ export class SolicitacaoService {
     }
   }
 
-  update(id: string, data: any & { userId: number }) {
+  update(id: number, data: any) {
     try {
       return this.prismaService.nato_solicitacao.update({
         where: {
           id,
-          corretor: data.userId,
         },
         data: data,
       });
@@ -94,12 +179,11 @@ export class SolicitacaoService {
     }
   }
 
-  delete(id: string, userId: number) {
+  delete(id: number) {
     try {
       return this.prismaService.nato_solicitacao.update({
         where: {
           id,
-          corretor: userId,
         },
         data: {
           ativo: false,
@@ -107,7 +191,63 @@ export class SolicitacaoService {
         },
       });
     } catch (error) {
-      return error;
+      return error.message;
+    }
+  }
+
+  async FilterDoc(id: number) {
+    try {
+      return this.prismaService.nato_solicitacoes_certificado.findMany({
+        where: {
+          id_fcw: id,
+          ativo: true,
+        },
+      });
+    } catch (error) {
+      return error.message;
+    }
+  }
+
+  async FilterDate(data: any) {
+    try {
+      return this.prismaService.nato_solicitacoes_certificado.findMany({
+        where: {
+          ...data,
+          ativo: true,
+        },
+      });
+    } catch (error) {
+      return error.message;
+    }
+  }
+
+  async GetRelacionamento(cpf: string) {
+    try {
+      const req =
+        await this.prismaService.nato_solicitacoes_certificado.findFirst({
+          where: {
+            cpf: cpf,
+            ativo: true,
+          },
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+            cpf: true,
+            dt_nascimento: true,
+            obs: true,
+            cnh: true,
+            enpreedimento: true,
+            ass_doc: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        });
+      return req;
+    } catch (error) {
+      console.log(error);
+      return error.message;
     }
   }
 }

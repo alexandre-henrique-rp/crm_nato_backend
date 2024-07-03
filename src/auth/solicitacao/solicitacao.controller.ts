@@ -31,7 +31,7 @@ export class SolicitacaoController {
   async GetOne(@Param('id') id: number, @Req() req: any) {
     try {
       return this.solicitacaoService.findOne(
-        id,
+        Number(id),
         req.user.id,
         req.user.hierarquia,
       );
@@ -53,22 +53,37 @@ export class SolicitacaoController {
   }
 
   @Delete('/delete/:id')
-  async Delete(@Param('id') id: string, @Req() req: any) {
+  async Delete(@Param('id') id: number) {
     try {
-      return this.solicitacaoService.delete(id, req.user.id);
+      return this.solicitacaoService.delete(Number(id));
     } catch (error) {
       throw error;
     }
   }
 
   @Put('/update/:id')
-  async Update(@Param('id') id: string, @Body() data: any, @Req() req: any) {
+  async Update(@Param('id') id: number, @Body() data: any) {
     try {
-      return this.solicitacaoService.update(id, {
+      return this.solicitacaoService.update(Number(id), {
         ...data,
-        userId: req.user.id,
-        user: req.user,
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('/filter/doc')
+  async FilterDoc(@Body() data: any) {
+    try {
+      return this.solicitacaoService.FilterDoc(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+  @Get('/filter/date')
+  async FilterDate(@Body() data: any) {
+    try {
+      return this.solicitacaoService.FilterDate(data);
     } catch (error) {
       throw error;
     }
