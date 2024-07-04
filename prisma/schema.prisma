@@ -356,6 +356,7 @@ model nato_solicitacoes_certificado {
   relacionamento String?        @db.LongText
   createdAt      DateTime       @default(now()) @db.DateTime(0)
   updatedAt      DateTime?      @db.DateTime(0)
+  telefone2      String?        @db.VarChar(100)
   nato_alerta    nato_alerta[]
   fcweb          fcweb?         @relation(fields: [id_fcw], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_fcweb_FK")
   nato_empresas  nato_empresas? @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_nato_empresas_FK")
@@ -372,8 +373,8 @@ model nato_user {
   password                      String                          @db.VarChar(100)
   password_key                  String                          @db.VarChar(100)
   telefone                      String?                         @db.VarChar(100)
-  email                         String?                         @unique(map: "nato_user_unique_2") @db.VarChar(100)
-  cpf                           String                          @unique(map: "nato_user_unique_1") @db.VarChar(100)
+  email                         String?                         @unique(map: "nato_user_unique_1") @db.VarChar(100)
+  cpf                           String?                         @db.VarChar(100)
   nome                          String?                         @db.VarChar(100)
   empreendimento                String?                         @db.LongText
   construtora                   String?                         @db.LongText
@@ -381,6 +382,7 @@ model nato_user {
   hierarquia                    String?                         @db.LongText
   createdAt                     DateTime                        @default(now()) @db.DateTime(0)
   updatedAt                     DateTime?                       @db.DateTime(0)
+  nato_alerta                   nato_alerta[]
   nato_solicitacoes_certificado nato_solicitacoes_certificado[]
 }
 
@@ -642,7 +644,7 @@ model nato_alerta {
   titulo                        String?                        @db.VarChar(100)
   texto                         String?                        @db.Text
   solicitacao_id                Int?
-  corretor                      String?                        @db.LongText
+  corretor                      Int?
   tipo                          String?                        @db.VarChar(100)
   tag                           String?                        @db.VarChar(100)
   empreendimento                Int
@@ -650,9 +652,11 @@ model nato_alerta {
   updatedAt                     DateTime?                      @db.DateTime(0)
   nato_empreendimento           nato_empreendimento            @relation(fields: [empreendimento], references: [id], onUpdate: Restrict, map: "nato_alerta_nato_empreendimento_FK")
   nato_solicitacoes_certificado nato_solicitacoes_certificado? @relation(fields: [solicitacao_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_alerta_nato_solicitacoes_certificado_FK")
+  nato_user                     nato_user?                     @relation(fields: [corretor], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_alerta_nato_user_FK")
 
   @@index([empreendimento], map: "nato_alerta_nato_empreendimento_FK")
   @@index([solicitacao_id], map: "nato_alerta_nato_solicitacoes_certificado_FK")
+  @@index([corretor], map: "nato_alerta_nato_user_FK")
 }
 
 model nato_empreendimento {

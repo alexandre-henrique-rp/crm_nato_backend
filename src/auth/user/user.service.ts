@@ -11,13 +11,13 @@ export class UserService {
     try {
       return this.prismaService.nato_user.create({
         data: {
-          username: dados.username,
+          username: dados.username.toUpperCase(),
           password: dados.password,
           password_key: this.generateHash(dados.password),
           email: dados.email,
           telefone: dados.telefone,
           cpf: dados.cpf,
-          nome: dados.nome,
+          nome: dados.nome.toUpperCase(),
           construtora: JSON.stringify(dados.construtora),
           empreendimento: JSON.stringify(dados.empreendimento),
           hierarquia: dados.hierarquia,

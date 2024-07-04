@@ -7,6 +7,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { SolicitacaoModule } from './solicitacao/solicitacao.module';
 import { EmpresaModule } from './empresa/empresa.module';
 import { EmpreendimentoModule } from './empreendimento/empreendimento.module';
+import { UserController2 } from './user/create/user.controller';
+import { AlertsModule } from './alerts/alerts.module';
 
 @Module({
   imports: [
@@ -18,8 +20,9 @@ import { EmpreendimentoModule } from './empreendimento/empreendimento.module';
     SolicitacaoModule,
     EmpresaModule,
     EmpreendimentoModule,
+    AlertsModule,
   ],
-  controllers: [UserController, AuthController],
+  controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],
 })
 export class AuthModule {}
