@@ -30,15 +30,17 @@ export class SolicitacaoService {
         });
 
       const data = req.map(async (item) => {
-        const consulta = await this.prismaService.nato_user.findFirst({
-          where: {
-            id: item.corretor,
-          },
-          select: {
-            id: true,
-            nome: true,
-          },
-        });
+        const consulta =
+          item.corretor &&
+          (await this.prismaService.nato_user.findFirst({
+            where: {
+              id: item.corretor,
+            },
+            select: {
+              id: true,
+              nome: true,
+            },
+          }));
 
         const consultaFcw =
           item.id_fcw &&
