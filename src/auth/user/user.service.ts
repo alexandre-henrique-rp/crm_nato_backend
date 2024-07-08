@@ -21,6 +21,7 @@ export class UserService {
           construtora: JSON.stringify(dados.construtora),
           empreendimento: JSON.stringify(dados.empreendimento),
           hierarquia: dados.hierarquia,
+          cargo: dados.cargo,
         },
       });
     } catch (error) {

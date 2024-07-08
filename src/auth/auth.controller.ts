@@ -6,7 +6,12 @@ import { LoginDto } from './dto/login.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
   @Post()
-  Login(@Body() data: LoginDto) {
-    return this.authService.Login(data);
+  async Login(@Body() data: LoginDto) {
+    try {
+      const req = await this.authService.Login(data);
+      return req;
+    } catch (error) {
+      return error;
+    }
   }
 }

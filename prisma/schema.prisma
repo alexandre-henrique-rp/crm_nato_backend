@@ -349,14 +349,15 @@ model nato_solicitacoes_certificado {
   id_fcw         Int?
   obs            String?        @db.LongText
   alert          String?        @db.VarChar(100)
-  enpreedimento  Int?
+  empreedimento  Int?
   cnh            String?        @db.VarChar(100)
   ativo          Boolean        @default(true)
-  upload         String?        @db.LongText
+  uploadCnh      String?        @db.LongText
   relacionamento String?        @db.LongText
   createdAt      DateTime       @default(now()) @db.DateTime(0)
   updatedAt      DateTime?      @db.DateTime(0)
   telefone2      String?        @db.VarChar(100)
+  uploadRg       String?        @db.LongText
   nato_alerta    nato_alerta[]
   fcweb          fcweb?         @relation(fields: [id_fcw], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_fcweb_FK")
   nato_empresas  nato_empresas? @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_nato_empresas_FK")

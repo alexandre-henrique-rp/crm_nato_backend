@@ -17,9 +17,10 @@ export class SolicitacaoService {
             nome: true,
             obs: true,
             dt_solicitacao: true,
-            enpreedimento: true,
+            empreedimento: true,
             construtora: true,
             corretor: true,
+            ass_doc: true,
             id_fcw: true,
             createdAt: true,
             updatedAt: true,
@@ -54,13 +55,38 @@ export class SolicitacaoService {
             },
           }));
 
+        const empreedimento =
+          item.empreedimento &&
+          (await this.prismaService.nato_empreendimento.findFirst({
+            where: {
+              id: item.empreedimento,
+            },
+            select: {
+              id: true,
+              nome: true,
+            },
+          }));
+
+        const construtora =
+          item.construtora &&
+          (await this.prismaService.nato_empresas.findFirst({
+            where: {
+              id: item.construtora,
+            },
+            select: {
+              id: true,
+              razaosocial: true,
+            },
+          }));
+
         return {
           ...item,
           corretor: { ...consulta },
           ...(item.id_fcw && { fcweb: { ...consultaFcw } }),
+          ...(item.empreedimento && { empreedimento: { ...empreedimento } }),
+          ...(item.construtora && { construtora: { ...construtora } }),
         };
       });
-
       return Promise.all(data);
     } catch (error) {
       return error;
@@ -145,12 +171,15 @@ export class SolicitacaoService {
             email: data.email,
             telefone: data.telefone,
             cpf: data.cpf,
-            dt_nascimento: new Date(data.dt_nascimento).toISOString(),
+            dt_nascimento: data.dt_nascimento
+              ? new Date(data.dt_nascimento).toISOString()
+              : new Date('2024-01-01').toISOString(),
             obs: data.obs,
             cnh: data.cnh,
-            upload: data.upload,
+            uploadCnh: data.upload,
+            uploadRg: data.uploadRg,
             relacionamento: JSON.stringify(data.relacionamento),
-            enpreedimento: data.enpreedimento,
+            empreedimento: data.empreedimento,
             construtora: data.construtora,
             dt_solicitacao: new Date().toISOString(),
             corretor: data.corretor,
@@ -238,7 +267,7 @@ export class SolicitacaoService {
             dt_nascimento: true,
             obs: true,
             cnh: true,
-            enpreedimento: true,
+            empreedimento: true,
             ass_doc: true,
             createdAt: true,
             updatedAt: true,
