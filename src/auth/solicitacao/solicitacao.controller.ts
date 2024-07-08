@@ -20,7 +20,6 @@ export class SolicitacaoController {
   @Get('/')
   async GetAll(@Req() req: any) {
     try {
-      console.log(req.user);
       return this.solicitacaoService.findAll(req.user.id, req.user.hierarquia);
     } catch (error) {
       throw error;

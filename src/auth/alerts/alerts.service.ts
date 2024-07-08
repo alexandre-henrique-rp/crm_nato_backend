@@ -7,8 +7,28 @@ export class AlertsService {
 
   async Create(data: any) {
     try {
+      console.log(data);
       return this.prismaService.nato_alerta.create({
         data,
+      });
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async GetAll(hierarquia: string, id: number) {
+    try {
+      console.log(hierarquia, id);
+      return this.prismaService.nato_alerta.findMany({
+        where: {
+          ...(hierarquia === 'USER'
+            ? {
+                solicitacao_id: {
+                  equals: null,
+                },
+              }
+            : {}),
+        },
       });
     } catch (error) {
       throw error;
@@ -43,7 +63,7 @@ export class AlertsService {
     try {
       return this.prismaService.nato_alerta.update({
         where: {
-          id,
+          id: Number(id),
         },
         data,
       });

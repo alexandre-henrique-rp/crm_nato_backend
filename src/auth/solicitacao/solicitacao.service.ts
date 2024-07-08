@@ -10,7 +10,8 @@ export class SolicitacaoService {
       const req =
         await this.prismaService.nato_solicitacoes_certificado.findMany({
           where: {
-            ...(hierarquia === 'USER' ? { corretor: userId, ativo: true } : {}),
+            ...(hierarquia === 'USER' && { corretor: userId, ativo: true }),
+            ...(hierarquia === 'CONST' && { ativo: true }),
           },
           select: {
             id: true,
@@ -79,12 +80,15 @@ export class SolicitacaoService {
             },
           }));
 
+        const Alerts = await this.GetAlert(item.id);
+
         return {
           ...item,
           corretor: { ...consulta },
+          ...(Alerts.length > 0 ? { alerts: Alerts } : { alerts: [] }),
           ...(item.id_fcw && { fcweb: { ...consultaFcw } }),
-          ...(item.empreedimento && { empreedimento: { ...empreedimento } }),
-          ...(item.construtora && { construtora: { ...construtora } }),
+          ...(item.empreedimento && { empreedimento: { empreedimento } }),
+          ...(item.construtora && { construtora: { construtora } }),
         };
       });
       return Promise.all(data);
@@ -109,15 +113,17 @@ export class SolicitacaoService {
         throw new Error('Request not found');
       }
 
-      const req2 = await this.prismaService.nato_user.findFirst({
-        where: {
-          id: req.corretor,
-        },
-        select: {
-          id: true,
-          nome: true,
-        },
-      });
+      const req2 =
+        req.corretor &&
+        (await this.prismaService.nato_user.findFirst({
+          where: {
+            id: req.corretor,
+          },
+          select: {
+            id: true,
+            nome: true,
+          },
+        }));
 
       const fichaCadastro =
         req.id_fcw &&
@@ -137,6 +143,8 @@ export class SolicitacaoService {
           },
         }));
 
+      const Alerts = await this.GetAlert(req.id);
+
       const relacionamento = JSON.parse(req.relacionamento);
       const dataRelacionamento = await Promise.all(
         relacionamento.map(async (item: any) => {
@@ -144,11 +152,17 @@ export class SolicitacaoService {
         }),
       );
 
+      const empreedimento = await this.GetEmpreedimento(req.empreedimento);
+      const construtora = await this.GetConstrutora(req.construtora);
+
       const data = {
         ...req,
+        alert: Alerts,
         corretor: {
           ...req2,
         },
+        ...(req.empreedimento && { empreedimento: { ...empreedimento } }),
+        ...(req.construtora && { construtora: { ...construtora } }),
         ...(req.id_fcw && { fcweb: { ...fichaCadastro } }),
         ...(req.relacionamento !== '[]' && {
           relacionamento: dataRelacionamento,
@@ -277,6 +291,54 @@ export class SolicitacaoService {
     } catch (error) {
       console.log(error);
       return error.message;
+    }
+  }
+
+  async GetAlert(id: number) {
+    try {
+      const req = await this.prismaService.nato_alerta.findMany({
+        where: {
+          solicitacao_id: id,
+        },
+      });
+      return req;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+
+  async GetEmpreedimento(id: number) {
+    try {
+      const req = await this.prismaService.nato_empreendimento.findFirst({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          nome: true,
+        },
+      });
+      return req;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async GetConstrutora(id: number) {
+    try {
+      const req = await this.prismaService.nato_empresas.findFirst({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          razaosocial: true,
+        },
+      });
+      return req;
+    } catch (error) {
+      return error;
     }
   }
 }
