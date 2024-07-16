@@ -8,10 +8,13 @@ export class AlertsService {
   async Create(data: any) {
     try {
       console.log(data);
-      return this.prismaService.nato_alerta.create({
+      const request = await this.prismaService.nato_alerta.create({
         data,
       });
+      console.log('🚀 ~ AlertsService ~ Create ~ request:', request);
+      return request;
     } catch (error) {
+      console.log(error);
       return error;
     }
   }

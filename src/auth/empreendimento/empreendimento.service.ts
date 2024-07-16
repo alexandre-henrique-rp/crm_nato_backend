@@ -28,7 +28,7 @@ export class EmpreendimentoService {
     try {
       return await this.prismaService.nato_empreendimento.findFirst({
         where: {
-          id: id,
+          id: Number(id),
           ativo: true,
         },
       });
@@ -123,7 +123,7 @@ export class EmpreendimentoService {
     try {
       return this.prismaService.nato_empreendimento.update({
         where: {
-          id,
+          id: Number(id),
         },
         data: data,
       });
@@ -136,10 +136,23 @@ export class EmpreendimentoService {
     try {
       return this.prismaService.nato_empreendimento.update({
         where: {
-          id,
+          id: Number(id),
         },
         data: {
           ativo: false,
+        },
+      });
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async Filter(id: number) {
+    try {
+      return this.prismaService.nato_empreendimento.findMany({
+        where: {
+          construtora: Number(id),
+          ativo: true,
         },
       });
     } catch (error) {

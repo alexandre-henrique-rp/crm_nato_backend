@@ -6,7 +6,7 @@ import { UserService } from '../user.service';
 @Controller('user')
 export class UserController2 {
   constructor(private userService: UserService) {}
-  @Post()
+  @Post('/')
   async create(@Body() data: createUserDto) {
     try {
       const dataCreated = await this.userService.create(data);

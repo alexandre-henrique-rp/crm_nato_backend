@@ -28,6 +28,9 @@ export class SolicitacaoService {
             ativo: true,
             rela_quest: true,
           },
+          orderBy: {
+            id: 'desc',
+          },
         });
 
       const data = req.map(async (item) => {
@@ -208,7 +211,11 @@ export class SolicitacaoService {
         where: {
           id,
         },
-        data: data,
+        data: {
+          ...data,
+          relacionamento: JSON.stringify(data.relacionamento),
+          dt_nascimento: new Date(data.dt_nascimento).toISOString(),
+        },
       });
     } catch (error) {
       return error;

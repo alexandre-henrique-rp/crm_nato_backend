@@ -31,6 +31,7 @@ export class EmpreendimentoController {
 
   @Post('/')
   async Create(@Body() data: any) {
+    console.log(data);
     const req = await this.empreendimentoService.Create(data);
     return new EmpreendimentoPresenter(req);
   }
@@ -56,5 +57,12 @@ export class EmpreendimentoController {
   @Delete('/delete/:id')
   async Delete(@Param('id') id: number) {
     return this.empreendimentoService.Delete(id);
+  }
+
+  @Get('/filter/:id')
+  async Filter(@Param('id') id: number) {
+    console.log(id);
+    const req = await this.empreendimentoService.Filter(id);
+    return req.map((data: any) => new EmpreendimentoPresenter(data));
   }
 }
