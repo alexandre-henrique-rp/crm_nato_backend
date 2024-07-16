@@ -31,10 +31,7 @@ export class AlertsController {
   @Get()
   async GetAll(@Req() request: any) {
     try {
-      const req = await this.empresaService.GetAll(
-        request.user.hierarquia,
-        request.user.id,
-      );
+      const req = await this.empresaService.GetAll(request.user.hierarquia);
       return req;
     } catch (error) {
       return error;

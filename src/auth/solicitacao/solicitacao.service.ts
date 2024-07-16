@@ -26,6 +26,7 @@ export class SolicitacaoService {
             createdAt: true,
             updatedAt: true,
             ativo: true,
+            rela_quest: true,
           },
         });
 
@@ -147,7 +148,8 @@ export class SolicitacaoService {
 
       const Alerts = await this.GetAlert(req.id);
 
-      const relacionamento = JSON.parse(req.relacionamento);
+      const relacionamento =
+        req.relacionamento === null ? [] : JSON.parse(req.relacionamento);
       const dataRelacionamento = await Promise.all(
         relacionamento.map(async (item: any) => {
           return this.GetRelacionamento(item);
@@ -166,9 +168,7 @@ export class SolicitacaoService {
         ...(req.empreedimento && { empreedimento: { ...empreedimento } }),
         ...(req.construtora && { construtora: { ...construtora } }),
         ...(req.id_fcw && { fcweb: { ...fichaCadastro } }),
-        ...(req.relacionamento !== '[]' && {
-          relacionamento: dataRelacionamento,
-        }),
+        relacionamento: dataRelacionamento,
       };
       return data;
     } catch (error) {
@@ -177,33 +177,24 @@ export class SolicitacaoService {
     }
   }
 
-  async create(data: any & { userId: number }) {
+  async create(data: any) {
     try {
-      console.log(data);
+      const dados = {
+        ...data,
+        dt_nascimento: data.dt_nascimento
+          ? new Date(data.dt_nascimento).toISOString()
+          : new Date('2024-01-01').toISOString(),
+        relacionamento: !data.relacionamento
+          ? JSON.stringify([])
+          : JSON.stringify(data.relacionamento),
+        dt_solicitacao: new Date().toISOString(),
+        ativo: true,
+      };
       const req = await this.prismaService.nato_solicitacoes_certificado.create(
         {
-          data: {
-            nome: data.nome,
-            email: data.email,
-            telefone: data.telefone,
-            cpf: data.cpf,
-            dt_nascimento: data.dt_nascimento
-              ? new Date(data.dt_nascimento).toISOString()
-              : new Date('2024-01-01').toISOString(),
-            obs: data.obs,
-            cnh: data.cnh,
-            uploadCnh: data.upload,
-            uploadRg: data.uploadRg,
-            relacionamento: JSON.stringify(data.relacionamento),
-            empreedimento: data.empreedimento,
-            construtora: data.construtora,
-            dt_solicitacao: new Date().toISOString(),
-            corretor: data.corretor,
-          },
+          data: dados,
         },
       );
-
-      console.log(req);
       return req;
     } catch (error) {
       console.log(error);
@@ -213,7 +204,7 @@ export class SolicitacaoService {
 
   update(id: number, data: any) {
     try {
-      return this.prismaService.nato_solicitacao.update({
+      return this.prismaService.nato_solicitacoes_certificado.update({
         where: {
           id,
         },
@@ -224,9 +215,23 @@ export class SolicitacaoService {
     }
   }
 
-  delete(id: number) {
+  async delete(id: number) {
     try {
-      return this.prismaService.nato_solicitacao.update({
+      const req =
+        await this.prismaService.nato_solicitacoes_certificado.findFirst({
+          where: {
+            id,
+          },
+          select: {
+            ativo: true,
+          },
+        });
+
+      if (req.ativo === false) {
+        throw new Error('Solicitação ja deletada');
+      }
+
+      return this.prismaService.nato_solicitacoes_certificado.update({
         where: {
           id,
         },

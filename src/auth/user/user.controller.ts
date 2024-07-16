@@ -14,7 +14,7 @@ export class UserController {
   }
 
   @Get('/:id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: number) {
     const data = await this.userService.findByid(id);
     return new UserPresenter(data);
   }
@@ -31,6 +31,12 @@ export class UserController {
       data.email,
       data.password,
     );
+    return new UserPresenter(dataUpdated);
+  }
+
+  @Put('/reset_password/:id')
+  async resetpassword(@Body() data: any, @Param('id') id: number) {
+    const dataUpdated = await this.userService.primeAcess(id, data);
     return new UserPresenter(dataUpdated);
   }
 }

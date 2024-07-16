@@ -16,12 +16,22 @@ export class AuthService {
       const user = await this.userLoginRequest(data.username);
 
       if (!user) {
-        throw new Error('Usuário e senha incorretos');
+        // throw new Error('Usuário e senha incorretos');
+        return { error: true, mesage: 'Usuário e senha incorretos' };
       }
       const isValid = bcrypt.compareSync(data.password, user.password_key);
 
       if (!isValid) {
-        throw new Error('Usuário e senha incorretos');
+        // throw new Error('Usuário e senha incorretos');
+        return { error: true, mesage: 'Usuário e senha incorretos' };
+      }
+
+      if (!user.status) {
+        // throw new Error('Usuário inativo, contate o administrador');
+        return {
+          error: true,
+          mesage: 'Usuário inativo, contate o administrador',
+        };
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,6 +50,8 @@ export class AuthService {
           empreendimento: user.empreendimento,
           hierarquia: user.hierarquia,
           cargo: user.cargo,
+          status: user.status,
+          reset_password: user.reset_password,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
         },

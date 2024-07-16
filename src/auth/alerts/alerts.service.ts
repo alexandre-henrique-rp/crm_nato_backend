@@ -16,9 +16,8 @@ export class AlertsService {
     }
   }
 
-  async GetAll(hierarquia: string, id: number) {
+  async GetAll(hierarquia: string) {
     try {
-      console.log(hierarquia, id);
       return this.prismaService.nato_alerta.findMany({
         where: {
           ...(hierarquia === 'USER'

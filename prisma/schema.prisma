@@ -358,6 +358,9 @@ model nato_solicitacoes_certificado {
   updatedAt      DateTime?      @db.DateTime(0)
   telefone2      String?        @db.VarChar(100)
   uploadRg       String?        @db.LongText
+  rela_quest     Boolean?       @default(false)
+  voucher        String?        @db.VarChar(100)
+  link_planilha  String?        @db.Text
   nato_alerta    nato_alerta[]
   fcweb          fcweb?         @relation(fields: [id_fcw], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_fcweb_FK")
   nato_empresas  nato_empresas? @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_nato_empresas_FK")
@@ -383,6 +386,8 @@ model nato_user {
   hierarquia                    String?                         @db.LongText
   createdAt                     DateTime                        @default(now()) @db.DateTime(0)
   updatedAt                     DateTime?                       @db.DateTime(0)
+  reset_password                Boolean?                        @default(true)
+  status                        Boolean?                        @default(false)
   nato_alerta                   nato_alerta[]
   nato_solicitacoes_certificado nato_solicitacoes_certificado[]
 }
@@ -464,8 +469,8 @@ model parceiro {
   whatsapp              String?   @db.VarChar(100)
   createdAt             DateTime  @default(now()) @db.DateTime(0)
   updatedAt             DateTime? @db.DateTime(0)
-  status                Int?      @default(1)
-  comicao               Int?      @default(0)
+  status                Boolean?  @default(true)
+  comicao               Boolean?  @default(false)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

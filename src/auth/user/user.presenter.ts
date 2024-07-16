@@ -17,6 +17,8 @@ export class UserPresenter {
       cargo: this.user.cargo,
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt,
+      status: this.user.status,
+      reset_password: this.user.reset_password,
     };
   }
 }

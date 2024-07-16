@@ -54,7 +54,10 @@ export class SolicitacaoController {
   @Delete('/delete/:id')
   async Delete(@Param('id') id: number) {
     try {
-      return this.solicitacaoService.delete(Number(id));
+      await this.solicitacaoService.delete(Number(id));
+      return {
+        message: 'Solicitação deletada com sucesso!',
+      };
     } catch (error) {
       throw error;
     }

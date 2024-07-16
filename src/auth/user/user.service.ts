@@ -88,11 +88,11 @@ export class UserService {
     }
   }
 
-  findByid(username: string) {
+  findByid(id: number) {
     try {
       return this.prismaService.nato_user.findFirst({
         where: {
-          username,
+          id: Number(id),
         },
       });
     } catch (error) {
@@ -119,5 +119,23 @@ export class UserService {
   // gerar hash
   generateHash(password: string) {
     return bcrypt.hashSync(password, 10);
+  }
+
+  primeAcess(id: number, data: any) {
+    try {
+      const Senha = this.generateHash(data.password);
+      return this.prismaService.nato_user.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          password: data.password,
+          password_key: Senha,
+          reset_password: false,
+        },
+      });
+    } catch (error) {
+      return error;
+    }
   }
 }
