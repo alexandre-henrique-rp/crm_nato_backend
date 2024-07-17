@@ -28,6 +28,7 @@ export class AlertsService {
                 solicitacao_id: {
                   equals: null,
                 },
+                status: true,
               }
             : {}),
         },
@@ -70,19 +71,22 @@ export class AlertsService {
         data,
       });
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
   async Delete(id: number) {
     try {
-      return this.prismaService.nato_alerta.delete({
+      return this.prismaService.nato_alerta.update({
         where: {
-          id,
+          id: Number(id),
+        },
+        data: {
+          status: false,
         },
       });
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 }

@@ -656,6 +656,7 @@ model nato_alerta {
   empreendimento                Int
   createdAt                     DateTime                       @default(now()) @db.DateTime(0)
   updatedAt                     DateTime?                      @db.DateTime(0)
+  status                        Boolean?                       @default(true)
   nato_empreendimento           nato_empreendimento            @relation(fields: [empreendimento], references: [id], onUpdate: Restrict, map: "nato_alerta_nato_empreendimento_FK")
   nato_solicitacoes_certificado nato_solicitacoes_certificado? @relation(fields: [solicitacao_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_alerta_nato_solicitacoes_certificado_FK")
   nato_user                     nato_user?                     @relation(fields: [corretor], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_alerta_nato_user_FK")
