@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { SolicitacaoService } from './solicitacao.service';
 import { AuthGuard } from '../auth.guard';
+import { SolicitacaoPresenter } from './solicitacao.presenter';
 
 @UseGuards(AuthGuard)
 @Controller('solicitacao')
@@ -77,7 +78,8 @@ export class SolicitacaoController {
   @Get('/filter/doc/:doc')
   async FilterDoc(@Param('doc') doc: string) {
     try {
-      return this.solicitacaoService.FilterDoc(doc);
+      const req = await this.solicitacaoService.FilterDoc(doc);
+      return req.map((data: any) => new SolicitacaoPresenter(data));
     } catch (error) {
       throw error;
     }
