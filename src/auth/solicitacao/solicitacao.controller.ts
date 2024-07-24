@@ -74,10 +74,10 @@ export class SolicitacaoController {
     }
   }
 
-  @Get('/filter/doc')
-  async FilterDoc(@Body() data: any) {
+  @Get('/filter/doc/:doc')
+  async FilterDoc(@Param('doc') doc: string) {
     try {
-      return this.solicitacaoService.FilterDoc(data);
+      return this.solicitacaoService.FilterDoc(doc);
     } catch (error) {
       throw error;
     }

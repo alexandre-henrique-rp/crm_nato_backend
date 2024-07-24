@@ -252,12 +252,18 @@ export class SolicitacaoService {
     }
   }
 
-  async FilterDoc(id: number) {
+  async FilterDoc(doc: string) {
     try {
       return this.prismaService.nato_solicitacoes_certificado.findMany({
         where: {
-          id_fcw: id,
-          ativo: true,
+          OR: [
+            {
+              cpf: doc,
+            },
+            {
+              relacionamento: JSON.stringify([doc]),
+            },
+          ],
         },
       });
     } catch (error) {

@@ -205,71 +205,70 @@ model erp_log {
 }
 
 model fcweb {
-  id                            Int                             @id @default(autoincrement())
-  s_alerta                      String?                         @db.VarChar(150)
-  referencia                    String?                         @db.VarChar(150)
-  id_boleto                     String?                         @db.VarChar(150)
-  id_cancelar_bol_rem           String?                         @db.VarChar(150)
-  unidade                       String?                         @db.VarChar(150)
-  responsavel                   String?                         @db.VarChar(150)
-  criou_fc                      String                          @db.VarChar(150)
-  andamento                     String?                         @db.VarChar(150)
-  prioridade                    String?                         @db.VarChar(150)
-  solicitacao                   String?                         @db.VarChar(150)
-  venda                         String?                         @db.VarChar(150)
-  cpf                           String?                         @db.VarChar(150)
-  cnpj                          String?                         @db.VarChar(150)
-  nome                          String?                         @db.VarChar(150)
-  razaosocial                   String?                         @db.VarChar(150)
-  vectoboleto                   DateTime?                       @db.Date
-  unico                         String?                         @db.VarChar(150)
-  contador                      String?                         @db.VarChar(150)
-  obscont                       String?                         @db.VarChar(150)
-  comissaoparceiro              Float?                          @db.Float
-  scp                           String?                         @db.VarChar(10)
-  tipocd                        String?                         @db.VarChar(150)
-  valorcd                       String?                         @db.VarChar(150)
-  custocd                       String?                         @db.VarChar(150)
-  custoCdpar                    String?                         @db.VarChar(150)
-  estatos_pgto                  String?                         @db.VarChar(150)
-  pgto_efi                      String                          @db.VarChar(100)
-  formapgto                     String?                         @db.VarChar(150)
-  vouchersoluti                 String?                         @db.VarChar(150)
-  ct_parcela                    String?                         @db.VarChar(150)
-  telefone                      String?                         @db.VarChar(150)
-  telefone2                     String?                         @db.VarChar(150)
-  email                         String?                         @db.VarChar(150)
-  dtnascimento                  String?                         @db.VarChar(150)
-  rg                            String?                         @db.VarChar(150)
-  cei                           String?                         @db.VarChar(150)
-  endereco                      String?                         @db.VarChar(150)
-  nrua                          String?                         @db.VarChar(150)
-  bairro                        String?                         @db.VarChar(150)
-  complemento                   String?                         @db.VarChar(150)
-  cep                           String?                         @db.VarChar(150)
-  uf                            String?                         @db.VarChar(150)
-  im                            Int
-  cidade                        String?                         @db.VarChar(150)
-  observacao                    String?                         @db.VarChar(150)
-  vctoCD                        DateTime?                       @db.Date
-  historico                     String?                         @db.Text
-  arquivo                       String?                         @db.VarChar(100)
-  nomearquivo                   String?                         @db.VarChar(100)
-  obsrenovacao                  String?                         @db.VarChar(150)
-  dt_aprovacao                  DateTime?                       @db.Date
-  comicao                       Float?                          @db.Float
-  validacao                     String?                         @db.VarChar(150)
-  nfe                           String?                         @db.VarChar(150)
-  urlnota                       String?                         @db.Text
-  id_fcw_soluti                 String?                         @db.VarChar(11)
-  dt_agenda                     DateTime?                       @db.Date
-  hr_agenda                     DateTime?                       @db.Time(0)
-  obs_agenda                    String?                         @db.VarChar(150)
-  reg_cnh                       String?                         @db.VarChar(150)
-  createdAt                     DateTime                        @default(now())
-  updatedAt                     DateTime?
-  nato_solicitacoes_certificado nato_solicitacoes_certificado[]
-  price_cert                    price_cert[]
+  id                  Int          @id @default(autoincrement())
+  s_alerta            String?      @db.VarChar(150)
+  referencia          String?      @db.VarChar(150)
+  id_boleto           String?      @db.VarChar(150)
+  id_cancelar_bol_rem String?      @db.VarChar(150)
+  unidade             String?      @db.VarChar(150)
+  responsavel         String?      @db.VarChar(150)
+  criou_fc            String       @db.VarChar(150)
+  andamento           String?      @db.VarChar(150)
+  prioridade          String?      @db.VarChar(150)
+  solicitacao         String?      @db.VarChar(150)
+  venda               String?      @db.VarChar(150)
+  cpf                 String?      @db.VarChar(150)
+  cnpj                String?      @db.VarChar(150)
+  nome                String?      @db.VarChar(150)
+  razaosocial         String?      @db.VarChar(150)
+  vectoboleto         DateTime?    @db.Date
+  unico               String?      @db.VarChar(150)
+  contador            String?      @db.VarChar(150)
+  obscont             String?      @db.VarChar(150)
+  comissaoparceiro    Float?       @db.Float
+  scp                 String?      @db.VarChar(10)
+  tipocd              String?      @db.VarChar(150)
+  valorcd             String?      @db.VarChar(150)
+  custocd             String?      @db.VarChar(150)
+  custoCdpar          String?      @db.VarChar(150)
+  estatos_pgto        String?      @db.VarChar(150)
+  pgto_efi            String       @db.VarChar(100)
+  formapgto           String?      @db.VarChar(150)
+  vouchersoluti       String?      @db.VarChar(150)
+  ct_parcela          String?      @db.VarChar(150)
+  telefone            String?      @db.VarChar(150)
+  telefone2           String?      @db.VarChar(150)
+  email               String?      @db.VarChar(150)
+  dtnascimento        String?      @db.VarChar(150)
+  rg                  String?      @db.VarChar(150)
+  cei                 String?      @db.VarChar(150)
+  endereco            String?      @db.VarChar(150)
+  nrua                String?      @db.VarChar(150)
+  bairro              String?      @db.VarChar(150)
+  complemento         String?      @db.VarChar(150)
+  cep                 String?      @db.VarChar(150)
+  uf                  String?      @db.VarChar(150)
+  im                  Int
+  cidade              String?      @db.VarChar(150)
+  observacao          String?      @db.VarChar(150)
+  vctoCD              DateTime?    @db.Date
+  historico           String?      @db.Text
+  arquivo             String?      @db.VarChar(100)
+  nomearquivo         String?      @db.VarChar(100)
+  obsrenovacao        String?      @db.VarChar(150)
+  dt_aprovacao        DateTime?    @db.Date
+  comicao             Float?       @db.Float
+  validacao           String?      @db.VarChar(150)
+  nfe                 String?      @db.VarChar(150)
+  urlnota             String?      @db.Text
+  id_fcw_soluti       String?      @db.VarChar(11)
+  dt_agenda           DateTime?    @db.Date
+  hr_agenda           DateTime?    @db.Time(0)
+  obs_agenda          String?      @db.VarChar(150)
+  reg_cnh             String?      @db.VarChar(150)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime?
+  price_cert          price_cert[]
 
   @@index([id], map: "id")
 }
@@ -319,52 +318,48 @@ model metadata {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model nato_empresas {
-  id                            Int                             @unique(map: "nato_empresas_unique") @default(autoincrement())
-  cnpj                          String                          @unique(map: "nato_empresas_unique_1") @db.VarChar(100)
-  razaosocial                   String                          @db.VarChar(100)
-  tel                           String?                         @db.LongText
-  email                         String?                         @db.VarChar(100)
-  colaboradores                 String?                         @db.LongText
-  responsavel                   String?                         @db.VarChar(100)
-  tipo                          String?                         @db.VarChar(100)
-  createdAt                     DateTime                        @default(now()) @db.DateTime(0)
-  updatedAt                     DateTime?                       @db.DateTime(0)
-  nato_empreendimento           nato_empreendimento[]
-  nato_solicitacoes_certificado nato_solicitacoes_certificado[]
+  id                  Int                   @unique(map: "nato_empresas_unique") @default(autoincrement())
+  cnpj                String                @unique(map: "nato_empresas_unique_1") @db.VarChar(100)
+  razaosocial         String                @db.VarChar(100)
+  tel                 String?               @db.LongText
+  email               String?               @db.VarChar(100)
+  colaboradores       String?               @db.LongText
+  responsavel         String?               @db.VarChar(100)
+  tipo                String?               @db.VarChar(100)
+  createdAt           DateTime              @default(now()) @db.DateTime(0)
+  updatedAt           DateTime?             @db.DateTime(0)
+  nato_empreendimento nato_empreendimento[]
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model nato_solicitacoes_certificado {
-  id             Int            @id @default(autoincrement())
-  nome           String         @db.VarChar(100)
-  cpf            String         @db.VarChar(100)
-  email          String         @db.VarChar(100)
-  dt_solicitacao DateTime       @db.Date
+  id             Int           @id @default(autoincrement())
+  nome           String        @db.VarChar(100)
+  cpf            String        @db.VarChar(100)
+  email          String        @db.VarChar(100)
+  dt_solicitacao DateTime      @db.Date
   corretor       Int?
   construtora    Int?
-  telefone       String?        @db.VarChar(100)
-  dt_nascimento  DateTime?      @db.Date
-  ass_doc        Boolean?       @default(false)
-  link_doc       String?        @db.Text
+  telefone       String?       @db.VarChar(100)
+  dt_nascimento  DateTime?     @db.Date
+  ass_doc        Boolean?      @default(false)
+  link_doc       String?       @db.Text
   id_fcw         Int?
-  obs            String?        @db.LongText
-  alert          String?        @db.VarChar(100)
+  obs            String?       @db.LongText
+  alert          String?       @db.VarChar(100)
   empreedimento  Int?
-  cnh            String?        @db.VarChar(100)
-  ativo          Boolean        @default(true)
-  uploadCnh      String?        @db.LongText
-  relacionamento String?        @db.LongText
-  createdAt      DateTime       @default(now()) @db.DateTime(0)
-  updatedAt      DateTime?      @db.DateTime(0)
-  telefone2      String?        @db.VarChar(100)
-  uploadRg       String?        @db.LongText
-  rela_quest     Boolean?       @default(false)
-  voucher        String?        @db.VarChar(100)
-  link_planilha  String?        @db.Text
+  cnh            String?       @db.VarChar(100)
+  ativo          Boolean       @default(true)
+  uploadCnh      String?       @db.LongText
+  relacionamento String?       @db.LongText
+  createdAt      DateTime      @default(now()) @db.DateTime(0)
+  updatedAt      DateTime?     @db.DateTime(0)
+  telefone2      String?       @db.VarChar(100)
+  uploadRg       String?       @db.LongText
+  rela_quest     Boolean?      @default(false)
+  voucher        String?       @db.VarChar(100)
+  link_planilha  String?       @db.Text
   nato_alerta    nato_alerta[]
-  fcweb          fcweb?         @relation(fields: [id_fcw], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_fcweb_FK")
-  nato_empresas  nato_empresas? @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_nato_empresas_FK")
-  nato_user      nato_user?     @relation(fields: [corretor], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_solicitacoes_certificado_nato_user_FK")
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")
   @@index([construtora], map: "nato_solicitacoes_certificado_nato_empresas_FK")
@@ -372,24 +367,23 @@ model nato_solicitacoes_certificado {
 }
 
 model nato_user {
-  id                            Int                             @id @default(autoincrement())
-  username                      String                          @unique(map: "nato_user_unique") @db.VarChar(100)
-  password                      String                          @db.VarChar(100)
-  password_key                  String                          @db.VarChar(100)
-  telefone                      String?                         @db.VarChar(100)
-  email                         String?                         @unique(map: "nato_user_unique_1") @db.VarChar(100)
-  cpf                           String?                         @db.VarChar(100)
-  nome                          String?                         @db.VarChar(100)
-  empreendimento                String?                         @db.LongText
-  construtora                   String?                         @db.LongText
-  cargo                         String?                         @db.VarChar(100)
-  hierarquia                    String?                         @db.LongText
-  createdAt                     DateTime                        @default(now()) @db.DateTime(0)
-  updatedAt                     DateTime?                       @db.DateTime(0)
-  reset_password                Boolean?                        @default(true)
-  status                        Boolean?                        @default(false)
-  nato_alerta                   nato_alerta[]
-  nato_solicitacoes_certificado nato_solicitacoes_certificado[]
+  id             Int           @id @default(autoincrement())
+  username       String        @unique(map: "nato_user_unique") @db.VarChar(100)
+  password       String        @db.VarChar(100)
+  password_key   String        @db.VarChar(100)
+  telefone       String?       @db.VarChar(100)
+  email          String?       @unique(map: "nato_user_unique_1") @db.VarChar(100)
+  cpf            String?       @db.VarChar(100)
+  nome           String?       @db.VarChar(100)
+  empreendimento String?       @db.LongText
+  construtora    String?       @db.LongText
+  cargo          String?       @db.VarChar(100)
+  hierarquia     String?       @db.LongText
+  createdAt      DateTime      @default(now()) @db.DateTime(0)
+  updatedAt      DateTime?     @db.DateTime(0)
+  reset_password Boolean?      @default(true)
+  status         Boolean?      @default(false)
+  nato_alerta    nato_alerta[]
 }
 
 model notanfe {
@@ -466,6 +460,15 @@ model parceiro {
   A3PF_36               String?   @map("A3PF-36") @db.VarChar(150)
   ocultar_valor_volcher String?   @db.VarChar(150)
   tipo_comissao         String?   @db.VarChar(150)
+  tipo_negociacao       String    @db.Text
+  C_A1PJ_12             String    @map("C-A1PJ-12") @db.VarChar(15)
+  C_A3PJ_12             String    @map("C-A3PJ-12") @db.VarChar(15)
+  C_A3PJ_24             String    @map("C-A3PJ-24") @db.VarChar(15)
+  C_A3PJ_36             String    @map("C-A3PJ-36") @db.VarChar(15)
+  C_A1PF_12             String    @map("C-A1PF-12") @db.VarChar(15)
+  C_A3PF_12             String    @map("C-A3PF-12") @db.VarChar(15)
+  C_A3PF_24             String    @map("C-A3PF-24") @db.VarChar(15)
+  C_A3PF_36             String    @map("C-A3PF-36") @db.VarChar(15)
   whatsapp              String?   @db.VarChar(100)
   createdAt             DateTime  @default(now()) @db.DateTime(0)
   updatedAt             DateTime? @db.DateTime(0)
