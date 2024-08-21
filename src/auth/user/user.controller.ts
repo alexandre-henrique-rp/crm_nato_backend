@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { UserPresenter } from './user.presenter';
 import { UserService } from './user.service';
 import { AuthGuard } from '../auth.guard';
@@ -10,7 +18,7 @@ export class UserController {
   @Get()
   async findAll() {
     const data = await this.userService.findAll();
-    return data.map((user) => new UserPresenter(user));
+    return data;
   }
 
   @Get('/:id')
@@ -37,6 +45,18 @@ export class UserController {
   @Put('/reset_password/:id')
   async resetpassword(@Body() data: any, @Param('id') id: number) {
     const dataUpdated = await this.userService.primeAcess(id, data);
+    return new UserPresenter(dataUpdated);
+  }
+
+  @Delete('/suspense/:id')
+  async suspense(@Param('id') id: number) {
+    const data = { status: false };
+    const dataUpdated = await this.userService.update(id, data);
+    return new UserPresenter(dataUpdated);
+  }
+  @Delete('/delete/:id')
+  async delete(@Param('id') id: number) {
+    const dataUpdated = await this.userService.delete(id);
     return new UserPresenter(dataUpdated);
   }
 }

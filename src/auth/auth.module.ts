@@ -9,6 +9,7 @@ import { EmpresaModule } from './empresa/empresa.module';
 import { EmpreendimentoModule } from './empreendimento/empreendimento.module';
 import { UserController2 } from './user/create/user.controller';
 import { AlertsModule } from './alerts/alerts.module';
+import { FinanceiroModule } from './financeiro/financeiro.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AlertsModule } from './alerts/alerts.module';
     EmpresaModule,
     EmpreendimentoModule,
     AlertsModule,
+    FinanceiroModule,
   ],
   controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],

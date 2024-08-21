@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -16,7 +17,7 @@ import { SolicitacaoPresenter } from './solicitacao.presenter';
 @UseGuards(AuthGuard)
 @Controller('solicitacao')
 export class SolicitacaoController {
-  constructor(private solicitacaoService: SolicitacaoService) {}
+  constructor(private solicitacaoService: SolicitacaoService) { }
 
   @Get('/')
   async GetAll(@Req() req: any) {
@@ -41,12 +42,13 @@ export class SolicitacaoController {
   }
 
   @Post('/')
-  async Create(@Body() data: any, @Req() req: any) {
+  async Create(@Body() data: any, @Req() req: any, @Query() query: any) {
     try {
+      const { sms } = query
       return this.solicitacaoService.create({
         ...data,
         corretor: data.corretor ? data.corretor : req.user.id,
-      });
+      }, sms);
     } catch (error) {
       throw error;
     }

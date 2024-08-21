@@ -1,17 +1,18 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Query, UseGuards } from '@nestjs/common';
 import { Get, Post, Put, Param, Body } from '@nestjs/common';
 import { EmpresaPresenter } from './empresa.presenter';
 import { AuthGuard } from '../auth.guard';
 import { EmpresaService } from './empresa.service';
 
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('empresa')
 export class EmpresaController {
   constructor(private empresaService: EmpresaService) {}
 
   @Get('/')
-  async GetAll() {
-    const req = await this.empresaService.GetAll();
+  async GetAll(@Query() query: any) {
+    const {all} = query
+    const req = await this.empresaService.GetAll(all);
     return req.map((data: any) => new EmpresaPresenter(data));
   }
 
@@ -33,6 +34,9 @@ export class EmpresaController {
     return new EmpresaPresenter(req);
   }
 
-  // @Delete('/delete/:id')
-  // async Delete(@Param('id') id: number) {}
+  @Delete('/delete/:id')
+  async Delete(@Param('id') id: number) {
+    const req = await this.empresaService.Delete(id);
+    return new EmpresaPresenter(req);
+  }
 }

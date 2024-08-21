@@ -18,9 +18,9 @@ export class AlertsController {
   constructor(private empresaService: AlertsService) {}
   //criar alerta
   @Post()
-  async Create(@Body() data: any) {
+  async Create(@Body() data: any, @Req() request: any) {
     try {
-      const req = await this.empresaService.Create(data);
+      const req = await this.empresaService.Create(data, request.user.hierarquia);
       return req;
     } catch (error) {
       return error;
@@ -31,7 +31,7 @@ export class AlertsController {
   @Get()
   async GetAll(@Req() request: any) {
     try {
-      const req = await this.empresaService.GetAll(request.user.hierarquia);
+      const req = await this.empresaService.GetAll(request.user.hierarquia, request.user.id);
       return req;
     } catch (error) {
       return error;

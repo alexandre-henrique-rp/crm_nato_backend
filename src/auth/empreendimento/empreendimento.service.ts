@@ -9,7 +9,7 @@ export class EmpreendimentoService {
     try {
       return await this.prismaService.nato_empreendimento.findMany({
         where: {
-          ativo: false,
+          ativo: true,
         },
         select: {
           id: true,
@@ -20,7 +20,8 @@ export class EmpreendimentoService {
         },
       });
     } catch (error) {
-      return error;
+      console.error(error.message);
+      return error.message;
     }
   }
 
@@ -33,7 +34,8 @@ export class EmpreendimentoService {
         },
       });
     } catch (error) {
-      return error;
+      console.error(error.message);
+      return error.message;
     }
   }
 
@@ -48,7 +50,8 @@ export class EmpreendimentoService {
         },
       });
     } catch (error) {
-      return error;
+      console.error(error.message);
+      return error.message;
     }
   }
 
@@ -95,27 +98,29 @@ export class EmpreendimentoService {
         },
       });
     } catch (error) {
-      return error;
+      console.error(error.message);
+      return error.message;
     }
   }
 
   async Create(data: any) {
     try {
-      return this.prismaService.nato_empreendimento.create({
+      const req = await this.prismaService.nato_empreendimento.create({
         data: {
           nome: data.nome,
           construtora: data.construtora,
           dt_inicio: new Date(data.dt_inicio).toISOString(),
-          dt_fim: new Date(data.dt_fim).toISOString(),
+          // dt_fim: new Date(data.dt_fim).toISOString().split('T')[0],
           uf: data.uf,
           cidade: data.cidade,
-          chave: data.chave,
-          vendedores: data.vendedores,
+          vendedores: JSON.stringify(data.vendedores),
           ativo: true,
         },
       });
+      return req;
     } catch (error) {
-      return error;
+      console.error(error.message);
+      return error.message;
     }
   }
 
@@ -128,7 +133,8 @@ export class EmpreendimentoService {
         data: data,
       });
     } catch (error) {
-      return error;
+      console.error(error.message);
+      return error.message;
     }
   }
 

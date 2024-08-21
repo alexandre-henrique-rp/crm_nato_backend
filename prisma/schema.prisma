@@ -328,6 +328,10 @@ model nato_empresas {
   tipo                String?               @db.VarChar(100)
   createdAt           DateTime              @default(now()) @db.DateTime(0)
   updatedAt           DateTime?             @db.DateTime(0)
+  obs                 String?               @db.Text
+  financeiro          String?               @db.LongText
+  atividade           String?               @db.VarChar(100)
+  fantasia            String?               @db.VarChar(100)
   nato_empreendimento nato_empreendimento[]
 }
 
@@ -342,7 +346,7 @@ model nato_solicitacoes_certificado {
   construtora    Int?
   telefone       String?       @db.VarChar(100)
   dt_nascimento  DateTime?     @db.Date
-  ass_doc        Boolean?      @default(false)
+  ass_doc        String?       @db.Text
   link_doc       String?       @db.Text
   id_fcw         Int?
   obs            String?       @db.LongText
@@ -359,6 +363,7 @@ model nato_solicitacoes_certificado {
   rela_quest     Boolean?      @default(false)
   voucher        String?       @db.VarChar(100)
   link_planilha  String?       @db.Text
+  financeiro     Int?
   nato_alerta    nato_alerta[]
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")
@@ -383,6 +388,8 @@ model nato_user {
   updatedAt      DateTime?     @db.DateTime(0)
   reset_password Boolean?      @default(true)
   status         Boolean?      @default(false)
+  Financeira     String?       @db.LongText
+  sms_relat      Boolean?      @default(false)
   nato_alerta    nato_alerta[]
 }
 
@@ -682,8 +689,43 @@ model nato_empreendimento {
   updatedAt     DateTime?      @db.DateTime(0)
   vendedores    String?        @db.LongText
   ativo         Boolean?       @default(true)
+  obs           String?        @db.Text
+  financeiro    String?        @db.LongText
   nato_alerta   nato_alerta[]
   nato_empresas nato_empresas? @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_empreendimento_nato_empresas_FK")
 
   @@index([construtora], map: "nato_empreendimento_nato_empresas_FK")
+}
+
+model client_ssl {
+  id             Int       @id @default(autoincrement())
+  responsavel    String?   @db.VarChar(100)
+  tel_reponsavel String?   @db.VarChar(100)
+  razaosocial    String?   @db.VarChar(100)
+  cnpj           String?   @db.VarChar(100)
+  tel_comercial  String?   @db.VarChar(100)
+  tipoCD         String?   @db.VarChar(100)
+  validade       String?   @db.VarChar(100)
+  vctoCD         DateTime? @db.DateTime(0)
+  compra         DateTime? @db.DateTime(0)
+  valor          Float?    @db.Float
+  email          String?   @db.VarChar(100)
+  email_nota     String?   @db.VarChar(100)
+  url            String?   @db.VarChar(100)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model nato_financeiro {
+  id            Int       @unique(map: "nato_empresas_unique") @default(autoincrement())
+  cnpj          String    @unique(map: "nato_empresas_unique_1") @db.VarChar(100)
+  razaosocial   String    @db.VarChar(100)
+  tel           String?   @db.VarChar(100)
+  email         String?   @db.VarChar(100)
+  colaboradores String?   @db.LongText
+  responsavel   String?   @db.VarChar(100)
+  tipo          String?   @db.VarChar(100)
+  createdAt     DateTime  @default(now()) @db.DateTime(0)
+  updatedAt     DateTime? @db.DateTime(0)
+  obs           String?   @db.Text
+  fantasia      String?   @db.VarChar(100)
 }

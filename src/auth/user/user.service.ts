@@ -5,7 +5,7 @@ import { createUserDto } from './dto/create_user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
 
   create(dados: createUserDto) {
     try {
@@ -43,9 +43,38 @@ export class UserService {
     }
   }
 
-  findAll() {
+  async findAll() {
     try {
-      return this.prismaService.nato_user.findMany();
+      const req = await this.prismaService.nato_user.findMany();
+      const data = await Promise.all(
+        req.map(async (data: any) => {
+          const construtoraDb = await this.prismaService.nato_empresas.findMany(
+            {
+              where: {
+                id: {
+                  in: JSON.parse(data.construtora),
+                },
+              },
+            },
+          );
+
+          const empreendimentoDb =
+            await this.prismaService.nato_empreendimento.findMany({
+              where: {
+                id: {
+                  in: JSON.parse(data.empreendimento),
+                },
+              },
+            });
+
+          return {
+            ...data,
+            construtora: construtoraDb,
+            empreendimento: empreendimentoDb,
+          };
+        }),
+      );
+      return data;
     } catch (error) {
       throw error;
     }
@@ -55,7 +84,7 @@ export class UserService {
     try {
       return this.prismaService.nato_user.update({
         where: {
-          id,
+          id: Number(id),
         },
         data,
       });
@@ -68,7 +97,7 @@ export class UserService {
     try {
       return this.prismaService.nato_user.delete({
         where: {
-          id,
+          id: Number(id),
         },
       });
     } catch (error) {
@@ -136,6 +165,38 @@ export class UserService {
       });
     } catch (error) {
       return error;
+    }
+  }
+
+  async CCA(EmpreendimentoId: number) {
+    try {
+      return await this.prismaService.nato_user.findMany({
+        where: {
+          sms_relat: false,
+          empreendimento: {
+            contains: EmpreendimentoId.toString()
+          },
+          OR: [
+            {
+              cargo: {
+                contains: "financeiro"
+              }
+            },
+            {
+              cargo: {
+                contains: "CCA"
+              }
+            }
+          ]
+        },
+        select: {
+          id: true,
+          nome: true,
+          telefone: true,
+        },
+      })
+    } catch (error) {
+      return error
     }
   }
 }

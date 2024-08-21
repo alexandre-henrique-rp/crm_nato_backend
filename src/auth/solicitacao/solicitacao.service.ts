@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SolicitacaoService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
 
   async findAll(userId: number, hierarquia: string) {
     try {
@@ -27,6 +27,7 @@ export class SolicitacaoService {
             updatedAt: true,
             ativo: true,
             rela_quest: true,
+            financeiro: true,
           },
           orderBy: {
             id: 'desc',
@@ -46,6 +47,18 @@ export class SolicitacaoService {
             },
           }));
 
+        const consultaFinanceira =
+          item.financeiro &&
+          (await this.prismaService.nato_financeiro.findFirst({
+            where: {
+              id: item.financeiro,
+            },
+            select: {
+              id: true,
+              fantasia: true,
+            },
+          }));
+
         const consultaFcw =
           item.id_fcw &&
           (await this.prismaService.fcweb.findFirst({
@@ -59,8 +72,10 @@ export class SolicitacaoService {
               hr_agenda: true,
               valorcd: true,
               estatos_pgto: true,
+              validacao: true,
             },
           }));
+
 
         const empreedimento =
           item.empreedimento &&
@@ -82,7 +97,7 @@ export class SolicitacaoService {
             },
             select: {
               id: true,
-              razaosocial: true,
+              fantasia: true,
             },
           }));
 
@@ -92,14 +107,16 @@ export class SolicitacaoService {
           ...item,
           corretor: { ...consulta },
           ...(Alerts.length > 0 ? { alerts: Alerts } : { alerts: [] }),
-          ...(item.id_fcw && { fcweb: { ...consultaFcw } }),
-          ...(item.empreedimento && { empreedimento: { empreedimento } }),
-          ...(item.construtora && { construtora: { construtora } }),
+          ...(item.id_fcw && { fcweb: { ...consultaFcw, validacao: consultaFcw.validacao.split(' ')[0] } }),
+          ...(item.empreedimento && { empreedimento: { ...empreedimento } }),
+          ...(item.construtora && { construtora: { ...construtora } }),
+          ...(item.financeiro && { financeiro: { ...consultaFinanceira } }),
         };
       });
       return Promise.all(data);
     } catch (error) {
-      return error;
+      console.error(error.message);
+      return error.message;
     }
   }
 
@@ -144,8 +161,10 @@ export class SolicitacaoService {
             hr_agenda: true,
             valorcd: true,
             estatos_pgto: true,
+            dt_aprovacao: true,
             createdAt: true,
             updatedAt: true,
+            vouchersoluti: true
           },
         }));
 
@@ -162,12 +181,15 @@ export class SolicitacaoService {
       const empreedimento = await this.GetEmpreedimento(req.empreedimento);
       const construtora = await this.GetConstrutora(req.construtora);
 
+      const financeira = await this.getFinanceiro(req.financeiro);
+
       const data = {
         ...req,
         alert: Alerts,
         corretor: {
           ...req2,
         },
+        ...(req.financeiro && { financeiro: { ...financeira } }),
         ...(req.empreedimento && { empreedimento: { ...empreedimento } }),
         ...(req.construtora && { construtora: { ...construtora } }),
         ...(req.id_fcw && { fcweb: { ...fichaCadastro } }),
@@ -175,12 +197,12 @@ export class SolicitacaoService {
       };
       return data;
     } catch (error) {
-      console.error(error);
-      return error;
+      console.error(error.message);
+      return error.message;
     }
   }
 
-  async create(data: any) {
+  async create(data: any, sms: string) {
     try {
       const dados = {
         ...data,
@@ -193,6 +215,48 @@ export class SolicitacaoService {
         dt_solicitacao: new Date().toISOString(),
         ativo: true,
       };
+      const [vendedor] = await Promise.all([
+        await this.prismaService.nato_user.findUnique({
+          where: {
+            id: data.corretor,
+          },
+          select: {
+            id: true,
+            nome: true,
+            telefone: true,
+          },
+        }),
+      ])
+
+
+      const [empreedimento] = await Promise.all([
+        await this.prismaService.nato_empreendimento.findUnique({
+          where: {
+            id: Number(data.empreedimento)
+          },
+          select: {
+            id: true,
+            nome: true
+          }
+        })
+      ])
+
+
+      const Msg = `Ola *${data.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido de ${vendedor.nome} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.nome ? `, em *${empreedimento?.nome}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar o contrato e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
+
+
+      if (sms === 'true' && data.telefone) {
+        await Promise.all([
+          await this.SendWhatsapp(data.telefone, Msg),
+        ]);
+      }
+
+      if (sms === 'true' && data.telefone2) {
+        await Promise.all([
+          await this.SendWhatsapp(data.telefone2, Msg),
+        ]);
+      }
+
       const req = await this.prismaService.nato_solicitacoes_certificado.create(
         {
           data: dados,
@@ -200,16 +264,16 @@ export class SolicitacaoService {
       );
       return req;
     } catch (error) {
-      console.log(error);
+      console.error(error.message);
       return error;
     }
   }
 
-  update(id: number, data: any) {
+  async update(id: number, data: any) {
     try {
-      return this.prismaService.nato_solicitacoes_certificado.update({
+      const req = await this.prismaService.nato_solicitacoes_certificado.update({
         where: {
-          id,
+          id: Number(id),
         },
         data: {
           ...data,
@@ -217,6 +281,8 @@ export class SolicitacaoService {
           dt_nascimento: new Date(data.dt_nascimento).toISOString(),
         },
       });
+
+      return req;
     } catch (error) {
       return error;
     }
@@ -256,14 +322,7 @@ export class SolicitacaoService {
     try {
       return this.prismaService.nato_solicitacoes_certificado.findMany({
         where: {
-          OR: [
-            {
-              cpf: doc,
-            },
-            {
-              relacionamento: JSON.stringify([doc]),
-            },
-          ],
+          cpf: doc
         },
       });
     } catch (error) {
@@ -300,16 +359,17 @@ export class SolicitacaoService {
             cpf: true,
             dt_nascimento: true,
             obs: true,
-            cnh: true,
-            empreedimento: true,
+            // cnh: true,
+            // empreedimento: true,
             ass_doc: true,
             createdAt: true,
             updatedAt: true,
+            // financeiro: true,
           },
         });
       return req;
     } catch (error) {
-      console.log(error);
+      console.error(error.message);
       return error.message;
     }
   }
@@ -319,12 +379,13 @@ export class SolicitacaoService {
       const req = await this.prismaService.nato_alerta.findMany({
         where: {
           solicitacao_id: id,
+          status: true,
         },
       });
       return req;
     } catch (error) {
-      console.log(error);
-      return error;
+      console.error(error.message);
+      return error.message;
     }
   }
 
@@ -353,11 +414,53 @@ export class SolicitacaoService {
         },
         select: {
           id: true,
-          razaosocial: true,
+          fantasia: true,
         },
       });
       return req;
     } catch (error) {
+      return error;
+    }
+  }
+
+  async getFinanceiro(id: number) {
+    try {
+      return await this.prismaService.nato_financeiro.findFirst({
+        where: {
+          id,
+        },
+        select: {
+          id: true,
+          fantasia: true,
+        }
+      });
+    } catch (error) {
+      return {};
+    }
+  }
+
+  SendWhatsapp = async (number: string, message: string) => {
+    try {
+      const response = await fetch(
+        `https://api.inovstar.com/core/v2/api/chats/create-new`,
+
+        {
+          headers: {
+            "access-token": '60de0c8bb0012f1e6ac5546b',
+            "Content-Type": 'application/json'
+          },
+          method: "POST",
+          body: JSON.stringify({
+            number: '55' + number,
+            message: message,
+            sectorId: "60de0c8bb0012f1e6ac55473",
+          },),
+        }
+      );
+      console.log(await response.json());
+      return await response.json();
+    } catch (error) {
+      console.log("error send sms", error);
       return error;
     }
   }

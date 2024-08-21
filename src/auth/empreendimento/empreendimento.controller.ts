@@ -20,7 +20,7 @@ export class EmpreendimentoController {
   @Get('/')
   async GetAll() {
     const req = await this.empreendimentoService.GetAll();
-    return req.map((data: any) => new EmpreendimentoPresenter(data));
+    return req;
   }
 
   @Get('/:id')
@@ -31,22 +31,21 @@ export class EmpreendimentoController {
 
   @Post('/')
   async Create(@Body() data: any) {
-    console.log(data);
     const req = await this.empreendimentoService.Create(data);
-    return new EmpreendimentoPresenter(req);
+    return req;
   }
 
-  @Post('/')
-  async FilterDate(@Body() data: any) {
-    const req = await this.empreendimentoService.GetFilteDate(data);
-    return req.map((data: any) => new EmpreendimentoPresenter(data));
-  }
+  // @Post('/')
+  // async FilterDate(@Body() data: any) {
+  //   const req = await this.empreendimentoService.GetFilteDate(data);
+  //   return req.map((data: any) => new EmpreendimentoPresenter(data));
+  // }
 
-  @Post('/')
-  async FilterUser(@Body() data: any) {
-    const req = await this.empreendimentoService.GetFilteUser(data);
-    return req.map((data: any) => new EmpreendimentoPresenter(data));
-  }
+  // @Post('/')
+  // async FilterUser(@Body() data: any) {
+  //   const req = await this.empreendimentoService.GetFilteUser(data);
+  //   return req.map((data: any) => new EmpreendimentoPresenter(data));
+  // }
 
   @Put('/:id')
   async Update(@Param('id') id: number, @Body() data: any) {
@@ -61,7 +60,6 @@ export class EmpreendimentoController {
 
   @Get('/filter/:id')
   async Filter(@Param('id') id: number) {
-    console.log(id);
     const req = await this.empreendimentoService.Filter(id);
     return req.map((data: any) => new EmpreendimentoPresenter(data));
   }

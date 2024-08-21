@@ -11,8 +11,8 @@ export class EmpresaPresenter {
       tel: this.empresa.tel,
       email: this.empresa.email,
       colaboradores: JSON.parse(this.empresa.colaboradores),
-      responsavel: this.empresa.responsavel,
       tipo: this.empresa.tipo,
+      fantasia: this.empresa.fantasia,
       createdAt: this.empresa.createdAt,
       updatedAt: this.empresa.updatedAt,
     };

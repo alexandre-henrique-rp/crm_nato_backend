@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { createUserDto } from '../dto/create_user.dto';
 import { UserPresenter } from '../user.presenter';
 import { UserService } from '../user.service';
@@ -20,5 +20,10 @@ export class UserController2 {
       }
       return error;
     }
+  }
+
+  @Get('/cca/:EmpreendimentoId')
+  async CCA(@Param('EmpreendimentoId') EmpreendimentoId: number) {
+    return await this.userService.CCA(EmpreendimentoId);
   }
 }

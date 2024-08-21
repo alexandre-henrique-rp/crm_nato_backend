@@ -38,24 +38,25 @@ export class AuthService {
       const { password_key, password, ...datauser } = user;
       const result = {
         token: this.jwtService.sign(datauser),
-        expire: new Date().getTime() + 14400000, //expirar em 4 h em segundos
         user: {
           id: user.id,
-          username: user.username,
+          // username: user.username,
           nome: user.nome,
-          cpf: user.cpf,
+          // cpf: user.cpf,
           telefone: user.telefone,
-          email: user.email,
+          // email: user.email,
           construtora: user.construtora,
           empreendimento: user.empreendimento,
           hierarquia: user.hierarquia,
           cargo: user.cargo,
           status: user.status,
+          Financeira: user.Financeira,
           reset_password: user.reset_password,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
+          // createdAt: user.createdAt,
+          // updatedAt: user.updatedAt,
         },
       };
+      
       return result;
     } catch (error) {
       throw error;
@@ -86,10 +87,17 @@ export class AuthService {
         ),
       );
 
+      const Financeira = await Promise.all(
+        request.Financeira ? JSON.parse(request.Financeira).map(async (item: number) =>
+          this.getFinanceira(Number(item)),
+        ) : []
+      )
+
       const data = {
         ...request,
         construtora,
         empreendimento,
+        Financeira,
       };
 
       return data;
@@ -104,6 +112,10 @@ export class AuthService {
         where: {
           id,
         },
+        select: {
+          id: true,
+          nome: true
+        }
       });
     } catch (error) {
       return {};
@@ -116,6 +128,26 @@ export class AuthService {
         where: {
           id,
         },
+        select: {
+          id: true,
+          fantasia: true,
+        }
+      });
+    } catch (error) {
+      return {};
+    }
+  }
+
+  async getFinanceira(id: number) {
+    try {
+      return await this.prismaService.nato_financeiro.findFirst({
+        where: {
+          id,
+        },
+        select: {
+          id: true,
+          fantasia: true
+        }
       });
     } catch (error) {
       return {};
