@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '../auth.guard';
@@ -18,9 +19,15 @@ export class EmpreendimentoController {
   constructor(private empreendimentoService: EmpreendimentoService) {}
 
   @Get('/')
-  async GetAll() {
-    const req = await this.empreendimentoService.GetAll();
-    return req;
+  async GetAll(@Req() req: any) {
+    try {
+      const Financeira = req.user.Financeira
+      const Hierarquia = req.user.hierarquia
+
+      return await this.empreendimentoService.GetAll(Financeira, Hierarquia);
+    } catch (error) {
+      return error;
+    }
   }
 
   @Get('/:id')

@@ -5,13 +5,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SolicitacaoService {
   constructor(private prismaService: PrismaService) { }
 
-  async findAll(userId: number, hierarquia: string) {
+  async findAll(userId: number, hierarquia: string, Financeira: any) {
     try {
+      const Ids = Financeira.map((item: { id: any; }) => item.id);
       const req =
         await this.prismaService.nato_solicitacoes_certificado.findMany({
           where: {
-            ...(hierarquia === 'USER' && { corretor: userId, ativo: true }),
-            ...(hierarquia === 'CONST' && { ativo: true }),
+            ...(hierarquia === 'USER' && { corretor: userId, ativo: true, financeiro: { in: Ids } }),
+            ...(hierarquia === 'CONST' && { financeiro: { in: Ids }, ativo: true }),
           },
           select: {
             id: true,
@@ -107,7 +108,7 @@ export class SolicitacaoService {
           ...item,
           corretor: { ...consulta },
           ...(Alerts.length > 0 ? { alerts: Alerts } : { alerts: [] }),
-          ...(item.id_fcw && { fcweb: { ...consultaFcw, validacao: consultaFcw.validacao.split(' ')[0] } }),
+          ...(item.id_fcw && { fcweb: { ...consultaFcw, validacao: consultaFcw.validacao.split(' ')[0], andamento: consultaFcw.andamento === "NOVA FC" ? "INICIADO" : consultaFcw.andamento } }),
           ...(item.empreedimento && { empreedimento: { ...empreedimento } }),
           ...(item.construtora && { construtora: { ...construtora } }),
           ...(item.financeiro && { financeiro: { ...consultaFinanceira } }),
@@ -120,12 +121,13 @@ export class SolicitacaoService {
     }
   }
 
-  async findOne(id: number, userId: number, hierarquia: string) {
+  async findOne(id: number, userId: number, hierarquia: string, Financeira: any) {
     try {
+      const Ids = Financeira.map((item: { id: any; }) => item.id);
       const Parans =
         hierarquia === 'USER'
-          ? { id: id, corretor: userId, ativo: true }
-          : { id: id };
+          ? { id: id, corretor: userId, ativo: true , financeiro: { in: Ids } }
+          : hierarquia === 'CONST' ? { id: id, financeiro: { in: Ids } } : { id: id };
 
       const req =
         await this.prismaService.nato_solicitacoes_certificado.findFirst({

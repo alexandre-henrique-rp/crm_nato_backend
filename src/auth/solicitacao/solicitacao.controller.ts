@@ -22,7 +22,10 @@ export class SolicitacaoController {
   @Get('/')
   async GetAll(@Req() req: any) {
     try {
-      return this.solicitacaoService.findAll(req.user.id, req.user.hierarquia);
+      const Financeira = req.user.Financeira
+      const Hierarquia = req.user.hierarquia
+      const Id = req.user.id
+      return this.solicitacaoService.findAll(Id, Hierarquia, Financeira);
     } catch (error) {
       throw error;
     }
@@ -31,10 +34,14 @@ export class SolicitacaoController {
   @Get('/:id')
   async GetOne(@Param('id') id: number, @Req() req: any) {
     try {
+      const Financeira = req.user.Financeira
+      const Hierarquia = req.user.hierarquia
+      const UserId = req.user.id
       return this.solicitacaoService.findOne(
         Number(id),
-        req.user.id,
-        req.user.hierarquia,
+        UserId,
+        Hierarquia,
+        Financeira
       );
     } catch (error) {
       throw error;
