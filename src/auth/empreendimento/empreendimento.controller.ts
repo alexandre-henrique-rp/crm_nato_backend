@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -14,7 +15,7 @@ import { EmpreendimentoService } from './empreendimento.service';
 import { EmpreendimentoPresenter } from './empreendimento.presenter';
 
 @UseGuards(AuthGuard)
-@Controller('empreendimento')
+  @Controller('empreendimento')
 export class EmpreendimentoController {
   constructor(private empreendimentoService: EmpreendimentoService) {}
 
@@ -30,6 +31,18 @@ export class EmpreendimentoController {
     }
   }
 
+  @Get('/search')
+  async GetAllSearch(@Req() req: any, @Query() query: any) {
+    try {
+      const {financeiro, construtora} = query
+      return await this.empreendimentoService.GetAllBusca(financeiro, construtora);
+    } catch (error) {
+      return error;
+    }
+  }
+
+
+
   @Get('/:id')
   async GetOne(@Param('id') id: number) {
     const req = await this.empreendimentoService.GetOne(id);
@@ -41,18 +54,6 @@ export class EmpreendimentoController {
     const req = await this.empreendimentoService.Create(data);
     return req;
   }
-
-  // @Post('/')
-  // async FilterDate(@Body() data: any) {
-  //   const req = await this.empreendimentoService.GetFilteDate(data);
-  //   return req.map((data: any) => new EmpreendimentoPresenter(data));
-  // }
-
-  // @Post('/')
-  // async FilterUser(@Body() data: any) {
-  //   const req = await this.empreendimentoService.GetFilteUser(data);
-  //   return req.map((data: any) => new EmpreendimentoPresenter(data));
-  // }
 
   @Put('/:id')
   async Update(@Param('id') id: number, @Body() data: any) {

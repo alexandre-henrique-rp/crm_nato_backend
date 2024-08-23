@@ -25,7 +25,9 @@ export class SolicitacaoController {
       const Financeira = req.user.Financeira
       const Hierarquia = req.user.hierarquia
       const Id = req.user.id
-      return this.solicitacaoService.findAll(Id, Hierarquia, Financeira);
+      const requisicao = await this.solicitacaoService.findAll(Id, Hierarquia, Financeira)
+      // console.log("🚀 ~ SolicitacaoController ~ GetAll ~ requisicao:", requisicao)
+      return requisicao
     } catch (error) {
       throw error;
     }

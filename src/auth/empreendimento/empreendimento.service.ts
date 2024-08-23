@@ -171,4 +171,26 @@ export class EmpreendimentoService {
       return error;
     }
   }
+
+
+  async GetAllBusca(financeiro: string, construtora: string) {
+    try {
+      const request = await this.prismaService.nato_empreendimento.findMany({
+        where:{
+          financeiro: {
+            contains: financeiro
+          },
+          construtora: Number(construtora)
+        },
+        select: {
+          id: true,
+          nome: true
+        }
+      })
+
+      return request
+    } catch (error) {
+      return error
+    }
+  }
 }

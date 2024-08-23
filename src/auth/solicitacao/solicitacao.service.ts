@@ -17,17 +17,12 @@ export class SolicitacaoService {
           select: {
             id: true,
             nome: true,
-            obs: true,
             dt_solicitacao: true,
             empreedimento: true,
             construtora: true,
             corretor: true,
-            ass_doc: true,
             id_fcw: true,
-            createdAt: true,
-            updatedAt: true,
             ativo: true,
-            rela_quest: true,
             financeiro: true,
           },
           orderBy: {
@@ -107,7 +102,7 @@ export class SolicitacaoService {
         return {
           ...item,
           corretor: { ...consulta },
-          ...(Alerts.length > 0 ? { alerts: Alerts } : { alerts: [] }),
+          // ...(Alerts.length > 0 ? { alerts: Alerts } : { alerts: [] }),
           ...(item.id_fcw && { fcweb: { ...consultaFcw, validacao: consultaFcw.validacao.split(' ')[0], andamento: consultaFcw.andamento === "NOVA FC" ? "INICIADO" : consultaFcw.andamento } }),
           ...(item.empreedimento && { empreedimento: { ...empreedimento } }),
           ...(item.construtora && { construtora: { ...construtora } }),
