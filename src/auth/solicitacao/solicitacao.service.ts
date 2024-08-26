@@ -3,7 +3,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SolicitacaoService {
-  constructor(private prismaService: PrismaService) { }
+  constructor(private prismaService: PrismaService
+  ) { }
 
   async findAll(userId: number, hierarquia: string, Financeira: any) {
     try {
@@ -54,7 +55,7 @@ export class SolicitacaoService {
               fantasia: true,
             },
           }));
-
+          
         const consultaFcw =
           item.id_fcw &&
           (await this.prismaService.fcweb.findFirst({
@@ -68,6 +69,7 @@ export class SolicitacaoService {
               hr_agenda: true,
               valorcd: true,
               estatos_pgto: true,
+              // dt_aprovacao: true,
               validacao: true,
             },
           }));
@@ -121,7 +123,7 @@ export class SolicitacaoService {
       const Ids = Financeira.map((item: { id: any; }) => item.id);
       const Parans =
         hierarquia === 'USER'
-          ? { id: id, corretor: userId, ativo: true , financeiro: { in: Ids } }
+          ? { id: id, corretor: userId, ativo: true, financeiro: { in: Ids } }
           : hierarquia === 'CONST' ? { id: id, financeiro: { in: Ids } } : { id: id };
 
       const req =
@@ -169,11 +171,11 @@ export class SolicitacaoService {
 
       const relacionamento =
         req.relacionamento === null ? [] : JSON.parse(req.relacionamento);
-      const dataRelacionamento = await Promise.all(
+      const dataRelacionamento = req.rela_quest ? await Promise.all(
         relacionamento.map(async (item: any) => {
           return this.GetRelacionamento(item);
         }),
-      );
+      ) : [];
 
       const empreedimento = await this.GetEmpreedimento(req.empreedimento);
       const construtora = await this.GetConstrutora(req.construtora);
@@ -364,7 +366,7 @@ export class SolicitacaoService {
             // financeiro: true,
           },
         });
-      return req;
+      return !req[0] ? [] : req;
     } catch (error) {
       console.error(error.message);
       return error.message;

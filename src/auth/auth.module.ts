@@ -10,6 +10,7 @@ import { EmpreendimentoModule } from './empreendimento/empreendimento.module';
 import { UserController2 } from './user/create/user.controller';
 import { AlertsModule } from './alerts/alerts.module';
 import { FinanceiroModule } from './financeiro/financeiro.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { FinanceiroModule } from './financeiro/financeiro.module';
     EmpreendimentoModule,
     AlertsModule,
     FinanceiroModule,
+    DashboardModule,
   ],
   controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],

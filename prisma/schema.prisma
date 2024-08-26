@@ -256,7 +256,7 @@ model fcweb {
   arquivo             String?      @db.VarChar(100)
   nomearquivo         String?      @db.VarChar(100)
   obsrenovacao        String?      @db.VarChar(150)
-  dt_aprovacao        DateTime?    @db.Date
+  dt_aprovacao        DateTime?    @db.Date @ignore
   comicao             Float?       @db.Float
   validacao           String?      @db.VarChar(150)
   nfe                 String?      @db.VarChar(150)
