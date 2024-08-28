@@ -12,7 +12,7 @@ export class SolicitacaoService {
       const req =
         await this.prismaService.nato_solicitacoes_certificado.findMany({
           where: {
-            ...(hierarquia === 'USER' && { corretor: userId, ativo: true, financeiro: { in: Ids } }),
+            ...(hierarquia === 'USER' && { corretor: userId, ativo: true, distrato: false, financeiro: { in: Ids } }),
             ...(hierarquia === 'CONST' && { financeiro: { in: Ids }, ativo: true }),
           },
           select: {
@@ -23,6 +23,7 @@ export class SolicitacaoService {
             construtora: true,
             corretor: true,
             id_fcw: true,
+            distrato: true,
             ativo: true,
             financeiro: true,
           },
@@ -55,7 +56,7 @@ export class SolicitacaoService {
               fantasia: true,
             },
           }));
-          
+
         const consultaFcw =
           item.id_fcw &&
           (await this.prismaService.fcweb.findFirst({
@@ -69,7 +70,7 @@ export class SolicitacaoService {
               hr_agenda: true,
               valorcd: true,
               estatos_pgto: true,
-              // dt_aprovacao: true,
+              dt_aprovacao: true,
               validacao: true,
             },
           }));
@@ -104,7 +105,7 @@ export class SolicitacaoService {
         return {
           ...item,
           corretor: { ...consulta },
-          // ...(Alerts.length > 0 ? { alerts: Alerts } : { alerts: [] }),
+          ...(Alerts.length > 0 ? { alerts: Alerts } : { alerts: [] }),
           ...(item.id_fcw && { fcweb: { ...consultaFcw, validacao: consultaFcw.validacao.split(' ')[0], andamento: consultaFcw.andamento === "NOVA FC" ? "INICIADO" : consultaFcw.andamento } }),
           ...(item.empreedimento && { empreedimento: { ...empreedimento } }),
           ...(item.construtora && { construtora: { ...construtora } }),
@@ -243,16 +244,20 @@ export class SolicitacaoService {
 
       const Msg = `Ola *${data.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido de ${vendedor.nome} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.nome ? `, em *${empreedimento?.nome}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar o contrato e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
 
+      const TermoDeUso = `TERMO DE CIÊNCIA\n\nCaro *${data.nome}*,\n\nInformamos que a assinatura fornecida será EXCLUSIVAMENTE utilizada para:\n\n1. Assinatura de contratos junto ao Correspondente da CAIXA.\n2. Abertura de fichas e assinatura de contratos junto à CAIXA ECONÔMICA FEDERAL.\n\nAtenciosamente,\nTime *INTERFACE certificadora* (REDE BRASIL RP)`
+
 
       if (sms === 'true' && data.telefone) {
         await Promise.all([
           await this.SendWhatsapp(data.telefone, Msg),
+          await this.SendTermo(data.telefone, TermoDeUso),
         ]);
       }
 
       if (sms === 'true' && data.telefone2) {
         await Promise.all([
           await this.SendWhatsapp(data.telefone2, Msg),
+          await this.SendTermo(data.telefone, TermoDeUso),
         ]);
       }
 
@@ -276,11 +281,10 @@ export class SolicitacaoService {
         },
         data: {
           ...data,
-          relacionamento: JSON.stringify(data.relacionamento),
-          dt_nascimento: new Date(data.dt_nascimento).toISOString(),
+          ...(data.relacionamento && { relacionamento: JSON.stringify(data.relacionamento), }),
+          ...(data.dt_nascimento && { dt_nascimento: new Date(data.dt_nascimento).toISOString(), }),
         },
       });
-
       return req;
     } catch (error) {
       return error;
@@ -463,4 +467,30 @@ export class SolicitacaoService {
       return error;
     }
   }
+
+  SendTermo = async (number: string, message: string) => {
+    try {
+      const response = await fetch(
+        `https://api.inovstar.com/core/v2/api/chats/send-text`,
+
+        {
+          headers: {
+            "access-token": '60de0c8bb0012f1e6ac5546b',
+            "Content-Type": 'application/json'
+          },
+          method: "POST",
+          body: JSON.stringify({
+            number: '55' + number,
+            message: message,
+          },),
+        }
+      );
+      console.log(await response.json());
+      return await response.json();
+    } catch (error) {
+      console.log("error send sms", error);
+      return error;
+    }
+  }
+
 }

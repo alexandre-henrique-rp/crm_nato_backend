@@ -11,6 +11,7 @@ import { UserController2 } from './user/create/user.controller';
 import { AlertsModule } from './alerts/alerts.module';
 import { FinanceiroModule } from './financeiro/financeiro.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     AlertsModule,
     FinanceiroModule,
     DashboardModule,
+    FileModule,
   ],
   controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],

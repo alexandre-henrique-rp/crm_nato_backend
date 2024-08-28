@@ -256,7 +256,7 @@ model fcweb {
   arquivo             String?      @db.VarChar(100)
   nomearquivo         String?      @db.VarChar(100)
   obsrenovacao        String?      @db.VarChar(150)
-  dt_aprovacao        DateTime?    @db.Date @ignore
+  dt_aprovacao        DateTime?    @db.Date
   comicao             Float?       @db.Float
   validacao           String?      @db.VarChar(150)
   nfe                 String?      @db.VarChar(150)
@@ -364,6 +364,8 @@ model nato_solicitacoes_certificado {
   voucher        String?       @db.VarChar(100)
   link_planilha  String?       @db.Text
   financeiro     Int?
+  distrato       Boolean?      @default(false)
+  user           Int?
   nato_alerta    nato_alerta[]
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")
