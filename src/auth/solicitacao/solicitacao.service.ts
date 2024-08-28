@@ -171,12 +171,13 @@ export class SolicitacaoService {
       const Alerts = await this.GetAlert(req.id);
 
       const relacionamento =
-        req.relacionamento === null ? [] : JSON.parse(req.relacionamento);
+      req.relacionamento === null ? [] : JSON.parse(req.relacionamento);
       const dataRelacionamento = req.rela_quest ? await Promise.all(
         relacionamento.map(async (item: any) => {
-          return this.GetRelacionamento(item);
+          const req = await this.GetRelacionamento(item);
+          return req;
         }),
-      ) : [];
+      ): [] ;
 
       const empreedimento = await this.GetEmpreedimento(req.empreedimento);
       const construtora = await this.GetConstrutora(req.construtora);
@@ -349,28 +350,23 @@ export class SolicitacaoService {
   async GetRelacionamento(cpf: string) {
     try {
       const req =
-        await this.prismaService.nato_solicitacoes_certificado.findFirst({
-          where: {
-            cpf: cpf,
-            ativo: true,
-          },
-          select: {
-            id: true,
-            nome: true,
-            email: true,
-            telefone: true,
-            cpf: true,
-            dt_nascimento: true,
-            obs: true,
-            // cnh: true,
-            // empreedimento: true,
-            ass_doc: true,
-            createdAt: true,
-            updatedAt: true,
-            // financeiro: true,
-          },
-        });
-      return !req[0] ? [] : req;
+      await this.prismaService.nato_solicitacoes_certificado.findFirst({
+        where: {
+          cpf: cpf,
+          ativo: true,
+        },
+        select: {
+          id: true,
+          nome: true,
+          email: true,
+          telefone: true,
+          cpf: true,
+          dt_nascimento: true,
+          ass_doc: true,
+          createdAt: true,
+        },
+      });
+      return req;
     } catch (error) {
       console.error(error.message);
       return error.message;
