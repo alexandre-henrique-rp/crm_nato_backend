@@ -366,6 +366,8 @@ model nato_solicitacoes_certificado {
   financeiro     Int?
   distrato       Boolean?      @default(false)
   user           Int?
+  logDelete      String?       @db.LongText
+  distrato_dt    DateTime?     @db.DateTime(0)
   nato_alerta    nato_alerta[]
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")

@@ -7,7 +7,8 @@ export class FinanceiroService {
 
   async findAll() {
     try {
-      return await this.prismaService.nato_financeiro.findMany();
+      const req = await this.prismaService.nato_financeiro.findMany();
+      return req
     } catch (error) {
      console.error(error.message);
       return error.message;

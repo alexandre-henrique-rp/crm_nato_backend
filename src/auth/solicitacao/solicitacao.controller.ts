@@ -64,9 +64,9 @@ export class SolicitacaoController {
   }
 
   @Delete('/delete/:id')
-  async Delete(@Param('id') id: number) {
+  async Delete(@Param('id') id: number, @Req() req: any) {
     try {
-      await this.solicitacaoService.delete(Number(id));
+      await this.solicitacaoService.delete(Number(id), req.user);
       return {
         message: 'Solicitação deletada com sucesso!',
       };
@@ -76,11 +76,11 @@ export class SolicitacaoController {
   }
 
   @Put('/update/:id')
-  async Update(@Param('id') id: number, @Body() data: any) {
+  async Update(@Param('id') id: number, @Body() data: any, @Req() req: any) {
     try {
       return this.solicitacaoService.update(Number(id), {
         ...data,
-      });
+      }, req.user);
     } catch (error) {
       throw error;
     }

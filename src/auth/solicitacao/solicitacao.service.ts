@@ -274,33 +274,59 @@ export class SolicitacaoService {
     }
   }
 
-  async update(id: number, data: any) {
-    try {
-      const req = await this.prismaService.nato_solicitacoes_certificado.update({
-        where: {
-          id: Number(id),
-        },
-        data: {
-          ...data,
-          ...(data.relacionamento && { relacionamento: JSON.stringify(data.relacionamento), }),
-          ...(data.dt_nascimento && { dt_nascimento: new Date(data.dt_nascimento).toISOString(), }),
-        },
-      });
-      return req;
-    } catch (error) {
-      return error;
-    }
-  }
-
-  async delete(id: number) {
+  async update(id: number, data: any, user: any) {
     try {
       const req =
         await this.prismaService.nato_solicitacoes_certificado.findFirst({
           where: {
             id,
+
           },
           select: {
             ativo: true,
+            logDelete: true,
+          },
+        });
+        
+        const dados = {
+          ...data,
+          ...(data.relacionamento && { relacionamento: JSON.stringify(data.relacionamento), }),
+          ...(data.dt_nascimento && { dt_nascimento: new Date(data.dt_nascimento).toISOString(), }),
+          ...(data.logDelete && { logDelete: `${data.logDelete}\nO usuário: ${user?.nome}, id: ${user?.id} editou esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}` }),
+          ...(req.logDelete && !data.logDelete && { logDelete: `${req.logDelete}\nO usuário: ${user?.nome}, id: ${user?.id} editou esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}` }),
+          ...(!data.logDelete && !req.logDelete && { logDelete: `${user?.nome}, id: ${user?.id} editou esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}` })
+        }
+
+        console.log("dados",dados)
+
+      const update = await this.prismaService.nato_solicitacoes_certificado.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          ...dados
+        },
+      });
+      console.log("update",update)
+      return update;
+    } catch (error) {
+      console.error(error);
+      console.error(error.message);
+      return error;
+    }
+  }
+
+  async delete(id: number, user: any) {
+    try {
+      const req =
+        await this.prismaService.nato_solicitacoes_certificado.findFirst({
+          where: {
+            id,
+           
+          },
+          select: {
+            ativo: true,
+            logDelete: true,
           },
         });
 
@@ -315,6 +341,7 @@ export class SolicitacaoService {
         data: {
           ativo: false,
           corretor: null,
+          logDelete: `${req.logDelete}\nO usuário: ${user?.nome}, id: ${user?.id} deletou esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}`,
         },
       });
     } catch (error) {
