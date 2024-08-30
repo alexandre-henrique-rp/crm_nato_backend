@@ -6,14 +6,16 @@ export class SolicitacaoService {
   constructor(private prismaService: PrismaService
   ) { }
 
-  async findAll(userId: number, hierarquia: string, Financeira: any) {
+  async findAll(userId: number, hierarquia: string, Financeira: any, Construtora: any) {
     try {
       const Ids = Financeira.map((item: { id: any; }) => item.id);
-      const req =
+      const ConstId = Construtora.map((i: any) => i.id)
+      const req = 
         await this.prismaService.nato_solicitacoes_certificado.findMany({
           where: {
             ...(hierarquia === 'USER' && { corretor: userId, ativo: true, distrato: false, financeiro: { in: Ids } }),
-            ...(hierarquia === 'CONST' && { financeiro: { in: Ids }, ativo: true }),
+            ...(hierarquia === 'CONST' && { financeiro: { in: Ids }, ativo: true, construtora: { in: ConstId } }),
+            ...(hierarquia === 'GRT' && { financeiro: { in: Ids }, ativo: true, construtora: { in: ConstId } }),
           },
           select: {
             id: true,

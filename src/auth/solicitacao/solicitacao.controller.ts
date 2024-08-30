@@ -23,10 +23,10 @@ export class SolicitacaoController {
   async GetAll(@Req() req: any) {
     try {
       const Financeira = req.user.Financeira
+      const construtora = req.user.construtora
       const Hierarquia = req.user.hierarquia
       const Id = req.user.id
-      const requisicao = await this.solicitacaoService.findAll(Id, Hierarquia, Financeira)
-      // console.log("🚀 ~ SolicitacaoController ~ GetAll ~ requisicao:", requisicao)
+      const requisicao = await this.solicitacaoService.findAll(Id, Hierarquia, Financeira, construtora)
       return requisicao
     } catch (error) {
       throw error;
