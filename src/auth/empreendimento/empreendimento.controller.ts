@@ -24,8 +24,9 @@ export class EmpreendimentoController {
     try {
       const Financeira = req.user.Financeira
       const Hierarquia = req.user.hierarquia
+      const Construtora = req.user.construtora
 
-      return await this.empreendimentoService.GetAll(Financeira, Hierarquia);
+      return await this.empreendimentoService.GetAll(Financeira, Hierarquia, Construtora);
     } catch (error) {
       return error;
     }

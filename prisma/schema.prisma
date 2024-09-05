@@ -337,38 +337,40 @@ model nato_empresas {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model nato_solicitacoes_certificado {
-  id             Int           @id @default(autoincrement())
-  nome           String        @db.VarChar(100)
-  cpf            String        @db.VarChar(100)
-  email          String        @db.VarChar(100)
-  dt_solicitacao DateTime      @db.Date
-  corretor       Int?
-  construtora    Int?
-  telefone       String?       @db.VarChar(100)
-  dt_nascimento  DateTime?     @db.Date
-  ass_doc        String?       @db.Text
-  link_doc       String?       @db.Text
-  id_fcw         Int?
-  obs            String?       @db.LongText
-  alert          String?       @db.VarChar(100)
-  empreedimento  Int?
-  cnh            String?       @db.VarChar(100)
-  ativo          Boolean       @default(true)
-  uploadCnh      String?       @db.LongText
-  relacionamento String?       @db.LongText
-  createdAt      DateTime      @default(now()) @db.DateTime(0)
-  updatedAt      DateTime?     @db.DateTime(0)
-  telefone2      String?       @db.VarChar(100)
-  uploadRg       String?       @db.LongText
-  rela_quest     Boolean?      @default(false)
-  voucher        String?       @db.VarChar(100)
-  link_planilha  String?       @db.Text
-  financeiro     Int?
-  distrato       Boolean?      @default(false)
-  user           Int?
-  logDelete      String?       @db.LongText
-  distrato_dt    DateTime?     @db.DateTime(0)
-  nato_alerta    nato_alerta[]
+  id               Int           @id @default(autoincrement())
+  nome             String        @db.VarChar(100)
+  cpf              String        @db.VarChar(100)
+  email            String        @db.VarChar(100)
+  dt_solicitacao   DateTime      @db.Date
+  corretor         Int?
+  construtora      Int?
+  telefone         String?       @db.VarChar(100)
+  dt_nascimento    DateTime?     @db.Date
+  ass_doc          String?       @db.Text
+  link_doc         String?       @db.Text
+  id_fcw           Int?
+  obs              String?       @db.LongText
+  alert            String?       @db.VarChar(100)
+  empreedimento    Int?
+  cnh              String?       @db.VarChar(100)
+  ativo            Boolean       @default(true)
+  uploadCnh        String?       @db.LongText
+  relacionamento   String?       @db.LongText
+  createdAt        DateTime      @default(now()) @db.DateTime(0)
+  updatedAt        DateTime?     @db.DateTime(0)
+  telefone2        String?       @db.VarChar(100)
+  uploadRg         String?       @db.LongText
+  rela_quest       Boolean?      @default(false)
+  voucher          String?       @db.VarChar(100)
+  link_planilha    String?       @db.Text
+  financeiro       Int?
+  distrato         Boolean?      @default(false)
+  user             Int?
+  logDelete        String?       @db.LongText
+  distrato_dt      DateTime?     @db.DateTime(0)
+  status_aprovacao Boolean?      @default(false)
+  distrato_id      Int?
+  nato_alerta      nato_alerta[]
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")
   @@index([construtora], map: "nato_solicitacoes_certificado_nato_empresas_FK")
@@ -695,6 +697,7 @@ model nato_empreendimento {
   ativo         Boolean?       @default(true)
   obs           String?        @db.Text
   financeiro    String?        @db.LongText
+  tag           String?        @db.VarChar(100)
   nato_alerta   nato_alerta[]
   nato_empresas nato_empresas? @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_empreendimento_nato_empresas_FK")
 

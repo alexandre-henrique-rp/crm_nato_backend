@@ -5,16 +5,18 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class EmpreendimentoService {
   constructor(private prismaService: PrismaService) {}
 
-  async GetAll(Financeira: any, Hierarquia: string) {
+  async GetAll(Financeira: any, Hierarquia: string, Construtora: any) {
     try {
-      const Ids = Financeira.map((item: { id: any }) => String(item.id)); // Convertendo IDs para string se necessário
-      return await this.prismaService.nato_empreendimento.findMany({
+      const Ids = Financeira.map((item: { id: any }) => String(item.id));
+      const IdsConst = Construtora.map((i: any) => i.id) // Convertendo IDs para string se necessário
+      const req = await this.prismaService.nato_empreendimento.findMany({
         where: {
           ativo: true,
           ...(Hierarquia === 'CONST' && {
             OR: Ids.map((id: any) => ({
               financeiro: { contains: id },
-            })),
+            }),
+          ),
           }),
         },
         select: {
@@ -25,6 +27,10 @@ export class EmpreendimentoService {
           dt_fim: true,
         },
       });
+
+      const data = req.filter((i: any) => i.construtora == IdsConst[0]);
+
+      return Hierarquia === 'CONST' ? data : req;
     } catch (error) {
       console.error('Erro ao buscar empreendimentos:', error);
       throw new Error('Erro ao buscar empreendimentos. Por favor, tente novamente mais tarde.');

@@ -49,6 +49,21 @@ export class AlertsController {
     }
   }
 
+
+  //listar alertas por id de solicitação
+  @Get('/get/cadastro/:id')
+  async GetAllUserCadastro(@Param('id') id: number, @Req() request: any) {
+    try {
+      const DataUser = request.user;
+      const req = await this.empresaService.GetSolicitacaoAlerta(DataUser, Number(id));
+      return req;
+    } catch (error) {
+      return error;
+    }
+  }
+
+
+
   //atualizar alerta
   @Put('/update/:id')
   async Update(@Param('id') id: number, @Body() data: any) {

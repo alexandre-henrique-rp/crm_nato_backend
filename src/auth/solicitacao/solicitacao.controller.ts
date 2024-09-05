@@ -19,14 +19,39 @@ import { SolicitacaoPresenter } from './solicitacao.presenter';
 export class SolicitacaoController {
   constructor(private solicitacaoService: SolicitacaoService) { }
 
+  // @Get('/')
+  // async GetAll(@Req() req: any) {
+  //   try {
+  //     const Financeira = req.user.Financeira
+  //     const construtora = req.user.construtora
+  //     const Hierarquia = req.user.hierarquia
+  //     const Id = req.user.id
+  //     const requisicao = await this.solicitacaoService.findAll(Id, Hierarquia, Financeira, construtora)
+  //     return requisicao
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
+  // http://localhost:3032/solicitacao?nome=nome&andamento=andamento&construtora=1&empreedimento=1&financeiro=1&id=1&pagina=1&limite=10
   @Get('/')
-  async GetAll(@Req() req: any) {
+  async GetAll(@Req() req: any, @Query() query: any) {
     try {
-      const Financeira = req.user.Financeira
-      const construtora = req.user.construtora
-      const Hierarquia = req.user.hierarquia
-      const Id = req.user.id
-      const requisicao = await this.solicitacaoService.findAll(Id, Hierarquia, Financeira, construtora)
+      const filter ={
+        ...(query.nome && { nome: query.nome } ),
+        ...(query.andamento && { andamento:  query.andamento }),
+        ...(query.construtora && { construtora: Number(query.construtora)  }),
+        ...(query.empreedimento && { empreedimento: Number(query.empreedimento) }),
+        ...(query.financeiro && { financeiro: Number(query.financeiro) } ),
+        ...(query.id && { id: Number(query.id) }),
+      }
+
+      const requisicao = await this.solicitacaoService.GetAllPaginationAndFilter(
+        query.pagina,
+        query.limite,
+        filter,
+        req.user
+      )
       return requisicao
     } catch (error) {
       throw error;
@@ -95,12 +120,12 @@ export class SolicitacaoController {
       throw error;
     }
   }
-  @Get('/filter/date')
-  async FilterDate(@Body() data: any) {
-    try {
-      return this.solicitacaoService.FilterDate(data);
-    } catch (error) {
-      throw error;
-    }
-  }
+  // @Get('/filter/date')
+  // async FilterDate(@Body() data: any) {
+  //   try {
+  //     return this.solicitacaoService.FilterDate(data);
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }

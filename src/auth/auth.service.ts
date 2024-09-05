@@ -75,23 +75,23 @@ export class AuthService {
         return null;
       }
 
-      const construtora = await Promise.all(
+      const construtora = request.construtora.length > 0 ? await Promise.all(
         JSON.parse(request.construtora).map(async (item: number) =>
           this.getConstrutora(Number(item)),
         ),
-      );
+      ): [];
 
-      const empreendimento = await Promise.all(
+      const empreendimento = request.empreendimento.length > 0 ? await Promise.all(
         JSON.parse(request.empreendimento).map(async (item: number) =>
           this.getEmpreedimento(Number(item)),
         ),
-      );
+      ): [];
 
-      const Financeira = await Promise.all(
-        request.Financeira ? JSON.parse(request.Financeira).map(async (item: number) =>
+      const Financeira = request.Financeira.length > 0 ?await Promise.all(
+         JSON.parse(request.Financeira).map(async (item: number) =>
           this.getFinanceira(Number(item)),
-        ) : []
-      )
+        ) 
+      ) : []
 
       const data = {
         ...request,

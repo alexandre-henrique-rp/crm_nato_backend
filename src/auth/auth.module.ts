@@ -12,6 +12,7 @@ import { AlertsModule } from './alerts/alerts.module';
 import { FinanceiroModule } from './financeiro/financeiro.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileModule } from './file/file.module';
+import { FichaModule } from './ficha/ficha.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { FileModule } from './file/file.module';
     FinanceiroModule,
     DashboardModule,
     FileModule,
+    FichaModule,
   ],
   controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],

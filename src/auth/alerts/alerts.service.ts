@@ -12,23 +12,24 @@ export class AlertsService {
         ...(hierarquia === 'USER' ? { data: data } : { data: { ...data } }),
       });
 
-      const [vendedor] = await Promise.all([
-        await this.prismaService.nato_user.findUnique({
-          where: {
-            id: data.corretor,
-          },
-          select: {
-            id: true,
-            nome: true,
-            telefone: true,
-          },
-        }),
-      ])
-      console.log(vendedor)
-      await Promise.all([
-        await this.SendWhatsapp( vendedor.telefone, `${data.titulo}-${data.texto}`),
-        // await this.Relatorio(data.empreendimento, `${data.titulo}-${data.texto} - Vendedor: ${vendedor.nome}`),
-      ])
+      if (!!data.corretor) {
+        const [vendedor] = await Promise.all([
+          await this.prismaService.nato_user.findUnique({
+            where: {
+              id: data.corretor,
+            },
+            select: {
+              id: true,
+              nome: true,
+              telefone: true,
+            },
+          }),
+        ])
+        await Promise.all([
+          await this.SendWhatsapp(vendedor.telefone, `🚨🚨🚨*Sis Nato Informa*🚨🚨🚨\n\ncliente: ${data.titulo}\n${data.texto}`),
+          // await this.Relatorio(data.empreendimento, `${data.titulo}-${data.texto} - Vendedor: ${vendedor.nome}`),
+        ])
+      }
 
       return request;
     } catch (error) {
@@ -144,6 +145,20 @@ export class AlertsService {
     }
   }
 
+  async GetSolicitacaoAlerta(DataUser: any, id: number) {
+    try {
+      const request = await this.prismaService.nato_alerta.findMany({
+        where: {
+          solicitacao_id: id,
+          status: true,
+          ...(DataUser.hierarquia === 'USER' && { corretor: DataUser.id }),
+        },
+      });
+      return request
+    } catch (error) {
+      return error.message;
+    }
+  }
   //-----------------------------------------------
 
   SendWhatsapp = async (number: string, message: string) => {

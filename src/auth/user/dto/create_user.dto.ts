@@ -9,4 +9,5 @@ export class createUserDto {
   construtora: string[];
   empreendimento: string[];
   hierarquia: string;
+  Financeira: string[];
 }

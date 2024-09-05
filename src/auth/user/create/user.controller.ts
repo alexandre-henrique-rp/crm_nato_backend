@@ -26,4 +26,10 @@ export class UserController2 {
   async CCA(@Param('EmpreendimentoId') EmpreendimentoId: number) {
     return await this.userService.CCA(EmpreendimentoId);
   }
+
+  @Post('/update/pass2/:id')
+  async updatePassword(@Body() data: any, @Param('id') id: number) {
+    console.log(data.password);
+    return await this.userService.updatePassword(Number(id), data.password);
+  }
 }
