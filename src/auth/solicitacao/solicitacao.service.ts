@@ -138,7 +138,7 @@ export class SolicitacaoService {
       const fichaCadastro = await this.GetFicha(req.cpf);
       const relacionamentoVerifica = !req.rela_quest ? [] : JSON.parse(req.relacionamento);
       const dataRelacionamento = await Promise.all(relacionamentoVerifica.map(async (item: any) => await this.GetRelacionamento(item)));
-      console.log("🚀 ~ SolicitacaoService ~ findOne ~ dataRelacionamento:", dataRelacionamento)
+      // console.log("🚀 ~ SolicitacaoService ~ findOne ~ dataRelacionamento:", dataRelacionamento)
       const empreedimento = await this.GetEmpreedimento(req.empreedimento);
       const construtora = await this.GetConstrutora(req.construtora);
       const financeira = await this.getFinanceiro(req.financeiro);
@@ -150,10 +150,10 @@ export class SolicitacaoService {
         ...(req.empreedimento && { empreedimento: { ...empreedimento } }),
         ...(req.construtora && { construtora: { ...construtora } }),
         ...(fichaCadastro && { fcweb: { ...fichaCadastro } }),
-        ...(req.rela_quest ? { relacionamento: { ...dataRelacionamento } } : { relacionamento: [] }),
+        ...(req.rela_quest ? { relacionamento: dataRelacionamento } : { relacionamento: [] }),
       };
-      console.log("🚀 ~ SolicitacaoService ~ findOne ~ req.rela_quest:", req.rela_quest)
-      console.log("🚀 ~ SolicitacaoService ~ findOne ~ data:", data)
+      // console.log("🚀 ~ SolicitacaoService ~ findOne ~ req.rela_quest:", req.rela_quest)
+      // console.log("🚀 ~ SolicitacaoService ~ findOne ~ data:", data)
       return data;
     } catch (error) {
       console.error(error.message);
@@ -341,11 +341,11 @@ export class SolicitacaoService {
    */
   async GetAllPaginationAndFilter(pagina: number, limite: number, filtro: any, UserData: any) {
     try {
-      const { nome, id, andamento, construtora, empreendimento, financeiro } = filtro;
+      const { nome, id, andamento, construtora, empreedimento, financeiro } = filtro;
       const PaginaAtual = pagina || 1;
       const Limite = limite ? limite : !!andamento ? 50 : 20;
       const Offset = (PaginaAtual - 1) * Limite;
-      const Ids = UserData.Financeira.map((item: { id: any; }) => String(item.id));
+      const Ids = UserData.Financeira.map((item: { id: any; }) => item.id);
       const ConstId = UserData.construtora.map((i: { id: any; }) => i.id);
 
       const count = await this.prismaService.nato_solicitacoes_certificado.count({
@@ -374,7 +374,7 @@ export class SolicitacaoService {
           ...(nome && { nome: { contains: nome } }),
           ...(id && { id: { equals: Number(id) } }),
           ...(construtora && { construtora: { in: ConstId } }),
-          ...(empreendimento && { empreendimento: { in: ConstId } }),
+          ...(empreedimento && { empreedimento: { in: ConstId } }),
           ...(financeiro && { financeiro: { in: Ids } }),
         },
       });
@@ -406,7 +406,7 @@ export class SolicitacaoService {
           ...(nome && { nome: { contains: nome } }),
           ...(id && { id: { equals: Number(id) } }),
           ...(Number(construtora) > 0 && { construtora: { equals: Number(construtora) } }),
-          ...(Number(empreendimento) > 0 && { empreendimento: { equals: Number(empreendimento) } }),
+          ...(Number(empreedimento) > 0 && { empreedimento: { equals: Number(empreedimento) } }),
           ...(financeiro && { financeiro: { equals: Number(financeiro) } }),
         },
         orderBy: {
