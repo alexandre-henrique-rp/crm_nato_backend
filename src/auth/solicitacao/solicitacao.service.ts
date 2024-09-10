@@ -135,10 +135,9 @@ export class SolicitacaoService {
         });
 
       const req2 = req.corretor && await this.GetCorretor(req.corretor);
-      const fichaCadastro = await this.GetFicha(req.cpf);
+      // const fichaCadastro = await this.GetFicha(req.cpf);
       const relacionamentoVerifica = !req.rela_quest ? [] : JSON.parse(req.relacionamento);
       const dataRelacionamento = await Promise.all(relacionamentoVerifica.map(async (item: any) => await this.GetRelacionamento(item)));
-      // console.log("🚀 ~ SolicitacaoService ~ findOne ~ dataRelacionamento:", dataRelacionamento)
       const empreedimento = await this.GetEmpreedimento(req.empreedimento);
       const construtora = await this.GetConstrutora(req.construtora);
       const financeira = await this.getFinanceiro(req.financeiro);
@@ -149,11 +148,9 @@ export class SolicitacaoService {
         ...(req.financeiro && { financeiro: { ...financeira } }),
         ...(req.empreedimento && { empreedimento: { ...empreedimento } }),
         ...(req.construtora && { construtora: { ...construtora } }),
-        ...(fichaCadastro && { fcweb: { ...fichaCadastro } }),
+        // ...(fichaCadastro && { fcweb: { ...fichaCadastro } }),
         ...(req.rela_quest ? { relacionamento: dataRelacionamento } : { relacionamento: [] }),
       };
-      // console.log("🚀 ~ SolicitacaoService ~ findOne ~ req.rela_quest:", req.rela_quest)
-      // console.log("🚀 ~ SolicitacaoService ~ findOne ~ data:", data)
       return data;
     } catch (error) {
       console.error(error.message);
@@ -231,6 +228,9 @@ export class SolicitacaoService {
    */
   async update(id: number, data: any, user: any) {
     try {
+      console.log(id)
+      console.log(data)
+      // console.log(data)
       const req =
         await this.prismaService.nato_solicitacoes_certificado.findFirst({
           where: {
@@ -343,7 +343,7 @@ export class SolicitacaoService {
     try {
       const { nome, id, andamento, construtora, empreedimento, financeiro } = filtro;
       const PaginaAtual = pagina || 1;
-      const Limite = limite ? limite : !!andamento ? 50 : 20;
+      const Limite = !!andamento ? 50 : limite ? limite : 20;
       const Offset = (PaginaAtual - 1) * Limite;
       const Ids = UserData.Financeira.map((item: { id: any; }) => item.id);
       const ConstId = UserData.construtora.map((i: { id: any; }) => i.id);
@@ -376,6 +376,7 @@ export class SolicitacaoService {
           ...(construtora && { construtora: { in: ConstId } }),
           ...(empreedimento && { empreedimento: { in: ConstId } }),
           ...(financeiro && { financeiro: { in: Ids } }),
+          ...(andamento && { Andamento: { equals: andamento === 'VAZIO' ? null : andamento } }),
         },
       });
 
@@ -408,6 +409,7 @@ export class SolicitacaoService {
           ...(Number(construtora) > 0 && { construtora: { equals: Number(construtora) } }),
           ...(Number(empreedimento) > 0 && { empreedimento: { equals: Number(empreedimento) } }),
           ...(financeiro && { financeiro: { equals: Number(financeiro) } }),
+          ...(andamento && { Andamento: { equals: andamento === 'VAZIO' ? null : andamento } }),
         },
         orderBy: {
           id: 'desc',
@@ -430,33 +432,21 @@ export class SolicitacaoService {
 
           return {
             ...item,
-            ...(ConsultaFcWeb && {
-              fcweb: {
-                ...ConsultaFcWeb,
-                validacao: ConsultaFcWeb.validacao?.split(' ')[0],
-                andamento: ConsultaFcWeb.andamento === 'NOVA FC' ? 'INICIADO' : ConsultaFcWeb.andamento,
-              },
-            }),
+            ...(item.type_validacao && { type_validacao: item.type_validacao.split(' ')[0] }),
+            ...(ConsultaFcWeb && { fcweb: { ...ConsultaFcWeb } }),
             ...(item.empreedimento && { empreendimento: { ...empreendimentoDb } }),
             ...(item.construtora && { construtora: { ...construtoraDb } }),
             ...(item.financeiro && { financeiro: { ...consultaFinanceira } }),
-            ...(item.rela_quest ? { relacionamento: { ...relacionamentoDb } }: { relacionamento: [] }),
+            ...(item.rela_quest ? { relacionamento: { ...relacionamentoDb } } : { relacionamento: [] }),
             ...(item.corretor && { corretor: { ...CorretorDb } }),
           };
         }),
       );
 
-
-      const Filter = andamento
-        ? andamento !== 'VAZIO'
-          ? data.filter(item => item.fcweb?.andamento?.toLowerCase().includes(andamento.toLowerCase()))
-          : data.filter(item => !item.fcweb)
-        : data;
-
       const Total = count;
 
 
-      return { total: Total, data: Filter, pagina: PaginaAtual, limite: Limite };
+      return { total: Total, data: data, pagina: PaginaAtual, limite: Limite };
     } catch (error) {
       console.error('Erro na função GetAllPaginationAndFilter:', error); // Logando erro completo para depuração
       return error.message;
@@ -473,38 +463,19 @@ export class SolicitacaoService {
    */
   async FilterDoc(doc: string) {
     try {
-      return this.prismaService.nato_solicitacoes_certificado.findMany({
+      console.log(doc)
+      const req = this.prismaService.nato_solicitacoes_certificado.findMany({
         where: {
           cpf: doc
         },
       });
+      return req;
     } catch (error) {
       return error.message;
     }
   }
 
-  // /**
-  //  * Filtra as solicita es por data.
-  //  *
-  //  * @param data objeto com datas no formato ISO. O objeto deve ter as seguintes propriedades:
-  //  * - inicio: data de incio da busca.
-  //  * - fim: data de fim da busca.
-  //  * - rengInit: data de incio do registro.
-  //  * - rengEnd: data de fim do rengimento.
-  //  * @returns Uma lista de solicita es que correspondem as datas informadas.
-  //  */
-  // async FilterDate(data: any) {
-  //   try {
-  //     return this.prismaService.nato_solicitacoes_certificado.findMany({
-  //       where: {
-  //         ...data,
-  //         ativo: true,
-  //       },
-  //     });
-  //   } catch (error) {
-  //     return error.message;
-  //   }
-  // }
+
 
   /**
    * Retorna um objeto com informa es sobre o relacionamento do titular da solicita o.
@@ -755,37 +726,13 @@ export class SolicitacaoService {
         },
         select: {
           id: true,
-          andamento: true,
-          dt_agenda: true,
-          hr_agenda: true,
           valorcd: true,
           estatos_pgto: true,
-          dt_aprovacao: true,
-          createdAt: true,
-          vouchersoluti: true,
-          validacao: true,
         },
       })
       return request
     } catch (error) {
-      const request = await this.prismaService.fcweb.findFirst({
-        where: {
-          cpf: cpf,
-          contador: { contains: "NATO_" }
-        },
-        select: {
-          id: true,
-          andamento: true,
-          dt_agenda: true,
-          hr_agenda: true,
-          valorcd: true,
-          estatos_pgto: true,
-          createdAt: true,
-          vouchersoluti: true,
-          validacao: true,
-        },
-      })
-      return request
+      return [];
     }
   }
 
