@@ -178,8 +178,8 @@ export class SolicitacaoService {
         dt_solicitacao: new Date().toISOString(),
         ativo: true,
       };
-      const [vendedor] = await Promise.all([
-        await this.GetCorretor(data.corretor),
+      const [construtora] = await Promise.all([
+        await this.GetConstrutora(data.construtora),
       ])
 
       const [empreedimento] = await Promise.all([
@@ -187,7 +187,7 @@ export class SolicitacaoService {
       ])
 
 
-      const Msg = `Ola *${data.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido de ${vendedor.nome} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.nome ? `, em *${empreedimento?.nome}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar o contrato e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
+      const Msg = `Ola *${data.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido de ${construtora.fantasia} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.nome ? `, em *${empreedimento?.nome}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar o contrato e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
 
       const TermoDeUso = `TERMO DE CIÊNCIA\n\nCaro *${data.nome}*,\n\nInformamos que a assinatura fornecida será EXCLUSIVAMENTE utilizada para:\n\n1. Assinatura de contratos junto ao Correspondente da CAIXA.\n2. Abertura de fichas e assinatura de contratos junto à CAIXA ECONÔMICA FEDERAL.\n\nAtenciosamente,\nTime *INTERFACE certificadora* (REDE BRASIL RP)`
 

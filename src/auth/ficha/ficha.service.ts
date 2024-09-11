@@ -14,4 +14,17 @@ export class FichaService {
     }
   }
 
+  async GetUpdate(id: number) {
+    try {
+      //buscar informações da solicitação
+      const solicitação = await this.prismaService.nato_solicitacoes_certificado.findFirst({
+        where: {
+          id: id
+        }
+        
+      })
+    } catch (error) {
+      return error.message
+    }
+  }
 }
