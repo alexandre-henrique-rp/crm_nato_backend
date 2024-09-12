@@ -40,11 +40,8 @@ export class AuthService {
         token: this.jwtService.sign(datauser),
         user: {
           id: user.id,
-          // username: user.username,
           nome: user.nome,
-          // cpf: user.cpf,
           telefone: user.telefone,
-          // email: user.email,
           construtora: user.construtora,
           empreendimento: user.empreendimento,
           hierarquia: user.hierarquia,
@@ -52,8 +49,6 @@ export class AuthService {
           status: user.status,
           Financeira: user.Financeira,
           reset_password: user.reset_password,
-          // createdAt: user.createdAt,
-          // updatedAt: user.updatedAt,
         },
       };
       
@@ -115,6 +110,9 @@ export class AuthService {
         select: {
           id: true,
           nome: true
+        },
+        orderBy: {
+          nome: 'asc'
         }
       });
     } catch (error) {
@@ -131,6 +129,9 @@ export class AuthService {
         select: {
           id: true,
           fantasia: true,
+        },
+        orderBy: {
+          fantasia: 'asc'
         }
       });
     } catch (error) {
@@ -147,6 +148,9 @@ export class AuthService {
         select: {
           id: true,
           fantasia: true
+        },
+        orderBy: {
+          fantasia: 'asc'
         }
       });
     } catch (error) {

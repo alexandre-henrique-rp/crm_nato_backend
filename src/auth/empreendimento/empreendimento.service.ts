@@ -26,6 +26,9 @@ export class EmpreendimentoService {
           dt_inicio: true,
           dt_fim: true,
         },
+        orderBy: {
+          nome: 'asc',
+        },
       });
 
       const data = req.filter((i: any) => i.construtora == IdsConst[0]);

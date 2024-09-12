@@ -7,10 +7,14 @@ export class FinanceiroService {
 
   async findAll() {
     try {
-      const req = await this.prismaService.nato_financeiro.findMany();
+      const req = await this.prismaService.nato_financeiro.findMany({
+        orderBy: {
+          fantasia: 'asc',
+        },
+      });
       return req
     } catch (error) {
-     console.error(error.message);
+      console.error(error.message);
       return error.message;
     }
   }
@@ -19,11 +23,11 @@ export class FinanceiroService {
     try {
       return await this.prismaService.nato_financeiro.findFirst({
         where: {
-          id:Number(id),
+          id: Number(id),
         },
       });
     } catch (error) {
-     console.error(error.message);
+      console.error(error.message);
       return error.message;
     }
   }
@@ -32,12 +36,12 @@ export class FinanceiroService {
     try {
       return await this.prismaService.nato_financeiro.create({
         data: {
-          ... data,
+          ...data,
           colaboradores: JSON.stringify(data.colaboradores),
         },
       });
     } catch (error) {
-     console.error(error.message);
+      console.error(error.message);
       return error.message;
     }
   }
@@ -54,7 +58,7 @@ export class FinanceiroService {
         },
       });
     } catch (error) {
-     console.error(error.message);
+      console.error(error.message);
       return error.message;
     }
   }

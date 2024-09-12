@@ -47,7 +47,11 @@ export class UserService {
 
   async findAll() {
     try {
-      const req = await this.prismaService.nato_user.findMany();
+      const req = await this.prismaService.nato_user.findMany({
+        orderBy: {
+          nome: 'asc',
+        }
+      });
       const data = await Promise.all(
         req.map(async (data: any) => {
           const construtoraDb = await this.prismaService.nato_empresas.findMany(
@@ -197,6 +201,9 @@ export class UserService {
           nome: true,
           telefone: true,
         },
+        orderBy: {
+          nome: 'asc',
+        }
       })
     } catch (error) {
       return error

@@ -59,6 +59,9 @@ export class AlertsService {
             }
             : {}),
         },
+        orderBy: {
+          createdAt: 'desc',
+        }
       });
 
       return req
@@ -75,6 +78,9 @@ export class AlertsService {
           corretor: id,
           status: true,
         },
+        orderBy: {
+          createdAt: 'desc',
+        }
       });
     } catch (error) {
       console.error(error.message);
@@ -89,6 +95,9 @@ export class AlertsService {
           solicitacao_id: id,
           status: true,
         },
+        orderBy: {
+          createdAt: 'desc',
+        }
       });
     } catch (error) {
       console.error(error.message);
@@ -153,6 +162,9 @@ export class AlertsService {
           status: true,
           ...(DataUser.hierarquia === 'USER' && { corretor: DataUser.id }),
         },
+        orderBy: {
+          createdAt: 'desc',
+        }
       });
       return request
     } catch (error) {

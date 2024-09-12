@@ -741,3 +741,10 @@ model nato_financeiro {
   obs           String?   @db.Text
   fantasia      String?   @db.VarChar(100)
 }
+
+model nato_bug_alert {
+  id        Int      @id @default(autoincrement())
+  mesagen   String?  @db.Text
+  createdAt DateTime @default(now()) @db.DateTime(0)
+  status    Boolean? @default(true)
+}

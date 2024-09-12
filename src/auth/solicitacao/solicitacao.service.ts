@@ -93,7 +93,7 @@ export class SolicitacaoService {
           ...item,
           corretor: { ...consulta },
           ...(Alerts.length > 0 ? { alerts: Alerts } : { alerts: [] }),
-          ...(consultaFcw && { fcweb: { ...consultaFcw, validacao: consultaFcw.validacao && consultaFcw.validacao.split(' ')[0], andamento: consultaFcw.andamento === "NOVA FC" ? "INICIADO" : consultaFcw.andamento } }),
+          ...(consultaFcw && { fcweb: { ...consultaFcw } }),
           ...(item.empreedimento && { empreedimento: { ...empreedimento } }),
           ...(item.construtora && { construtora: { ...construtora } }),
           ...(item.financeiro && { financeiro: { ...consultaFinanceira } }),
@@ -186,23 +186,21 @@ export class SolicitacaoService {
         await this.GetEmpreedimento(data.empreedimento),
       ])
 
+      const [financeira]:any = await Promise.all([
+        await this.getFinanceiro(data.financeiro),
+      ])
 
-      const Msg = `Ola *${data.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido de ${construtora.fantasia} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.nome ? `, em *${empreedimento?.nome}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar o contrato e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
-
-      const TermoDeUso = `TERMO DE CIÊNCIA\n\nCaro *${data.nome}*,\n\nInformamos que a assinatura fornecida será EXCLUSIVAMENTE utilizada para:\n\n1. Assinatura de contratos junto ao Correspondente da CAIXA.\n2. Abertura de fichas e assinatura de contratos junto à CAIXA ECONÔMICA FEDERAL.\n\nAtenciosamente,\nTime *INTERFACE certificadora* (REDE BRASIL RP)`
-
+      const Msg = `Ola *${data.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido da construtora ${construtora.fantasia} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.cidade ? `, em *${empreedimento?.cidade}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar os documentos do seu financiamento imobiliário junto a CAIXA e Correspondente bancário ${financeira?.fantasia}, e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
 
       if (sms === 'true' && data.telefone) {
         await Promise.all([
           await this.SendWhatsapp(data.telefone, Msg),
-          await this.SendTermo(data.telefone, TermoDeUso),
         ]);
       }
 
       if (sms === 'true' && data.telefone2) {
         await Promise.all([
           await this.SendWhatsapp(data.telefone2, Msg),
-          await this.SendTermo(data.telefone, TermoDeUso),
         ]);
       }
 

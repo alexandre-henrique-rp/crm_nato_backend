@@ -26,6 +26,9 @@ export class EmpresaService {
             }
           }
           ),
+        },
+        orderBy: {
+          fantasia: 'asc',
         }
       });
     } catch (error) {
