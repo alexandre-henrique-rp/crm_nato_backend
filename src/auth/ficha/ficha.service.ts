@@ -21,8 +21,9 @@ export class FichaService {
         where: {
           id: id
         }
-        
       })
+
+      return solicitação
     } catch (error) {
       return error.message
     }
