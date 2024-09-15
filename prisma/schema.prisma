@@ -232,7 +232,7 @@ model fcweb {
   custocd             String?      @db.VarChar(150)
   custoCdpar          String?      @db.VarChar(150)
   estatos_pgto        String?      @db.VarChar(150)
-  pgto_efi            String       @db.VarChar(100)
+  pgto_efi            String?      @db.VarChar(100)
   formapgto           String?      @db.VarChar(150)
   vouchersoluti       String?      @db.VarChar(150)
   ct_parcela          String?      @db.VarChar(150)
@@ -248,7 +248,7 @@ model fcweb {
   complemento         String?      @db.VarChar(150)
   cep                 String?      @db.VarChar(150)
   uf                  String?      @db.VarChar(150)
-  im                  Int
+  im                  Int?
   cidade              String?      @db.VarChar(150)
   observacao          String?      @db.VarChar(150)
   vctoCD              DateTime?    @db.Date
@@ -257,6 +257,7 @@ model fcweb {
   nomearquivo         String?      @db.VarChar(100)
   obsrenovacao        String?      @db.VarChar(150)
   dt_aprovacao        DateTime?    @db.Date
+  hr_aprovacao        DateTime?    @db.Time(0)
   comicao             Float?       @db.Float
   validacao           String?      @db.VarChar(150)
   nfe                 String?      @db.VarChar(150)
@@ -375,6 +376,9 @@ model nato_solicitacoes_certificado {
   type_validacao   String?       @db.VarChar(100)
   dt_agendamento   DateTime?     @db.Date
   hr_agendamento   DateTime?     @db.Time(0)
+  mult_link        String?       @db.LongText
+  mult_ass_doc     String?       @db.LongText
+  hr_aprovacao     DateTime?     @db.Time(0)
   nato_alerta      nato_alerta[]
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")

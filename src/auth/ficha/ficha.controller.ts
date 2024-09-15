@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { FichaService } from './ficha.service';
-
+import { AuthGuard } from '../auth.guard';
+@UseGuards(AuthGuard)
 @Controller('ficha')
 export class FichaController {
   constructor(private fichaService: FichaService ) { }
@@ -10,10 +11,10 @@ export class FichaController {
     return this.fichaService.CreateFicha(data)
   } 
 
-  @Get('/:id_solicitacao')
-  async get(@Param('id_solicitacao') id_solicitacao: number) {
-    const id = Number(id_solicitacao)
-    return this.fichaService.GetUpdate(id)
+  @Post('/create')
+  async get(@Body() data: any, @Req() req: any) {
+    const id = Number(data.id)
+    return this.fichaService.GetUpdate(id, req.user)
   }
 }
 

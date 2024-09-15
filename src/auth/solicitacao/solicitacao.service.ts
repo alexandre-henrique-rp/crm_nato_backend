@@ -141,6 +141,8 @@ export class SolicitacaoService {
       const empreedimento = await this.GetEmpreedimento(req.empreedimento);
       const construtora = await this.GetConstrutora(req.construtora);
       const financeira = await this.getFinanceiro(req.financeiro);
+      const Mult_link = req.mult_link && JSON.parse(req.mult_link);
+      const Mult_ass = req.mult_ass_doc && JSON.parse(req.mult_ass_doc);
 
       const data = {
         ...req,
@@ -148,9 +150,11 @@ export class SolicitacaoService {
         ...(req.financeiro && { financeiro: { ...financeira } }),
         ...(req.empreedimento && { empreedimento: { ...empreedimento } }),
         ...(req.construtora && { construtora: { ...construtora } }),
-        // ...(fichaCadastro && { fcweb: { ...fichaCadastro } }),
+        ...(req.mult_link && { mult_link: Mult_link  }),
+        ...(req.mult_ass_doc && { mult_ass_doc: Mult_ass }),
         ...(req.rela_quest ? { relacionamento: dataRelacionamento } : { relacionamento: [] }),
       };
+      // console.log("🚀 ~ SolicitacaoService ~ findOne ~ data:", data)
       return data;
     } catch (error) {
       console.error(error.message);
@@ -226,7 +230,7 @@ export class SolicitacaoService {
    */
   async update(id: number, data: any, user: any) {
     try {
-      console.log(id)
+
       console.log(data)
       // console.log(data)
       const req =
@@ -243,6 +247,7 @@ export class SolicitacaoService {
 
       const dados = {
         ...data,
+        ...(data.mult_link && { mult_link: JSON.stringify(data.mult_link), }),
         ...(data.relacionamento && { relacionamento: JSON.stringify(data.relacionamento), }),
         ...(data.dt_nascimento && { dt_nascimento: new Date(data.dt_nascimento).toISOString(), }),
         ...(data.logDelete && { logDelete: `${data.logDelete}\nO usuário: ${user?.nome}, id: ${user?.id} editou esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}` }),
@@ -371,9 +376,9 @@ export class SolicitacaoService {
           }),
           ...(nome && { nome: { contains: nome } }),
           ...(id && { id: { equals: Number(id) } }),
-          ...(construtora && { construtora: { in: ConstId } }),
-          ...(empreedimento && { empreedimento: { in: ConstId } }),
-          ...(financeiro && { financeiro: { in: Ids } }),
+          ...(Number(construtora) > 0 && { construtora: { equals: Number(construtora) } }),
+          ...(Number(empreedimento) > 0 && { empreedimento: { equals: Number(empreedimento) } }),
+          ...(financeiro && { financeiro: { equals: Number(financeiro) } }),
           ...(andamento && { Andamento: { equals: andamento === 'VAZIO' ? null : andamento } }),
         },
       });
