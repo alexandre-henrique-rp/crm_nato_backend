@@ -9,7 +9,6 @@ export class FichaService {
     try {
       console.log(data)
       const req = await this.prismaService.fcweb.create({ data: { ...data, pgto_efi: '', im: 0 } })
-      console.log("🚀 ~ FichaService ~ CreateFicha ~ req:", req)
       return req
     } catch (error) {
       console.log("🚀 ~ FichaService ~ CreateFicha ~ error:", error)

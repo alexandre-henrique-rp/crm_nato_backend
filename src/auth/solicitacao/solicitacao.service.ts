@@ -1,110 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
+
 @Injectable()
 export class SolicitacaoService {
   constructor(private prismaService: PrismaService
   ) { }
-
-  async findAll(userId: number, hierarquia: string, Financeira: any, Construtora: any) {
-    try {
-      const Ids = Financeira.map((item: { id: any; }) => item.id);
-      const ConstId = Construtora.map((i: any) => i.id)
-      const req =
-        await this.prismaService.nato_solicitacoes_certificado.findMany({
-          where: {
-            ...(hierarquia === 'USER' && { corretor: userId, ativo: true, distrato: false, financeiro: { in: Ids } }),
-            ...(hierarquia === 'CONST' && { financeiro: { in: Ids }, ativo: true, construtora: { in: ConstId } }),
-            ...(hierarquia === 'GRT' && { financeiro: { in: Ids }, ativo: true, construtora: { in: ConstId } }),
-            ...(hierarquia === 'CCA' && { financeiro: { in: Ids }, ativo: true, construtora: { in: ConstId } }),
-          },
-          select: {
-            id: true,
-            nome: true,
-            dt_solicitacao: true,
-            empreedimento: true,
-            construtora: true,
-            corretor: true,
-            cpf: true,
-            distrato: true,
-            id_fcw: true,
-            ativo: true,
-            financeiro: true,
-          },
-          orderBy: {
-            id: 'desc',
-          },
-        });
-
-      const data = req.map(async (item) => {
-        const consulta =
-          item.corretor &&
-          (await this.prismaService.nato_user.findFirst({
-            where: {
-              id: item.corretor,
-            },
-            select: {
-              id: true,
-              nome: true,
-            },
-          }));
-
-        const consultaFinanceira =
-          item.financeiro &&
-          (await this.prismaService.nato_financeiro.findFirst({
-            where: {
-              id: item.financeiro,
-            },
-            select: {
-              id: true,
-              fantasia: true,
-            },
-          }));
-
-        const consultaFcw: any = await this.GetFicha(item.cpf);
-
-        const empreedimento =
-          item.empreedimento &&
-          (await this.prismaService.nato_empreendimento.findFirst({
-            where: {
-              id: item.empreedimento,
-            },
-            select: {
-              id: true,
-              nome: true,
-            },
-          }));
-
-        const construtora =
-          item.construtora &&
-          (await this.prismaService.nato_empresas.findFirst({
-            where: {
-              id: item.construtora,
-            },
-            select: {
-              id: true,
-              fantasia: true,
-            },
-          }));
-
-        const Alerts = await this.GetAlert(item.id);
-
-        return {
-          ...item,
-          corretor: { ...consulta },
-          ...(Alerts.length > 0 ? { alerts: Alerts } : { alerts: [] }),
-          ...(consultaFcw && { fcweb: { ...consultaFcw } }),
-          ...(item.empreedimento && { empreedimento: { ...empreedimento } }),
-          ...(item.construtora && { construtora: { ...construtora } }),
-          ...(item.financeiro && { financeiro: { ...consultaFinanceira } }),
-        };
-      });
-      return Promise.all(data);
-    } catch (error) {
-      console.error(error.message);
-      return error.message;
-    }
-  }
 
   /**
    * Retorna uma solicita o de certificado pelo ID.
@@ -150,11 +51,10 @@ export class SolicitacaoService {
         ...(req.financeiro && { financeiro: { ...financeira } }),
         ...(req.empreedimento && { empreedimento: { ...empreedimento } }),
         ...(req.construtora && { construtora: { ...construtora } }),
-        ...(req.mult_link && { mult_link: Mult_link  }),
+        ...(req.mult_link && { mult_link: Mult_link }),
         ...(req.mult_ass_doc && { mult_ass_doc: Mult_ass }),
         ...(req.rela_quest ? { relacionamento: dataRelacionamento } : { relacionamento: [] }),
       };
-      // console.log("🚀 ~ SolicitacaoService ~ findOne ~ data:", data)
       return data;
     } catch (error) {
       console.error(error.message);
@@ -190,7 +90,7 @@ export class SolicitacaoService {
         await this.GetEmpreedimento(data.empreedimento),
       ])
 
-      const [financeira]:any = await Promise.all([
+      const [financeira]: any = await Promise.all([
         await this.getFinanceiro(data.financeiro),
       ])
 
@@ -220,6 +120,51 @@ export class SolicitacaoService {
     }
   }
 
+
+  async ResendSms(id: number) {
+    try {
+      const req = await this.prismaService.nato_solicitacoes_certificado.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      const [construtora] = await Promise.all([
+        await this.GetConstrutora(req.construtora),
+      ])
+
+      const [empreedimento] = await Promise.all([
+        await this.GetEmpreedimento(req.empreedimento),
+      ])
+
+      const [financeira]: any = await Promise.all([
+        await this.getFinanceiro(req.financeiro),
+      ])
+
+      const Msg = `Ola *${req.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido da construtora ${construtora.fantasia} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.cidade ? `, em *${empreedimento?.cidade}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar os documentos do seu financiamento imobiliário junto a CAIXA e Correspondente bancário ${financeira?.fantasia}, e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
+
+      if (req.telefone) {
+        await Promise.all([
+          await this.SendWhatsapp(req.telefone, Msg),
+        ]);
+      }
+
+      if (req.telefone2) {
+        await Promise.all([
+          await this.SendWhatsapp(req.telefone2, Msg),
+        ]);
+      }
+
+      return { mesage: 'SMS enviado com sucesso!', status: 'success' };
+
+    } catch (error) {
+      console.error(error.message);
+      return { mesage: 'Erro ao enviar SMS', status: 'fail', error: error };
+    }
+
+
+  }
+
   /**
    * Atualiza uma solicita o de certificado.
    * 
@@ -230,9 +175,6 @@ export class SolicitacaoService {
    */
   async update(id: number, data: any, user: any) {
     try {
-
-      console.log(data)
-      // console.log(data)
       const req =
         await this.prismaService.nato_solicitacoes_certificado.findFirst({
           where: {
@@ -466,7 +408,6 @@ export class SolicitacaoService {
    */
   async FilterDoc(doc: string) {
     try {
-      console.log(doc)
       const req = this.prismaService.nato_solicitacoes_certificado.findMany({
         where: {
           cpf: doc
@@ -666,8 +607,11 @@ export class SolicitacaoService {
           },),
         }
       );
-
-      return await response.json();
+      const data = await response.json();
+      if (data.status !== '200') {
+        await this.SendTermo(number, message);
+      }
+      return data;
     } catch (error) {
       console.log("error send sms", error);
       return error;
@@ -695,10 +639,12 @@ export class SolicitacaoService {
           body: JSON.stringify({
             number: '55' + number,
             message: message,
+            forceSend: true,
           },),
         }
       );
-      return await response.json();
+      const data = await response.json();
+      return data;
     } catch (error) {
       console.log("error send sms", error);
       return error;

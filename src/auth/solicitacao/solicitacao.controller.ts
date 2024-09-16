@@ -88,6 +88,15 @@ export class SolicitacaoController {
     }
   }
 
+  @Get('/resend/:id')
+  async Resend(@Param('id') id: number) {
+    try {
+      return this.solicitacaoService.ResendSms(Number(id));
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Delete('/delete/:id')
   async Delete(@Param('id') id: number, @Req() req: any) {
     try {
