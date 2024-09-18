@@ -32,6 +32,7 @@ export class SolicitacaoController {
   //     throw error;
   //   }
   // }
+  
 
   // http://localhost:3032/solicitacao?nome=nome&andamento=andamento&construtora=1&empreedimento=1&financeiro=1&id=1&pagina=1&limite=10
   @Get('/')

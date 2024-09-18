@@ -50,34 +50,43 @@ export class UserService {
       const req = await this.prismaService.nato_user.findMany({
         orderBy: {
           nome: 'asc',
-        }
+        },
+        select: {
+          id: true,
+          nome: true,
+          cargo: true,
+          hierarquia: true,
+          empreendimento: true,
+          construtora: true,
+          Financeira: true,
+          telefone: true,
+          email: true,
+          cpf: true,
+          sms_relat: true,
+          createdAt: true,
+          status: true,
+        },
       });
+
       const data = await Promise.all(
         req.map(async (data: any) => {
-          const construtoraDb = await this.prismaService.nato_empresas.findMany(
-            {
-              where: {
-                id: {
-                  in: JSON.parse(data.construtora),
-                },
-              },
-            },
-          );
+
+
+          const construtoraDb = await this.getUsersByConstrutora(data.construtora);
 
           const empreendimentoDb =
-            await this.prismaService.nato_empreendimento.findMany({
-              where: {
-                id: {
-                  in: JSON.parse(data.empreendimento),
-                },
-              },
-            });
+            await this.getUsersByEmpreendimento(data.empreendimento);
 
-          return {
+          const financeiraDb = await this.getUsersByFinanceira(data.Financeira);
+
+          const Dados = {
             ...data,
-            construtora: construtoraDb,
-            empreendimento: empreendimentoDb,
+            ...(financeiraDb &&{Financeira: financeiraDb}),
+            ...(construtoraDb && {construtora: construtoraDb}),
+            ...(empreendimentoDb && {empreendimento: empreendimentoDb}),
           };
+
+          return Dados
         }),
       );
       return data;
@@ -172,6 +181,70 @@ export class UserService {
       });
     } catch (error) {
       return error;
+    }
+  }
+
+  //-----------------------------------------------------------------------------------------------------
+
+  async getUsersByEmpreendimento(EmpreendimentoId: string) {
+    try {
+      return await this.prismaService.nato_empreendimento.findMany({
+        where: {
+          id: {
+            in: JSON.parse(EmpreendimentoId),
+          },
+        },
+        select: {
+          id: true,
+          nome: true,
+          uf: true,
+          cidade: true,
+        }
+      })
+    } catch (error) {
+      return error
+    }
+  }
+
+  async getUsersByConstrutora(construtora: string) {
+    try {
+      return await this.prismaService.nato_empresas.findMany({
+        where: {
+          id: {
+            in: JSON.parse(construtora)
+          }
+        },
+        select: {
+          id: true,
+          fantasia: true,
+          cnpj: true,
+          tel: true,
+          email: true,
+        }
+      })
+    } catch (error) {
+      return error
+    }
+  }
+
+  async getUsersByFinanceira(financeira: string) {
+    try {
+      return await this.prismaService.nato_financeiro.findMany({
+        where: {
+          id: {
+            in: JSON.parse(financeira)
+          },
+        },
+        select: {
+          id: true,
+          fantasia: true,
+          cnpj: true,
+          tel: true,
+          email: true,
+        }
+      })
+    } catch (error) {
+      return error
     }
   }
 

@@ -28,8 +28,7 @@ export class UserController2 {
   }
 
   @Post('/update/pass2/:id')
-  async updatePassword(@Body() data: any, @Param('id') id: number) {
-    console.log(data.password);
-    return await this.userService.updatePassword(Number(id), data.password);
+  async updatePassword(@Param('id') id: number) {
+    return await this.userService.updatePassword(Number(id), '1234');
   }
 }
