@@ -133,6 +133,7 @@ export class UserService {
   }
 
   findByid(id: number) {
+    console.log(id);
     try {
       return this.prismaService.nato_user.findFirst({
         where: {
@@ -183,6 +184,24 @@ export class UserService {
       return error;
     }
   }
+
+  async search(empreedimento: string, financeiro: string, construtora: string, telefone: string, email: string, cpf: string, hierarquia: string) {
+    try {
+      return await this.prismaService.nato_user.findMany({
+        where: {
+          ...(empreedimento && { empreendimento: { contains: empreedimento } }),
+          ...(financeiro && { Financeira: { contains: financeiro } }),
+          ...(construtora && { construtora: { contains: construtora } }),
+          ...(telefone && { telefone: { contains: telefone } }),
+          ...(email && { email: { contains: email } }),
+          ...(cpf && { cpf: { contains: cpf } }),
+        },
+      });
+    } catch (error) {
+      return error
+    }
+  }
+
 
   //-----------------------------------------------------------------------------------------------------
 

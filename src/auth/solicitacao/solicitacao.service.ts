@@ -28,14 +28,17 @@ export class SolicitacaoService {
         await this.prismaService.nato_solicitacoes_certificado.findFirst({
           where: {
             id,
-            ...(hierarquia === 'USER' && { corretor: userId, ativo: true, financeiro: { in: Ids } }),
-            ...(hierarquia === 'CONST' && { financeiro: { in: Ids }, ativo: true }),
-            ...(hierarquia === 'GRT' && { financeiro: { in: Ids }, ativo: true }),
-            ...(hierarquia === 'CCA' && { financeiro: { in: Ids }, ativo: true }),
+            ...(hierarquia === 'USER' && { ativo: true, financeiro: { in: Ids }, OR: [
+              { corretor: userId },
+              { corretor: null }
+            ] }),
+            ...(hierarquia === 'CONST' && { financeiro: { in: Ids } }),
+            ...(hierarquia === 'GRT' && { financeiro: { in: Ids } }),
+            ...(hierarquia === 'CCA' && { financeiro: { in: Ids } }),
           }
         });
 
-      const req2 = req.corretor && await this.GetCorretor(req.corretor);
+      const req2 = req.corretor > 0 && await this.GetCorretor(req.corretor);
       // const fichaCadastro = await this.GetFicha(req.cpf);
       const relacionamentoVerifica = !req.rela_quest ? [] : JSON.parse(req.relacionamento);
       const dataRelacionamento = await Promise.all(relacionamentoVerifica.map(async (item: any) => await this.GetRelacionamento(item)));
@@ -359,37 +362,44 @@ export class SolicitacaoService {
         orderBy: {
           id: 'desc',
         },
+        select: {
+          id: true,
+          nome:true,
+          cpf: true,
+          dt_solicitacao: true,
+          id_fcw:true,
+          ativo: true,
+          createdAt: true,
+          ass_doc: true,
+          mult_ass_doc: true,
+          mult_link: true,
+          link_doc: true,
+          alert: true,
+          distrato: true,
+          dt_agendamento: true,
+          hr_agendamento: true,
+          hr_aprovacao: true,
+          dt_aprovacao: true,
+          Andamento: true,
+          type_validacao: true
+        },
         skip: Offset,
         take: Limite,
       });
 
+
       const data = await Promise.all(
         req.map(async item => {
-          const DataRelacionamento = item.rela_quest || item.relacionamento !== null ? JSON.parse(item.relacionamento) : [];
-          const relacionamentoDb = await Promise.all(
-            DataRelacionamento.map(async (rel: any) => await this.GetRelacionamento(rel))
-          );
-          const construtoraDb = await this.GetConstrutora(Number(item.construtora));
-          const empreendimentoDb = await this.GetEmpreedimento(Number(item.empreedimento));
-          const CorretorDb = await this.GetCorretor(item.corretor);
           const ConsultaFcWeb: any = await this.GetFicha(item.cpf);
-          const consultaFinanceira: any = await this.getFinanceiro(item.financeiro);
 
           return {
             ...item,
-            ...(item.type_validacao && { type_validacao: item.type_validacao.split(' ')[0] }),
             ...(ConsultaFcWeb && { fcweb: { ...ConsultaFcWeb } }),
-            ...(item.empreedimento && { empreendimento: { ...empreendimentoDb } }),
-            ...(item.construtora && { construtora: { ...construtoraDb } }),
-            ...(item.financeiro && { financeiro: { ...consultaFinanceira } }),
-            ...(item.rela_quest ? { relacionamento: { ...relacionamentoDb } } : { relacionamento: [] }),
-            ...(item.corretor && { corretor: { ...CorretorDb } }),
           };
         }),
       );
 
       const Total = count;
-
 
       return { total: Total, data: data, pagina: PaginaAtual, limite: Limite };
     } catch (error) {

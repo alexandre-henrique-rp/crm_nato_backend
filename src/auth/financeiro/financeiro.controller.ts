@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { FinanceiroService } from './financeiro.service';
 
 @Controller('financeiro')
@@ -49,4 +49,6 @@ export class FinanceiroController {
       throw error;
     }
   }
+
+ 
 }

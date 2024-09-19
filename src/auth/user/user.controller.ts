@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UserPresenter } from './user.presenter';
@@ -21,7 +22,7 @@ export class UserController {
     return data;
   }
 
-  @Get('/:id')
+  @Get('/get/:id')
   async findOne(@Param('id') id: number) {
     const data = await this.userService.findByid(id);
     return new UserPresenter(data);
@@ -58,5 +59,12 @@ export class UserController {
   async delete(@Param('id') id: number) {
     const dataUpdated = await this.userService.delete(id);
     return new UserPresenter(dataUpdated);
+  }
+
+  @Get('/Busca/')
+  async Search(@Query() query: any) {
+    const { empreedimento, financeiro, construtora,telefone, email, cpf, hierarquia} = query
+    const data = await this.userService.search(empreedimento, financeiro, construtora, telefone, email, cpf, hierarquia);
+    return data;
   }
 }

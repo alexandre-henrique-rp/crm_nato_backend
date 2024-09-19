@@ -169,6 +169,7 @@ export class EmpreendimentoService {
   }
 
   async Filter(id: number) {
+    console.log(id)
     try {
       return this.prismaService.nato_empreendimento.findMany({
         where: {
