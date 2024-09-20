@@ -67,7 +67,7 @@ export class SolicitacaoController {
       return this.solicitacaoService.create({
         ...data,
         corretor: data.corretor ? data.corretor : req.user.id,
-      }, sms);
+      }, sms, req.user);
     } catch (error) {
       throw error;
     }

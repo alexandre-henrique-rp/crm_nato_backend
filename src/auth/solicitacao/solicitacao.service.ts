@@ -28,10 +28,12 @@ export class SolicitacaoService {
         await this.prismaService.nato_solicitacoes_certificado.findFirst({
           where: {
             id,
-            ...(hierarquia === 'USER' && { ativo: true, financeiro: { in: Ids }, OR: [
-              { corretor: userId },
-              { corretor: null }
-            ] }),
+            ...(hierarquia === 'USER' && {
+              ativo: true, financeiro: { in: Ids }, OR: [
+                { corretor: userId },
+                { corretor: null }
+              ]
+            }),
             ...(hierarquia === 'CONST' && { financeiro: { in: Ids } }),
             ...(hierarquia === 'GRT' && { financeiro: { in: Ids } }),
             ...(hierarquia === 'CCA' && { financeiro: { in: Ids } }),
@@ -72,8 +74,9 @@ export class SolicitacaoService {
    * @param sms Se true, envia mensagens de texto para o cliente.
    * @returns O registro criado.
    */
-  async create(data: any, sms: string) {
+  async create(data: any, sms: string, user: any) {
     try {
+
       const dados = {
         ...data,
         dt_nascimento: data.dt_nascimento
@@ -84,6 +87,7 @@ export class SolicitacaoService {
           : JSON.stringify(data.relacionamento),
         dt_solicitacao: new Date().toISOString(),
         ativo: true,
+        logDelete: `O usuário: ${user?.nome}, id: ${user?.id} criou esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}`
       };
       const [construtora] = await Promise.all([
         await this.GetConstrutora(data.construtora),
@@ -197,7 +201,7 @@ export class SolicitacaoService {
         ...(data.dt_nascimento && { dt_nascimento: new Date(data.dt_nascimento).toISOString(), }),
         ...(data.logDelete && { logDelete: `${data.logDelete}\nO usuário: ${user?.nome}, id: ${user?.id} editou esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}` }),
         ...(req.logDelete && !data.logDelete && { logDelete: `${req.logDelete}\nO usuário: ${user?.nome}, id: ${user?.id} editou esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}` }),
-        ...(!data.logDelete && !req.logDelete && { logDelete: `${user?.nome}, id: ${user?.id} editou esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}` })
+        ...(!data.logDelete && !req.logDelete && { logDelete: `${user?.nome}, id: ${user?.id} editou esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}` }),
       }
 
 
@@ -364,10 +368,10 @@ export class SolicitacaoService {
         },
         select: {
           id: true,
-          nome:true,
+          nome: true,
           cpf: true,
           dt_solicitacao: true,
-          id_fcw:true,
+          id_fcw: true,
           ativo: true,
           createdAt: true,
           ass_doc: true,
