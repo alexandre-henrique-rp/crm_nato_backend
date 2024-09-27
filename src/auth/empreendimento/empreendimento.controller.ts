@@ -70,7 +70,6 @@ export class EmpreendimentoController {
   @Get('/filter/:id')
   async Filter(@Param('id') id: number) {
     const req = await this.empreendimentoService.Filter(id);
-    console.log("🚀 ~ EmpreendimentoController ~ Filter ~ req:", req)
     return req.map((data: any) => new EmpreendimentoPresenter(data));
   }
 }

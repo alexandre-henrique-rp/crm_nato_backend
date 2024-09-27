@@ -752,3 +752,10 @@ model nato_bug_alert {
   createdAt DateTime @default(now()) @db.DateTime(0)
   status    Boolean? @default(true)
 }
+
+model nato_tags {
+  id          Int      @id @default(autoincrement())
+  solicitacao Int?
+  createAt    DateTime @default(now()) @db.DateTime(0)
+  descricao   String?  @db.VarChar(100)
+}

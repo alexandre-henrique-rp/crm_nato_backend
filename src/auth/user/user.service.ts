@@ -133,7 +133,7 @@ export class UserService {
   }
 
   findByid(id: number) {
-    console.log(id);
+  
     try {
       return this.prismaService.nato_user.findFirst({
         where: {

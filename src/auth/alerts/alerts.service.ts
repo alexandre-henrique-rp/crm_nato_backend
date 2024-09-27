@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Console } from 'console';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -119,7 +118,7 @@ export class AlertsService {
           },
         }),
       ])
-      console.log(vendedor)
+
       await Promise.all([
         await this.SendWhatsapp(vendedor.telefone, `Atualização: ${data.titulo}-${data.texto}`),
         // await this.Relatorio(data.empreendimento, `Atualização: ${data.titulo}-${data.texto} - Vendedor: ${vendedor.nome}`),
@@ -190,10 +189,9 @@ export class AlertsService {
         }),
       });
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return error;
     }
   }

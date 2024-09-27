@@ -395,10 +395,12 @@ export class SolicitacaoService {
       const data = await Promise.all(
         req.map(async item => {
           const ConsultaFcWeb: any = await this.GetFicha(item.cpf);
+          const ConsultaTag: any = await this.GetTag(item.id);
 
           return {
             ...item,
             ...(ConsultaFcWeb && { fcweb: { ...ConsultaFcWeb } }),
+            ...(ConsultaTag && { tag: ConsultaTag  }),
           };
         }),
       );
@@ -627,7 +629,7 @@ export class SolicitacaoService {
       }
       return data;
     } catch (error) {
-      console.log("error send sms", error);
+      console.error("error send sms", error);
       return error;
     }
   }
@@ -660,7 +662,7 @@ export class SolicitacaoService {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.log("error send sms", error);
+      console.error("error send sms", error);
       return error;
     }
   }
@@ -691,7 +693,26 @@ export class SolicitacaoService {
           id: true,
           valorcd: true,
           estatos_pgto: true,
+          dt_aprovacao: true,
+          hr_aprovacao: true,
         },
+      })
+      return request
+    } catch (error) {
+      return [];
+    }
+  }
+
+  async GetTag(id: number) {
+    try {
+      const request = await this.prismaService.nato_tags.findMany({
+        where: {
+          solicitacao: id
+        },
+        select: {
+          id: true,
+          descricao: true
+        }
       })
       return request
     } catch (error) {
