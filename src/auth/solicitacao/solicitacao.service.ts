@@ -396,10 +396,6 @@ export class SolicitacaoService {
         req.map(async item => {
           const ConsultaFcWeb: any = await this.GetFicha(item.cpf);
           const ConsultaTag: any = await this.GetTag(item.id);
-
-
-          
-
           return {
             ...item,
             ...(ConsultaFcWeb && { fcweb: { ...ConsultaFcWeb } }),
