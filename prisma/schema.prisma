@@ -333,6 +333,8 @@ model nato_empresas {
   financeiro          String?               @db.LongText
   atividade           String?               @db.VarChar(100)
   fantasia            String?               @db.VarChar(100)
+  status              Boolean               @default(true)
+  valor_cert          Float?                @db.Float
   nato_empreendimento nato_empreendimento[]
 }
 
@@ -379,6 +381,9 @@ model nato_solicitacoes_certificado {
   mult_link        String?       @db.LongText
   mult_ass_doc     String?       @db.LongText
   hr_aprovacao     DateTime?     @db.Time(0)
+  estatos_pgto     String?       @db.VarChar(100)
+  valorcd          Float?        @db.Float
+  situacao_pg      Int?          @db.TinyInt
   nato_alerta      nato_alerta[]
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")
@@ -758,4 +763,14 @@ model nato_tags {
   solicitacao Int?
   createAt    DateTime @default(now()) @db.DateTime(0)
   descricao   String?  @db.VarChar(100)
+}
+
+model nato_relatorio_financeiro {
+  id          Int      @id @default(autoincrement())
+  protocolo   BigInt?  @unique(map: "nato_relatorio_financeiro_unique")
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime @default(now()) @db.Timestamp(0)
+  situacao_pg Int?     @default(0) @db.TinyInt
+  nota_fiscal String?  @db.VarChar(100)
+  solicitacao String?  @default("[]") @db.VarChar(256)
 }

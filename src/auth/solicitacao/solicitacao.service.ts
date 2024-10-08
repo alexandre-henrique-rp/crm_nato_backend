@@ -22,7 +22,7 @@ export class SolicitacaoService {
    */
   async findOne(id: number, userId: number, hierarquia: string, Financeira: any) {
     try {
-      const Ids = Financeira.map((item: { id: any; }) => item.id);
+      const Ids = Financeira;
 
       const req =
         await this.prismaService.nato_solicitacoes_certificado.findFirst({
@@ -292,13 +292,14 @@ export class SolicitacaoService {
    * @returns objeto com dois campos: Total (número com a quantidade total de registros) e Filter (array com os registros filtrados)
    */
   async GetAllPaginationAndFilter(pagina: number, limite: number, filtro: any, UserData: any) {
+    console.log("🚀 ~ SolicitacaoService ~ GetAllPaginationAndFilter ~ UserData:", UserData)
     try {
       const { nome, id, andamento, construtora, empreedimento, financeiro } = filtro;
       const PaginaAtual = pagina || 1;
       const Limite = !!andamento ? 50 : limite ? limite : 20;
       const Offset = (PaginaAtual - 1) * Limite;
-      const Ids = UserData.Financeira.map((item: { id: any; }) => item.id);
-      const ConstId = UserData.construtora.map((i: { id: any; }) => i.id);
+      const Ids = UserData.Financeira;
+      const ConstId = UserData.construtora;
 
       const count = await this.prismaService.nato_solicitacoes_certificado.count({
         where: {

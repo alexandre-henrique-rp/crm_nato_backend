@@ -17,27 +17,33 @@ export class AuthService {
 
       if (!user) {
         // throw new Error('Usuário e senha incorretos');
-        return { error: true, mesage: 'Usuário e senha incorretos' };
+        return { error: true, mesage: 'Usuário e senha incorretos3' };
       }
       const isValid = bcrypt.compareSync(data.password, user.password_key);
 
       if (!isValid) {
         // throw new Error('Usuário e senha incorretos');
-        return { error: true, mesage: 'Usuário e senha incorretos' };
+        return { error: true, mesage: 'Usuário e senha incorretos2' };
       }
 
       if (!user.status) {
         // throw new Error('Usuário inativo, contate o administrador');
         return {
           error: true,
-          mesage: 'Usuário inativo, contate o administrador',
+          mesage: 'Usuário inativo, contate o administrador1',
         };
       }
-
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password_key, password, ...datauser } = user;
+      const Pyload = {
+        id: user.id,
+        construtora: user.construtora.map((x: any) => x.id),
+        empreendimento: user.empreendimento.map((x: any) =>  x.id),
+        hierarquia: user.hierarquia,
+        Financeira: user.Financeira.map((x: any) => x.id),
+      }
       const result = {
-        token: this.jwtService.sign(datauser),
+        token: this.jwtService.sign(Pyload),
         user: {
           id: user.id,
           nome: user.nome,
@@ -54,6 +60,7 @@ export class AuthService {
       
       return result;
     } catch (error) {
+     
       throw error;
     }
   }
