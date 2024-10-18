@@ -31,6 +31,7 @@ export class FileService {
       await fs.access(filePath); // Verifica se o arquivo existe
       return filePath; // Retorna o caminho do arquivo se existir
     } catch (error) {
+      console.error('Error accessing file:', error);
       throw new NotFoundException(`File not found: ${filename}`);
     }
   }

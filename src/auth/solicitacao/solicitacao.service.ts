@@ -292,7 +292,6 @@ export class SolicitacaoService {
    * @returns objeto com dois campos: Total (número com a quantidade total de registros) e Filter (array com os registros filtrados)
    */
   async GetAllPaginationAndFilter(pagina: number, limite: number, filtro: any, UserData: any) {
-    console.log("🚀 ~ SolicitacaoService ~ GetAllPaginationAndFilter ~ UserData:", UserData)
     try {
       const { nome, id, andamento, construtora, empreedimento, financeiro } = filtro;
       const PaginaAtual = pagina || 1;
@@ -407,6 +406,9 @@ export class SolicitacaoService {
 
       const Total = count;
 
+      const resposta = { total: Total, data: data, pagina: PaginaAtual, limite: Limite }
+
+      console.log("🚀 ~ SolicitacaoService ~ GetAllPaginationAndFilter ~ resposta:", resposta)
       return { total: Total, data: data, pagina: PaginaAtual, limite: Limite };
     } catch (error) {
       console.error('Erro na função GetAllPaginationAndFilter:', error); // Logando erro completo para depuração

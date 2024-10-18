@@ -48,7 +48,7 @@ export class FileController {
 
     try {
       const savedFile = await this.fileService.salvarDados(file, req);
-      // console.log('File saved:', savedFile);
+      console.log('File saved:', savedFile);
       return savedFile;
     } catch (error) {
       console.error('Error saving file:', error);
