@@ -101,7 +101,7 @@ export class SolicitacaoService {
         await this.getFinanceiro(data.financeiro),
       ])
 
-      const Msg = `Ola *${data.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido da construtora ${construtora.fantasia} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.cidade ? `, em *${empreedimento?.cidade}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar os documentos do seu financiamento imobiliário junto a CAIXA e Correspondente bancário ${financeira?.fantasia}, e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
+      const Msg = `Ola *${data.nome}*, tudo bem?!\n\nSomos a *Interface Certificadora*, e à pedido da construtora ${construtora.fantasia} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.cidade ? `, em *${empreedimento?.cidade}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar os documentos do seu financiamento imobiliário junto a CAIXA e Correspondente bancário ${financeira?.fantasia}, e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
 
       if (sms === 'true' && data.telefone) {
         await Promise.all([
@@ -148,7 +148,7 @@ export class SolicitacaoService {
         await this.getFinanceiro(req.financeiro),
       ])
 
-      const Msg = `Ola *${req.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido da construtora ${construtora.fantasia} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.cidade ? `, em *${empreedimento?.cidade}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar os documentos do seu financiamento imobiliário junto a CAIXA e Correspondente bancário ${financeira?.fantasia}, e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
+      const Msg = `Ola *${req.nome}*, tudo bem?!\n\nSomos a *Interface Certificadora*, e à pedido da construtora ${construtora.fantasia} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.cidade ? `, em *${empreedimento?.cidade}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar os documentos do seu financiamento imobiliário junto a CAIXA e Correspondente bancário ${financeira?.fantasia}, e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
 
       if (req.telefone) {
         await Promise.all([
@@ -406,9 +406,9 @@ export class SolicitacaoService {
 
       const Total = count;
 
-      const resposta = { total: Total, data: data, pagina: PaginaAtual, limite: Limite }
+      // const resposta = { total: Total, data: data, pagina: PaginaAtual, limite: Limite }
 
-      console.log("🚀 ~ SolicitacaoService ~ GetAllPaginationAndFilter ~ resposta:", resposta)
+      // console.log("🚀 ~ SolicitacaoService ~ GetAllPaginationAndFilter ~ resposta:", resposta)
       return { total: Total, data: data, pagina: PaginaAtual, limite: Limite };
     } catch (error) {
       console.error('Erro na função GetAllPaginationAndFilter:', error); // Logando erro completo para depuração

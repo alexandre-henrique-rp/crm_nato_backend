@@ -37,6 +37,7 @@ export class AuthService {
       const { password_key, password, ...datauser } = user;
       const Pyload = {
         id: user.id,
+        nome: user.nome,
         construtora: user.construtora.map((x: any) => x.id),
         empreendimento: user.empreendimento.map((x: any) =>  x.id),
         hierarquia: user.hierarquia,
