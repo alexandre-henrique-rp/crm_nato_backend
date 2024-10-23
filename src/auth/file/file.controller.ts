@@ -71,7 +71,6 @@ export class FileController {
     @Res() res: Response,
   ) {
     const filePath = join(process.cwd(), 'uploads', filename);
-
     try {
       const fileStats = statSync(filePath);
       if (fileStats.isFile()) {
@@ -80,9 +79,7 @@ export class FileController {
           `attachment; filename="${filename}"`,
         );
         return createReadStream(filePath).pipe(res);
-      } else {
-        throw new NotFoundException('File not found');
-      }
+      } 
     } catch (error) {
       console.error('Error downloading file:', error);
       throw new NotFoundException('File not found');
@@ -96,7 +93,6 @@ export class FileController {
         destination: './print-suporte-files',
         filename: (req, file, callback) => {
           console.log('🚀 ~ FileController ~ req:', req);
-
           try {
             const fileNameWithoutSpaces = file.originalname.replace(
               /\s+/g,
