@@ -383,7 +383,8 @@ model nato_solicitacoes_certificado {
   hr_aprovacao     DateTime?     @db.Time(0)
   estatos_pgto     String?       @db.VarChar(100)
   valorcd          Float?        @db.Float
-  situacao_pg      Int?          @db.TinyInt
+  situacao_pg      Int?          @default(0) @db.TinyInt
+  freqSms          Int?          @default(0)
   nato_alerta      nato_alerta[]
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")
@@ -774,5 +775,12 @@ model nato_relatorio_financeiro {
   nota_fiscal String?  @db.VarChar(100)
   solicitacao String   @db.Text
   construtora Int?
+}
 
+model nato_suporte {
+  id          Int      @id @default(autoincrement())
+  tag         String   @db.VarChar(100)
+  deescricao  String?  @db.VarChar(256)
+  solicitacao Int?
+  createAt    DateTime @default(now()) @db.DateTime(0)
 }

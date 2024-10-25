@@ -9,6 +9,7 @@ import {
   Res,
   NotFoundException,
   InternalServerErrorException,
+  Delete,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -16,7 +17,7 @@ import { Request, Response } from 'express';
 import { FileService } from './file.service';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
-import { createReadStream, statSync } from 'fs';
+import { createReadStream, statSync, unlinkSync } from 'fs';
 import { console } from 'inspector';
 
 @Controller('file')
@@ -124,7 +125,7 @@ export class FileController {
       );
     }
     try {
-      const savedFile = await this.fileService.salvarDados(file, req);
+      const savedFile = await this.fileService.salvarImgSuporte(file, req);
       console.log('File saved:', savedFile);
       return savedFile;
     } catch (error) {
@@ -160,5 +161,23 @@ export class FileController {
     console.log('🚀 ~ FileController ~ location:', location);
     return JSON.stringify({ ip, userAgent, location });
   }
+
+  @Delete('suporte/delete/:filename')
+  async deleteFileSuporte(@Param('filename') filename: any) {
+
+    try {
+      const message = await this.fileService.deleteFileSuporte(filename);
+      return message;
+    } catch (error) {
+      console.error('Error deleting file:', error);
+      if (error instanceof NotFoundException) {
+        throw error; // Propaga o erro NotFoundException
+      }
+      throw new InternalServerErrorException('Failed to delete file.');
+    }
+  }
+  
+  
   // visualização de arquivos pelo navegador pode ser adicionada aqui.
 }
+0
