@@ -59,6 +59,7 @@ export class SolicitacaoService {
         ...(req.mult_link && { mult_link: Mult_link }),
         ...(req.mult_ass_doc && { mult_ass_doc: Mult_ass }),
         ...(req.rela_quest ? { relacionamento: dataRelacionamento } : { relacionamento: [] }),
+        docSuspenso: req.docSuspenso, 
       };
       return data;
     } catch (error) {
