@@ -12,7 +12,11 @@ export default async function suspenderDoc(ids) {
           where: {
             id:{
               notIn: id
-            }
+            },
+            OR: [
+              { uploadCnh: { not: '' } },
+              { uploadRg: { not: '' } }
+          ]
           },
           data:{
             docSuspenso: `DOCUMENTO SUSPENSO - ${dataAtual}`,

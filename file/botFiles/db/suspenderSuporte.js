@@ -12,6 +12,11 @@ export default async function suspenderSuporte(ids) {
           where: {
             id:{
               notIn: id
+            },
+            AND:{
+              urlSuporte: {
+                not: null || ''
+              },
             }
           },
           data:{
