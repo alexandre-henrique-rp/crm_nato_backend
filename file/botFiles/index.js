@@ -6,6 +6,7 @@ import getArquivos from './db/arquivosDb.js';
 import getSuporte from './db/suporteDb.js';
 import suspenderDoc from './db/suspenderDoc.js';
 import suspenderSuporte from './db/suspenderSuporte.js';
+import getAllFiles from './db/getAllFiles.js';
 
 const pastaSuporte = '../suporteDocs'
 const pastaRgCnh = '../arquivos';
@@ -16,10 +17,12 @@ async function main() {
     const nomeSuportes = suportes.map(suporte => suporte.urlFileName);
     const idSuportes = suportes.map(suporte => suporte.id);
 
+
     const arquivos = await getArquivos();
     const nomeArquivos = arquivos.map(arquivo => arquivo.nomeArquivo);
     const idArquivos = arquivos.map(arquivo => arquivo.id);
-  
+    const allArquivos = await getAllFiles(idArquivos)
+    
     const dataAtual = new Date();
     const dataFormatada = dataAtual.toLocaleDateString('pt-BR').split('/').join('-');
 
@@ -64,8 +67,15 @@ async function main() {
             // Adicionar arquivos ao zip
             arquivosParaCompactar.forEach(arquivo => {
               const caminhoCompleto = path.join(pastaRgCnh, arquivo);
-              archive.file(caminhoCompleto, { name: arquivo });
-            });
+              const arq = allArquivos.find(arq => arq.nomeArquivo === arquivo);
+              if(arq){
+                const novoNome = `${arq.id}-${arq.tag}`;
+                archive.file(caminhoCompleto, { name: novoNome });
+              }
+              else{
+                archive.file(caminhoCompleto, { name: arquivo });
+              }
+          });
             
             // Finalizar o zip
             await archive.finalize();

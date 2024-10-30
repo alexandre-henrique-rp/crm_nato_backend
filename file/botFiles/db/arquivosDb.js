@@ -34,7 +34,8 @@ export default async function getArquivos() {
                     return {
                         id: item.id,
                         data: item.createdAt,
-                        arquivo: nomeArquivo
+                        arquivo: nomeArquivo,
+                        tag: 'CNH'
                     }
                 }
                 else{
@@ -42,14 +43,16 @@ export default async function getArquivos() {
                         return {
                             id: item.id,
                             data: item.createdAt,
-                            arquivo: nomeArquivo
+                            arquivo: nomeArquivo,
+                            tag: 'RG'
                         }
                     }
         });
         const nomeArquivos = arquivosFiltrados.map((arquivo) => {
           return{
-          id: arquivo.id,
-          nomeArquivo: arquivo.arquivo
+            id: arquivo.id,
+            nomeArquivo: arquivo.arquivo,
+            tag: arquivo.tag
           }
         });
         return nomeArquivos;
