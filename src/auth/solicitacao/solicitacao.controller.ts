@@ -13,6 +13,7 @@ import {
 import { SolicitacaoService } from './solicitacao.service';
 import { AuthGuard } from '../auth.guard';
 import { SolicitacaoPresenter } from './solicitacao.presenter';
+import { CreateSolicitacaoDto } from './dto/create_solicitacao.dto';
 
 @UseGuards(AuthGuard)
 @Controller('solicitacao')
@@ -61,7 +62,7 @@ export class SolicitacaoController {
   }
 
   @Post('/')
-  async Create(@Body() data: any, @Req() req: any, @Query() query: any) {
+  async Create(@Body() data: CreateSolicitacaoDto, @Req() req: any, @Query() query: any) {
     try {
       const { sms } = query
       return this.solicitacaoService.create({
@@ -69,6 +70,7 @@ export class SolicitacaoController {
         corretor: data.corretor ? data.corretor : req.user.id,
       }, sms, req.user);
     } catch (error) {
+      console.log("🚀 ~ SolicitacaoController ~ Create ~ error:", error)
       throw error;
     }
   }
