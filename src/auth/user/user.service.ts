@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { createUserDto } from './dto/create_user.dto';
+import { CreateUserDto } from './dto/create_user.dto';
 
 @Injectable()
 export class UserService {
   constructor(private prismaService: PrismaService) { }
 
-  create(dados: createUserDto) {
+  create(dados: CreateUserDto) {
     try {
       return this.prismaService.nato_user.create({
         data: {
@@ -23,7 +23,7 @@ export class UserService {
           empreendimento: JSON.stringify(dados.empreendimento),
           hierarquia: dados.hierarquia,
           cargo: dados.cargo,
-          Financeira: JSON.stringify(dados.Financeira),
+          Financeira: JSON.stringify(dados.financeira),
         },
       });
     } catch (error) {
