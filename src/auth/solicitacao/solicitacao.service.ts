@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateSolicitacaoDto } from './dto/create_solicitacao.dto';
 
 
 @Injectable()
@@ -75,9 +76,10 @@ export class SolicitacaoService {
    * @param sms Se true, envia mensagens de texto para o cliente.
    * @returns O registro criado.
    */
-  async create(data: any, sms: string, user: any) {
+  async create(data: CreateSolicitacaoDto, sms: string, user: any) {
     try {
-
+      
+      console.log("🚀 ~ SolicitacaoService ~ create ~ data:", data)
       const dados = {
         ...data,
         dt_nascimento: data.dt_nascimento
@@ -123,7 +125,7 @@ export class SolicitacaoService {
       );
       return req;
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
       return error;
     }
   }
