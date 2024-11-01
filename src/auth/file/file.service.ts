@@ -22,6 +22,8 @@ export class FileService {
       url: fileUrl,
     };
   }
+ 
+
 
   // async getFile(filename: string): Promise<string> {
   //   const filePath = path.join(__dirname, '../../uploads', filename);
@@ -51,13 +53,15 @@ export class FileService {
       throw new Error('File not provided or upload failed.');
     }
     // Cria a URL para acessar o arquivo
-    const fileUrl = `${req.protocol}://${req.get('host')}/file/uploads/suporte/${file.filename}`;
+    const fileUrl = `${req.protocol}://${req.get('host')}/file/downloads/suporte/${file.filename}`;
+    const viewUrl = `${req.protocol}://${req.get('host')}/file/view/suporte/${file.filename}`;
 
     return {
       fileName: file.filename,
       contentLength: file.size,
       contentType: file.mimetype,
       url: fileUrl,
+      viewUrl: viewUrl,
     };
   }
 
@@ -124,6 +128,35 @@ export class FileService {
     } catch (error) {
       console.error('Erro ao exibir arquivo:', error);
       throw new NotFoundException('Erro', error.message);
+    }
+  }
+  /**
+   * Deleta um arquivo de suporte do servidor.
+   *
+   * @param filename Nome do arquivo a ser deletado.
+   * @throws {NotFoundException} Se o arquivo não existir.
+   * @throws {Error} Se houver um erro ao deletar o arquivo.
+   */
+  async deleteFileSuporte(filename: string): Promise<string> {
+    const filePath = path.join(process.cwd(), 'print-suporte-files', filename);
+
+    try {
+      // Verifica se o arquivo existe
+      const res = await fs.access(filePath); // Usa acesso assíncrono
+      // Deleta o arquivo
+      const res2 = await fs.unlink(filePath);
+
+      const dataReturn: any = {
+        message:`Arquivo ${filename} deletado com sucesso.`
+      }
+      
+      return dataReturn
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        throw new NotFoundException(`Arquivo não encontrado: ${filename}`);
+      }
+      console.error('Erro ao deletar arquivo:', error);
+      throw new Error('Erro ao deletar o arquivo.');
     }
   }
 }
