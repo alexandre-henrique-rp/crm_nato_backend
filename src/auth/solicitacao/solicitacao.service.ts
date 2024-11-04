@@ -302,6 +302,7 @@ export class SolicitacaoService {
       const Offset = (PaginaAtual - 1) * Limite;
       const Ids = UserData.Financeira;
       const ConstId = UserData.construtora;
+      const EmpId = UserData.empreendimento;
 
       const count = await this.prismaService.nato_solicitacoes_certificado.count({
         where: {
@@ -309,22 +310,21 @@ export class SolicitacaoService {
             corretor: UserData.id,
             ativo: true,
             distrato: false,
-            financeiro: { in: Ids },
           }),
           ...(UserData.hierarquia === 'CONST' && {
-            financeiro: { in: Ids },
-            ativo: true,
             construtora: { in: ConstId },
           }),
           ...(UserData.hierarquia === 'GRT' && {
             financeiro: { in: Ids },
             ativo: true,
             construtora: { in: ConstId },
+            empreedimento: { in: EmpId },
           }),
           ...(UserData.hierarquia === 'CCA' && {
             financeiro: { in: Ids },
             ativo: true,
-            construtora: { in: ConstId },
+            ...(ConstId.length > 0 && {construtora: { in: ConstId }}),
+            ...(EmpId.length > 0 && {empreedimento: { in: EmpId }}),
           }),
           ...(nome && { nome: { contains: nome } }),
           ...(id && { id: { equals: Number(id) } }),
@@ -342,22 +342,21 @@ export class SolicitacaoService {
             corretor: UserData.id,
             ativo: true,
             distrato: false,
-            financeiro: { in: Ids },
           }),
           ...(UserData.hierarquia === 'CONST' && {
-            financeiro: { in: Ids },
-            ativo: true,
             construtora: { in: ConstId },
           }),
           ...(UserData.hierarquia === 'GRT' && {
             financeiro: { in: Ids },
             ativo: true,
             construtora: { in: ConstId },
+            empreedimento: { in: EmpId },
           }),
           ...(UserData.hierarquia === 'CCA' && {
             financeiro: { in: Ids },
             ativo: true,
-            construtora: { in: ConstId },
+            ...(ConstId.length > 0 && {construtora: { in: ConstId }}),
+            ...(EmpId.length > 0 && {empreedimento: { in: EmpId }}),
           }),
           ...(nome && { nome: { contains: nome } }),
           ...(id && { id: { equals: Number(id) } }),
@@ -394,7 +393,6 @@ export class SolicitacaoService {
         take: Limite,
       });
 
-
       const data = await Promise.all(
         req.map(async item => {
           const ConsultaFcWeb: any = await this.GetFicha(item.cpf);
@@ -407,12 +405,7 @@ export class SolicitacaoService {
         }),
       );
 
-      const Total = count;
-
-      // const resposta = { total: Total, data: data, pagina: PaginaAtual, limite: Limite }
-
-      // console.log("🚀 ~ SolicitacaoService ~ GetAllPaginationAndFilter ~ resposta:", resposta)
-      return { total: Total, data: data, pagina: PaginaAtual, limite: Limite };
+      return { total: count, data: data, pagina: PaginaAtual, limite: Limite };
     } catch (error) {
       console.error('Erro na função GetAllPaginationAndFilter:', error); // Logando erro completo para depuração
       return error.message;
