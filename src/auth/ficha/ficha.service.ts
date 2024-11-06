@@ -53,6 +53,9 @@ export class FichaService {
         throw new Error(`O corretor com id ${solicitacao.corretor} não existe`);
       }
 
+      const DataAtual = new Date();
+      DataAtual.setHours(DataAtual.getHours() - 3);
+
       const dataFcweb = {
         cpf: solicitacao.cpf.replace(/\W+/g, ""),
         nome: solicitacao.nome.toUpperCase(),
@@ -65,7 +68,7 @@ export class FichaService {
         andamento: "NOVA FC",
         unidade: "1",
         s_alerta: "ATIVADO",
-        referencia: `${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}`,
+        referencia: `${DataAtual.toLocaleDateString('pt-BR')} ${DataAtual.toLocaleTimeString('pt-BR')}`,
         obscont: `Criado Por: ${user?.nome} - Empreendimento: ${empreedimento.nome} - vendedor: ${corretor.nome} - ( ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')} )`,
         tipocd: "A3PF Bird5000",
         valorcd: "100,00",
