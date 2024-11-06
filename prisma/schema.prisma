@@ -412,6 +412,7 @@ model nato_user {
   status         Boolean?      @default(false)
   Financeira     String?       @db.LongText
   sms_relat      Boolean?      @default(false)
+  termos         Boolean?      @default(false)
   nato_alerta    nato_alerta[]
 }
 
@@ -768,14 +769,16 @@ model nato_tags {
 }
 
 model nato_relatorio_financeiro {
-  id          Int      @id @default(autoincrement())
-  protocolo   String?  @unique(map: "nato_relatorio_financeiro_unique") @db.VarChar(20)
-  createdAt   DateTime @default(now()) @db.Timestamp(0)
-  updatedAt   DateTime @default(now()) @db.Timestamp(0)
-  situacao_pg Int      @default(0) @db.TinyInt
-  nota_fiscal String?  @db.VarChar(100)
-  solicitacao String   @db.Text
+  id          Int       @id @default(autoincrement())
+  protocolo   String?   @unique(map: "nato_relatorio_financeiro_unique") @db.VarChar(20)
+  createdAt   DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime  @default(now()) @db.Timestamp(0)
+  situacao_pg Int       @default(0) @db.TinyInt
+  nota_fiscal String?   @db.VarChar(100)
+  solicitacao String    @db.Text
   construtora Int?
+  start       DateTime? @db.Date
+  end         DateTime? @db.Date
 }
 
 model nato_suporte {

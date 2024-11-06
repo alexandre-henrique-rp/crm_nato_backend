@@ -56,6 +56,7 @@ export class AuthService {
           status: user.status,
           Financeira: user.Financeira,
           reset_password: user.reset_password,
+          termos: user.termos
         },
       };
       
