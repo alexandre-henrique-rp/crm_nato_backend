@@ -16,6 +16,8 @@ export class BugService {
       return req
     } catch (error) {
       return error.message
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 }

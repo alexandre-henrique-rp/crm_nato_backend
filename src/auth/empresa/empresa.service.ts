@@ -33,6 +33,8 @@ export class EmpresaService {
       });
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -45,6 +47,8 @@ export class EmpresaService {
       });
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -55,6 +59,8 @@ export class EmpresaService {
       });
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -71,6 +77,8 @@ export class EmpresaService {
       });
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -83,6 +91,8 @@ export class EmpresaService {
       });
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 }

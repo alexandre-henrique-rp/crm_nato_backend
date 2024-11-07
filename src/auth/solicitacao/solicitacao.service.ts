@@ -76,6 +76,8 @@ export class SolicitacaoService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -132,6 +134,8 @@ export class SolicitacaoService {
     } catch (error) {
       console.error(error);
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -170,6 +174,8 @@ export class SolicitacaoService {
     } catch (error) {
       console.error(error.message);
       return { mesage: 'Erro ao enviar SMS', status: 'fail', error: error };
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -230,6 +236,8 @@ export class SolicitacaoService {
       console.error(error);
       console.error(error.message);
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -270,6 +278,8 @@ export class SolicitacaoService {
       });
     } catch (error) {
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -435,6 +445,8 @@ export class SolicitacaoService {
     } catch (error) {
       console.error('Erro na função GetAllPaginationAndFilter:', error); // Logando erro completo para depuração
       return error.message;
+    }finally{
+      await this.prismaService.$disconnect()
     }
   }
 
@@ -455,6 +467,8 @@ export class SolicitacaoService {
       return req;
     } catch (error) {
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -495,6 +509,8 @@ export class SolicitacaoService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -517,6 +533,8 @@ export class SolicitacaoService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -544,6 +562,8 @@ export class SolicitacaoService {
       return req;
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -568,6 +588,8 @@ export class SolicitacaoService {
       return req;
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -593,6 +615,8 @@ export class SolicitacaoService {
       return req;
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -616,6 +640,8 @@ export class SolicitacaoService {
       });
     } catch (error) {
       return {};
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -721,6 +747,8 @@ export class SolicitacaoService {
       return request;
     } catch (error) {
       return [];
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -738,6 +766,8 @@ export class SolicitacaoService {
       return request;
     } catch (error) {
       return [];
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 }
