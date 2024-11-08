@@ -22,24 +22,7 @@ export class FileService {
       url: fileUrl,
     };
   }
- 
-
-
-  // async getFile(filename: string): Promise<string> {
-  //   const filePath = path.join(__dirname, '../../uploads', filename);
-  //   try {
-  //     await fs.access(filePath); // Verifica se o arquivo existe
-  //     return filePath; // Retorna o caminho do arquivo se existir
-  //   } catch (error) {
-  //     console.error('Error accessing file:', error);
-  //     throw new NotFoundException(`File not found: ${filename}`);
-  //   }
-  // }
-
-  //suporte
-
-  //salvar imagem de suporte
-
+  
   /**
    * Salva uma imagem de suporte no servidor.
    *

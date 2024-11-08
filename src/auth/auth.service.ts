@@ -107,6 +107,8 @@ export class AuthService {
       return data;
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -126,6 +128,8 @@ export class AuthService {
       });
     } catch (error) {
       return {};
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -145,6 +149,8 @@ export class AuthService {
       });
     } catch (error) {
       return {};
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -164,6 +170,8 @@ export class AuthService {
       });
     } catch (error) {
       return {};
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 }

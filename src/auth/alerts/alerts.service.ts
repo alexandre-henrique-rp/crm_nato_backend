@@ -34,6 +34,8 @@ export class AlertsService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -67,6 +69,8 @@ export class AlertsService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -84,6 +88,8 @@ export class AlertsService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -101,6 +107,8 @@ export class AlertsService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -132,6 +140,8 @@ export class AlertsService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -150,6 +160,8 @@ export class AlertsService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -168,6 +180,8 @@ export class AlertsService {
       return request
     } catch (error) {
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
   //-----------------------------------------------
@@ -224,6 +238,8 @@ export class AlertsService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 }

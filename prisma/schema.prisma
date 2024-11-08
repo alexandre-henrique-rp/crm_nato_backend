@@ -386,6 +386,8 @@ model nato_solicitacoes_certificado {
   situacao_pg      Int?          @default(0) @db.TinyInt
   freqSms          Int?          @default(0)
   docSuspenso      String?       @db.VarChar(100)
+  alertanow        Boolean?      @default(false)
+  dt_criacao_now   DateTime?     @db.DateTime(0)
   nato_alerta      nato_alerta[]
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")
@@ -789,4 +791,11 @@ model nato_suporte {
   createAt    DateTime @default(now()) @db.DateTime(0)
   urlSuporte  String?  @db.LongText
   imgSuspensa String?  @db.VarChar(100)
+}
+
+model nato_termos {
+  id        Int      @id @default(autoincrement())
+  termo     String?  @db.LongText
+  politicas String?  @db.LongText
+  createdAt DateTime @default(now()) @db.DateTime(0)
 }

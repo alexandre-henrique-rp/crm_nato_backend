@@ -37,6 +37,8 @@ export class EmpreendimentoService {
     } catch (error) {
       console.error('Erro ao buscar empreendimentos:', error);
       throw new Error('Erro ao buscar empreendimentos. Por favor, tente novamente mais tarde.');
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -51,6 +53,8 @@ export class EmpreendimentoService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -67,6 +71,8 @@ export class EmpreendimentoService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -115,6 +121,8 @@ export class EmpreendimentoService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -136,6 +144,8 @@ export class EmpreendimentoService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -150,6 +160,8 @@ export class EmpreendimentoService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -165,6 +177,8 @@ export class EmpreendimentoService {
       });
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -179,6 +193,8 @@ export class EmpreendimentoService {
       });
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -201,6 +217,8 @@ export class EmpreendimentoService {
       return request
     } catch (error) {
       return error
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 }

@@ -35,6 +35,8 @@ export class DashboardService {
     } catch (error) {
       console.error('Erro ao buscar as solicitações:', error);
       throw new Error('Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.');
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -53,6 +55,8 @@ export class DashboardService {
     } catch (error) {
       console.error('Erro ao buscar o empreendimento:', error);
       throw new Error('Erro ao buscar o empreendimento. Por favor, tente novamente mais tarde.');
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -71,6 +75,8 @@ export class DashboardService {
     } catch (error) {
       console.error('Erro ao buscar a construtora:', error);
       throw new Error('Erro ao buscar a construtora. Por favor, tente novamente mais tarde.');
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -89,6 +95,8 @@ export class DashboardService {
     } catch (error) {
       console.error('Erro ao buscar o vendedor:', error);
       throw new Error('Erro ao buscar o vendedor. Por favor, tente novamente mais tarde.');
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -107,6 +115,8 @@ export class DashboardService {
     } catch (error) {
       console.error('Erro ao buscar o financeiro:', error);
       throw new Error('Erro ao buscar o financeiro. Por favor, tente novamente mais tarde.');
+    }finally{
+      this.prismaService.$disconnect
     }
   } 
 
@@ -128,6 +138,8 @@ export class DashboardService {
     } catch (error) {
       console.error('Erro ao buscar a Ficha de Contrato:', error);
       throw new Error('Erro ao buscar a Ficha de Contrato. Por favor, tente novamente mais tarde.');
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 }

@@ -16,6 +16,8 @@ export class FinanceiroService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -29,6 +31,8 @@ export class FinanceiroService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -43,6 +47,8 @@ export class FinanceiroService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -60,6 +66,8 @@ export class FinanceiroService {
     } catch (error) {
       console.error(error.message);
       return error.message;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -73,6 +81,8 @@ export class FinanceiroService {
       return "Financeiro deletado com sucesso!"
     } catch (error) {
       return error
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 }

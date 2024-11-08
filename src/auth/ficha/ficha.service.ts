@@ -13,6 +13,8 @@ export class FichaService {
     } catch (error) {
       console.log("🚀 ~ FichaService ~ CreateFicha ~ error:", error)
       return error
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -99,6 +101,8 @@ export class FichaService {
     } catch (error) {
       console.log("🚀 ~ FichaService ~ GetUpdate ~ error:", error);
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -133,6 +137,8 @@ export class FichaService {
       return req;
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -157,6 +163,8 @@ export class FichaService {
       return req;
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -182,6 +190,8 @@ export class FichaService {
       return req;
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 
@@ -205,6 +215,8 @@ export class FichaService {
       });
     } catch (error) {
       return {};
+    }finally{
+      this.prismaService.$disconnect
     }
   }
 }
