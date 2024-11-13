@@ -320,7 +320,7 @@ model metadata {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model nato_empresas {
   id                  Int                   @unique(map: "nato_empresas_unique") @default(autoincrement())
-  cnpj                String                @unique(map: "nato_empresas_unique_1") @db.VarChar(100)
+  cnpj                String                @db.VarChar(100)
   razaosocial         String                @db.VarChar(100)
   tel                 String?               @db.LongText
   email               String?               @db.VarChar(100)
@@ -781,6 +781,7 @@ model nato_relatorio_financeiro {
   construtora Int?
   start       DateTime? @db.Date
   end         DateTime? @db.Date
+  statusNota  Boolean?  @default(false)
 }
 
 model nato_suporte {
