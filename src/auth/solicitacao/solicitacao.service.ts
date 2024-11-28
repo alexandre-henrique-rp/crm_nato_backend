@@ -424,6 +424,7 @@ export class SolicitacaoService {
             type_validacao: true,
             construtora: true,
             alertanow: true,
+            statusAtendimento: true,
           },
           skip: Offset,
           take: Limite,
