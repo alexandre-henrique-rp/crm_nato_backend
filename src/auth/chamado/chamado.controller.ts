@@ -7,7 +7,7 @@ export class ChamadoController {
   constructor(private chamadoService: ChamadoService) {}
 
   @Post('/create')
-  create(@Body() data: CreateChamadoDto, @Req() req: any) {
+  Create(@Body() data: CreateChamadoDto, @Req() req: any) {
     try{
       return this.chamadoService.create(data, req.user)
     } catch (error) {
