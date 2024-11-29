@@ -14,6 +14,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { FileModule } from './file/file.module';
 import { FichaModule } from './ficha/ficha.module';
 import { BugModule } from './bug/bug.module';
+import { ChamadoModule } from './chamado/chamado.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { BugModule } from './bug/bug.module';
     FileModule,
     FichaModule,
     BugModule,
+    ChamadoModule,
   ],
   controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],
