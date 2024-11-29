@@ -340,55 +340,56 @@ model nato_empresas {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model nato_solicitacoes_certificado {
-  id                Int       @id @default(autoincrement())
-  nome              String    @db.VarChar(100)
-  cpf               String    @db.VarChar(100)
-  email             String    @db.VarChar(100)
-  dt_solicitacao    DateTime  @db.Date
+  id                Int           @id @default(autoincrement())
+  nome              String        @db.VarChar(100)
+  cpf               String        @db.VarChar(100)
+  email             String        @db.VarChar(100)
+  dt_solicitacao    DateTime      @db.Date
   corretor          Int?
   construtora       Int?
-  telefone          String?   @db.VarChar(100)
-  dt_nascimento     DateTime? @db.Date
-  ass_doc           String?   @db.Text
-  link_doc          String?   @db.Text
+  telefone          String?       @db.VarChar(100)
+  dt_nascimento     DateTime?     @db.Date
+  ass_doc           String?       @db.Text
+  link_doc          String?       @db.Text
   id_fcw            Int?
-  obs               String?   @db.LongText
-  alert             String?   @db.VarChar(100)
+  obs               String?       @db.LongText
+  alert             String?       @db.VarChar(100)
   empreedimento     Int?
-  cnh               String?   @db.VarChar(100)
-  ativo             Boolean   @default(true)
-  uploadCnh         String?   @db.LongText
-  relacionamento    String?   @db.LongText
-  createdAt         DateTime  @default(now()) @db.DateTime(0)
-  updatedAt         DateTime? @db.DateTime(0)
-  telefone2         String?   @db.VarChar(100)
-  uploadRg          String?   @db.LongText
-  rela_quest        Boolean?  @default(false)
-  voucher           String?   @db.VarChar(100)
-  link_planilha     String?   @db.Text
+  cnh               String?       @db.VarChar(100)
+  ativo             Boolean       @default(true)
+  uploadCnh         String?       @db.LongText
+  relacionamento    String?       @db.LongText
+  createdAt         DateTime      @default(now()) @db.DateTime(0)
+  updatedAt         DateTime?     @db.DateTime(0)
+  telefone2         String?       @db.VarChar(100)
+  uploadRg          String?       @db.LongText
+  rela_quest        Boolean?      @default(false)
+  voucher           String?       @db.VarChar(100)
+  link_planilha     String?       @db.Text
   financeiro        Int?
-  distrato          Boolean?  @default(false)
+  distrato          Boolean?      @default(false)
   user              Int?
-  logDelete         String?   @db.LongText
-  distrato_dt       DateTime? @db.DateTime(0)
-  status_aprovacao  Boolean?  @default(false)
+  logDelete         String?       @db.LongText
+  distrato_dt       DateTime?     @db.DateTime(0)
+  status_aprovacao  Boolean?      @default(false)
   distrato_id       Int?
-  Andamento         String?   @db.VarChar(100)
-  dt_aprovacao      DateTime? @db.Date
-  type_validacao    String?   @db.VarChar(100)
-  dt_agendamento    DateTime? @db.Date
-  hr_agendamento    DateTime? @db.Time(0)
-  mult_link         String?   @db.LongText
-  mult_ass_doc      String?   @db.LongText
-  hr_aprovacao      DateTime? @db.Time(0)
-  estatos_pgto      String?   @db.VarChar(100)
-  valorcd           Float?    @db.Float
-  situacao_pg       Int?      @default(0) @db.TinyInt
-  freqSms           Int?      @default(0)
-  docSuspenso       String?   @db.VarChar(100)
-  alertanow         Boolean?  @default(false)
-  dt_criacao_now    DateTime? @db.DateTime(0)
-  statusAtendimento Int?      @default(0)
+  Andamento         String?       @db.VarChar(100)
+  dt_aprovacao      DateTime?     @db.Date
+  type_validacao    String?       @db.VarChar(100)
+  dt_agendamento    DateTime?     @db.Date
+  hr_agendamento    DateTime?     @db.Time(0)
+  mult_link         String?       @db.LongText
+  mult_ass_doc      String?       @db.LongText
+  hr_aprovacao      DateTime?     @db.Time(0)
+  estatos_pgto      String?       @db.VarChar(100)
+  valorcd           Float?        @db.Float
+  situacao_pg       Int?          @default(0) @db.TinyInt
+  freqSms           Int?          @default(0)
+  docSuspenso       String?       @db.VarChar(100)
+  alertanow         Boolean?      @default(false)
+  dt_criacao_now    DateTime?     @db.DateTime(0)
+  statusAtendimento Boolean?      @default(false)
+  nato_alerta       nato_alerta[]
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")
   @@index([construtora], map: "nato_solicitacoes_certificado_nato_empresas_FK")
@@ -681,22 +682,24 @@ model voucher {
 }
 
 model nato_alerta {
-  id                  Int                 @id @default(autoincrement())
-  titulo              String?             @db.VarChar(100)
-  texto               String?             @db.Text
-  solicitacao_id      Int?
-  corretor            Int?
-  tipo                String?             @db.VarChar(100)
-  tag                 String?             @db.VarChar(100)
-  empreendimento      Int
-  createdAt           DateTime            @default(now()) @db.DateTime(0)
-  updatedAt           DateTime?           @db.DateTime(0)
-  status              Boolean?            @default(true)
-  nato_empreendimento nato_empreendimento @relation(fields: [empreendimento], references: [id], onUpdate: Restrict, map: "nato_alerta_nato_empreendimento_FK")
-  nato_user           nato_user?          @relation(fields: [corretor], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_alerta_nato_user_FK")
+  id                            Int                            @id @default(autoincrement())
+  titulo                        String?                        @db.VarChar(100)
+  texto                         String?                        @db.Text
+  solicitacao_id                Int?
+  corretor                      Int?
+  tipo                          String?                        @db.VarChar(100)
+  tag                           String?                        @db.VarChar(100)
+  empreendimento                Int
+  createdAt                     DateTime                       @default(now()) @db.DateTime(0)
+  updatedAt                     DateTime?                      @db.DateTime(0)
+  status                        Boolean?                       @default(true)
+  nato_empreendimento           nato_empreendimento            @relation(fields: [empreendimento], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "nato_alerta_nato_empreendimento_FK")
+  nato_solicitacoes_certificado nato_solicitacoes_certificado? @relation(fields: [solicitacao_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "nato_alerta_nato_solicitacoes_certificado_FK")
+  nato_user                     nato_user?                     @relation(fields: [corretor], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "nato_alerta_nato_user_FK")
 
   @@index([empreendimento], map: "nato_alerta_nato_empreendimento_FK")
   @@index([corretor], map: "nato_alerta_nato_user_FK")
+  @@index([solicitacao_id], map: "nato_alerta_nato_solicitacoes_certificado_FK")
 }
 
 model nato_empreendimento {
@@ -716,7 +719,7 @@ model nato_empreendimento {
   financeiro    String?        @db.LongText
   tag           String?        @db.VarChar(100)
   nato_alerta   nato_alerta[]
-  nato_empresas nato_empresas? @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_empreendimento_nato_empresas_FK")
+  nato_empresas nato_empresas? @relation(fields: [construtora], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "nato_empreendimento_nato_empresas_FK")
 
   @@index([construtora], map: "nato_empreendimento_nato_empresas_FK")
 }
