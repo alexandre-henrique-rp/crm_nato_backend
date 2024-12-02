@@ -10,12 +10,12 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Sis Nato Api')
-    .setDescription('The cats API description')
+    .setDescription('Api de integração com o Sis Nato')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('Rotas')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
+  SwaggerModule.setup('swagger', app, documentFactory);
 
   app.useGlobalPipes(
     new ValidationPipe({

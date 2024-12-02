@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
@@ -21,6 +22,7 @@ export class CreateChamadoDto {
    * - Deve ser um número positivo.
    * - Obrigatório.
    */
+  @ApiProperty({ description: 'ID da solicitação associado ao chamado' })
   @IsNumber({}, { message: 'solicitacao_id deve ser um número' })
   @IsPositive({ message: 'solicitacao_id deve ser um número positivo' })
   @IsNotEmpty({ message: 'solicitacao_id é obrigatório' })
@@ -32,6 +34,7 @@ export class CreateChamadoDto {
    * - Deve ser uma string.
    * - Obrigatório.
    */
+  @ApiProperty({ description: 'Descrição do chamado' })
   @IsString({ message: 'Descrição deve ser uma string válida' })
   @IsNotEmpty({ message: 'Descrição é obrigatória' })
   descricao: string;
@@ -42,6 +45,7 @@ export class CreateChamadoDto {
    * - Deve ser um número positivo.
    * - Deve ser 0, 1, 2 ou 3.
    */
+  @ApiProperty({ description: 'Status do chamado' })
   @IsNumber({}, { message: 'status deve ser um número' })
   @IsIn([0, 1, 2, 3], { message: 'O status deve ser 0, 1, 2 ou 3.' })
   @Type(() => Number)
@@ -53,6 +57,7 @@ export class CreateChamadoDto {
    * - Deve ser um número positivo.
    * - Obrigatório.
    */
+  @ApiProperty({ description: 'id do usuário que abriu o chamado' })
   @IsNumber({}, { message: 'status deve ser um número' })
   @IsPositive({ message: 'status deve ser um número positivo' })
   @IsNotEmpty({ message: 'status é obrigatório' })
@@ -64,6 +69,7 @@ export class CreateChamadoDto {
    * - Se fornecido, o array será transformado em uma única string no formato JSON.
    * - Opcional.
    */
+  @ApiProperty({ description: 'Lista de imagens associadas ao chamado' })
   @IsOptional() // Campo não é obrigatório
   @ValidateIf((obj) => Array.isArray(obj.images)) // Valida apenas se o valor for um array
   @IsArray({ message: 'images deve ser um array' }) // Garante que seja um array

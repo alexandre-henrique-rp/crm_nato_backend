@@ -11,14 +11,21 @@ import {
 } from '@nestjs/common';
 import { ChamadoService } from './chamado.service';
 import { CreateChamadoDto } from './dto/create_chamado.dto';
+import { ApiTags } from '@nestjs/swagger';
 // import { AuthGuard } from '../auth.guard';
 
 // @UseGuards(AuthGuard)
 @Controller('chamado')
+@ApiTags('chamado')
 export class ChamadoController {
   constructor(private chamadoService: ChamadoService) {}
 
   @Post('/create')
+  /**
+   * Create a new chamado.
+   * @param data The data for the chamado to be created.
+   * @returns The created chamado.
+   */
   Create(@Body() data: CreateChamadoDto) {
     try {
       console.log("🚀 ~ ChamadoController ~ Create ~ data:", data)
