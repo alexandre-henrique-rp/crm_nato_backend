@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
 import { ChamadoService } from './chamado.service';
 import { CreateChamadoDto } from './dto/create_chamado.dto';
 
@@ -9,26 +9,53 @@ export class ChamadoController {
   @Post('/create')
   Create(@Body() data: CreateChamadoDto, @Req() req: any) {
     try{
-      return this.chamadoService.create(data, req.user)
+      return this.chamadoService.create(data)
     } catch (error) {
       return error
     }
   }
 
-  @Get()
+  @Get('/')
   GetAll() {
-    return this.chamadoService.getAll()
+    try {
+      return this.chamadoService.getAll()
+    } catch (error) {
+      return error
+    }
   }
 
-  @Get(':id')
-  getOne(@Param('id') id: number) {
-    return 'chamado'
+  @Get('/:id')
+  GetOne(@Param('id') id: number) {
+    try {
+      return this.chamadoService.getOne(id)
+    } catch (error) {
+      return error
+    }
   }
 
-  @Get()
-  search(@Query() pesquisa: any) {
+  @Get("/pesquisar")
+  Search(@Query() pesquisa: any) {
     const {all} = pesquisa
     return 'chamado'
   }
+
+  @Put('/atualizar/:id')
+  Update(@Param('id') id: number, @Body() data: any) {
+    try {
+      return this.chamadoService.update(id, data)
+    } catch (error) {
+      return error
+    }
+  }
+
+  @Delete('/delete/:id')
+  Delete(@Param('id') id: number) {
+    try {
+      return this.chamadoService.delete(id)
+    } catch (error) {
+      return error
+    }
+  }
+
 
 }

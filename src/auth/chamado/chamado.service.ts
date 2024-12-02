@@ -7,11 +7,10 @@ import { AuthGuard } from '../auth.guard';
 export class ChamadoService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(data: CreateChamadoDto, user: any) {
+  async create(data: CreateChamadoDto) {
     return await this.prismaService.nato_chamados.create({
       data: {
         ...data,
-        idUser: user.id,
       },
     });
   }
