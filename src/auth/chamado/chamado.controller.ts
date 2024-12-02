@@ -16,8 +16,8 @@ export class ChamadoController {
   }
 
   @Get()
-  getAll() {
-    return 'chamado'
+  GetAll() {
+    return this.chamadoService.getAll()
   }
 
   @Get(':id')

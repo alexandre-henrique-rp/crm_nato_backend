@@ -13,7 +13,42 @@ export class ChamadoService {
         ...data,
         idUser: user.id,
       },
-     });
+    });
   }
 
+  async getAll() {
+    return await this.prismaService.nato_chamados.findMany({
+      where: {
+        status: { not: 2 },
+      },
+    });
+  }
+
+  async getOne(id: number) {
+    return await this.prismaService.nato_chamados.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async update(id: number, data: any) {
+    return await this.prismaService.nato_chamados.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
+
+  async delete(id: number) {
+    return await this.prismaService.nato_chamados.update({
+      where: {
+        id,
+      },
+      data:{
+        status: 3
+      },
+    });
+  }
 }
