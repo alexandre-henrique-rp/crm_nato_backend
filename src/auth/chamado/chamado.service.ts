@@ -50,4 +50,12 @@ export class ChamadoService {
       },
     });
   }
+
+  async search(pesquisa: any) {
+    return await this.prismaService.nato_chamados.findMany({
+      where: {
+       ...(pesquisa && pesquisa),
+      }
+    });
+  }
 }

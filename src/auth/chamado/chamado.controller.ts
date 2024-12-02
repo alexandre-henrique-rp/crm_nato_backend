@@ -48,8 +48,12 @@ export class ChamadoController {
 
   @Get('/pesquisar')
   Search(@Query() pesquisa: any) {
-    const { all } = pesquisa;
-    return 'chamado';
+    try {
+      const all  = pesquisa;
+      return this.chamadoService.search(all);
+    } catch (error) {
+      return error;
+    }
   }
 
   @Put('/atualizar/:id')
@@ -69,4 +73,6 @@ export class ChamadoController {
       return error;
     }
   }
+
+ 
 }
