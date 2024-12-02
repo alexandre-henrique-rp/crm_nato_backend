@@ -25,6 +25,7 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/platform-express": "^10.4.4",
     "@nestjs/sequelize": "^10.0.1",
+    "@nestjs/swagger": "^8.0.7",
     "@nestjs/typeorm": "^10.0.2",
     "@prisma/client": "^5.20.0",
     "@types/bcrypt": "^5.0.2",
