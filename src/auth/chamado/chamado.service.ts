@@ -20,6 +20,9 @@ export class ChamadoService {
       where: {
         status: { not: 2 },
       },
+      orderBy: {
+        status: 'asc',
+      }
     });
   }
 

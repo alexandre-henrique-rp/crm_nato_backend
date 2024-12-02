@@ -7,7 +7,6 @@ import {
   Post,
   Put,
   Query,
-  Req,
   // UseGuards,
 } from '@nestjs/common';
 import { ChamadoService } from './chamado.service';
@@ -20,9 +19,12 @@ export class ChamadoController {
   constructor(private chamadoService: ChamadoService) {}
 
   @Post('/create')
-  Create(@Body() data: CreateChamadoDto, @Req() req: any) {
+  Create(@Body() data: CreateChamadoDto) {
     try {
-      return this.chamadoService.create(data);
+      console.log("🚀 ~ ChamadoController ~ Create ~ data:", data)
+      const req =this.chamadoService.create(data);
+      console.log("🚀 ~ ChamadoController ~ Create ~ req:", req)
+      return req;
     } catch (error) {
       return error;
     }
