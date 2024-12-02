@@ -15,7 +15,7 @@ import {
  * DTO para criar um chamado.
  * Valida e transforma os dados recebidos na requisição.
  */
-export class CreateChamadoDto {
+export class UpdateChamadoDto {
   /**
    * ID da solicitação associado ao chamado.
    * - Deve ser um número positivo.
@@ -77,4 +77,36 @@ export class CreateChamadoDto {
     return value;
   })
   images?: string; // Após a transformação, será uma string
+
+  /**
+   * Lista de imagens associadas ao chamado.
+   * - Deve ser um array de strings.
+   * - Se fornecido, o array será transformado em uma única string no formato JSON.
+   * - Opcional.
+   */
+  @IsOptional() // Campo não é obrigatório
+  @ValidateIf((obj) => Array.isArray(obj.images)) // Valida apenas se o valor for um array
+  @IsArray({ message: 'images_adm deve ser um array' }) // Garante que seja um array
+  @ArrayNotEmpty({ message: 'images_adm não pode ser um array vazio' }) // Garante que o array não esteja vazio
+  @IsString({
+    each: true,
+    message: 'Cada item em images_adm deve ser uma string',
+  }) // Valida que todos os itens sejam strings
+  @Transform(({ value }) => {
+    // Transforma o array em uma string no formato JSON, se aplicável
+    if (Array.isArray(value)) {
+      return JSON.stringify(value);
+    }
+    return value;
+  })
+  images_adm?: string;
+
+  /**
+   * resposta do chamado.
+   * - Deve ser uma string.
+   * - Obrigatório.
+   */
+  @IsString({ message: 'Resposta deve ser uma string válida' })
+  @IsNotEmpty({ message: 'Resposta é obrigatória' })
+  resposta: string;
 }
