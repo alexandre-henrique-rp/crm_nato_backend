@@ -3,17 +3,29 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateChamadoDto } from './dto/create_chamado.dto';
 import { AuthGuard } from '../auth.guard';
 import { UpdateChamadoDto } from './dto/update_chamado.dto';
+import { ReadByIdChamadoDto } from './dto/read_by_id_chamado.dto';
 @UseGuards(AuthGuard)
 @Injectable()
 export class ChamadoService {
   constructor(private prismaService: PrismaService) {}
 
   async create(data: CreateChamadoDto) {
-    return await this.prismaService.nato_chamados.create({
-      data: {
-        ...data,
-      },
-    });
+    try {
+      const request = await this.prismaService.nato_chamados.create({
+        data: {
+          ...data,
+        },
+      });
+      const dados: ReadByIdChamadoDto = {
+        ...request,
+        images: request.images ? JSON.parse(request.images) : [],
+        images_adm: request.images_adm ? JSON.parse(request.images_adm) : [],
+      }
+      return dados
+    } catch (error) {
+      console.log("🚀 ~ ChamadoService ~ create ~ error:", error)
+      return error
+    }
   }
 
   async getAll() {

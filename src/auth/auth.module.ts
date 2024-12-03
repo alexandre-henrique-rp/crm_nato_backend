@@ -15,6 +15,8 @@ import { FileModule } from './file/file.module';
 import { FichaModule } from './ficha/ficha.module';
 import { BugModule } from './bug/bug.module';
 import { ChamadoModule } from './chamado/chamado.module';
+import { ReFinanceiroModule } from './relatorio/financeiro/financeiro.module';
+
 
 @Module({
   imports: [
@@ -33,6 +35,7 @@ import { ChamadoModule } from './chamado/chamado.module';
     FichaModule,
     BugModule,
     ChamadoModule,
+    ReFinanceiroModule
   ],
   controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],

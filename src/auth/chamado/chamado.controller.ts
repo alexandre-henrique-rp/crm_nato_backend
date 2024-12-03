@@ -13,6 +13,7 @@ import { ChamadoService } from './chamado.service';
 import { CreateChamadoDto } from './dto/create_chamado.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateChamadoDto } from './dto/update_chamado.dto';
+import { ReadByIdChamadoDto } from './dto/read_by_id_chamado.dto';
 // import { AuthGuard } from '../auth.guard';
 
 // @UseGuards(AuthGuard)
@@ -22,17 +23,12 @@ export class ChamadoController {
   constructor(private chamadoService: ChamadoService) {}
 
   @Post('/create')
-  /**
-   * Create a new chamado.
-   * @param data The data for the chamado to be created.
-   * @returns The created chamado.
-   */
-  Create(@Body() data: CreateChamadoDto) {
+  async Create(@Body() data: CreateChamadoDto): Promise<ReadByIdChamadoDto> {
     try {
-      console.log("🚀 ~ ChamadoController ~ Create ~ data:", data)
-      const req =this.chamadoService.create(data);
-      console.log("🚀 ~ ChamadoController ~ Create ~ req:", req)
-      return req;
+      console.log('🚀 ~ ChamadoController ~ Create ~ data:', data);
+      const req = this.chamadoService.create(data);
+      console.log('🚀 ~ ChamadoController ~ Create ~ req:', req);
+      return  req;
     } catch (error) {
       return error;
     }
@@ -59,7 +55,7 @@ export class ChamadoController {
   @Get('/pesquisar')
   Search(@Query() pesquisa: any) {
     try {
-      const all  = pesquisa;
+      const all = pesquisa;
       return this.chamadoService.search(all);
     } catch (error) {
       return error;
@@ -83,6 +79,4 @@ export class ChamadoController {
       return error;
     }
   }
-
- 
 }

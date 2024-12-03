@@ -111,8 +111,8 @@ export class UpdateChamadoDto {
    * - Deve ser uma string.
    * - Obrigatório.
    */
-  @ApiProperty({ description: 'Resposta do chamado', example: 'Resposta do chamado' })
+  @ApiPropertyOptional({ description: 'Resposta do chamado', example: 'Resposta do chamado' })
   @IsString({ message: 'Resposta deve ser uma string válida' })
   @IsNotEmpty({ message: 'Resposta é obrigatória' })
-  resposta: string;
+  resposta?: string;
 }
