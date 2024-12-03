@@ -1,3 +1,4 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
@@ -21,20 +22,21 @@ export class UpdateChamadoDto {
    * - Deve ser um número positivo.
    * - Obrigatório.
    */
+  @ApiPropertyOptional({ description: 'ID da solicitação associado ao chamado', example: 123 })
   @IsNumber({}, { message: 'solicitacao_id deve ser um número' })
   @IsPositive({ message: 'solicitacao_id deve ser um número positivo' })
-  @IsNotEmpty({ message: 'solicitacao_id é obrigatório' })
   @Type(() => Number) // Garante que o valor seja transformado em número
-  solicitacao: number;
+  solicitacao?: number;
 
   /**
    * Descrição do chamado (assunto).
    * - Deve ser uma string.
    * - Obrigatório.
    */
+  @ApiPropertyOptional({ description: 'Descrição do chamado (assunto)', example: 'Chamado de teste' })
   @IsString({ message: 'Descrição deve ser uma string válida' })
   @IsNotEmpty({ message: 'Descrição é obrigatória' })
-  descricao: string;
+  descricao?: string;
 
   /**
    * Status do chamado.
@@ -42,10 +44,11 @@ export class UpdateChamadoDto {
    * - Deve ser um número positivo.
    * - Deve ser 0, 1, 2 ou 3.
    */
+  @ApiPropertyOptional({ description: 'Status do chamado, 0 = iniciado, 1 = em andamento, 2 = enviado para NL2, 3 = concluído, 4 = cancelado', example: 0 })
   @IsNumber({}, { message: 'status deve ser um número' })
   @IsIn([0, 1, 2, 3], { message: 'O status deve ser 0, 1, 2 ou 3.' })
   @Type(() => Number)
-  status: number;
+  status?: number;
 
   /**
    * id do usuário que abriu o chamado.
@@ -53,10 +56,10 @@ export class UpdateChamadoDto {
    * - Deve ser um número positivo.
    * - Obrigatório.
    */
+  @ApiPropertyOptional({ description: 'id do usuário que abriu o chamado', example: 143 })
   @IsNumber({}, { message: 'status deve ser um número' })
   @IsPositive({ message: 'status deve ser um número positivo' })
-  @IsNotEmpty({ message: 'status é obrigatório' })
-  idUser: number;
+  idUser?: number;
 
   /**
    * Lista de imagens associadas ao chamado.
@@ -64,6 +67,7 @@ export class UpdateChamadoDto {
    * - Se fornecido, o array será transformado em uma única string no formato JSON.
    * - Opcional.
    */
+  @ApiPropertyOptional({ type: [String], description: 'Lista de imagens associadas ao chamado', example: ['image1.jpg', 'image2.jpg'] })
   @IsOptional() // Campo não é obrigatório
   @ValidateIf((obj) => Array.isArray(obj.images)) // Valida apenas se o valor for um array
   @IsArray({ message: 'images deve ser um array' }) // Garante que seja um array
@@ -84,6 +88,7 @@ export class UpdateChamadoDto {
    * - Se fornecido, o array será transformado em uma única string no formato JSON.
    * - Opcional.
    */
+  @ApiPropertyOptional({ type: [String], description: 'Lista de imagens associadas ao chamado', example: ['image1.jpg', 'image2.jpg'] })
   @IsOptional() // Campo não é obrigatório
   @ValidateIf((obj) => Array.isArray(obj.images)) // Valida apenas se o valor for um array
   @IsArray({ message: 'images_adm deve ser um array' }) // Garante que seja um array
@@ -106,6 +111,7 @@ export class UpdateChamadoDto {
    * - Deve ser uma string.
    * - Obrigatório.
    */
+  @ApiProperty({ description: 'Resposta do chamado', example: 'Resposta do chamado' })
   @IsString({ message: 'Resposta deve ser uma string válida' })
   @IsNotEmpty({ message: 'Resposta é obrigatória' })
   resposta: string;

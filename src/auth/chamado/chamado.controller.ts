@@ -12,6 +12,7 @@ import {
 import { ChamadoService } from './chamado.service';
 import { CreateChamadoDto } from './dto/create_chamado.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { UpdateChamadoDto } from './dto/update_chamado.dto';
 // import { AuthGuard } from '../auth.guard';
 
 // @UseGuards(AuthGuard)
@@ -66,7 +67,7 @@ export class ChamadoController {
   }
 
   @Put('/atualizar/:id')
-  Update(@Param('id') id: number, @Body() data: any) {
+  Update(@Param('id') id: number, @Body() data: UpdateChamadoDto) {
     try {
       return this.chamadoService.update(id, data);
     } catch (error) {

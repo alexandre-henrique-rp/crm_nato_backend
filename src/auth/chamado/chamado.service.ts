@@ -2,6 +2,7 @@ import { Injectable, UseGuards } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateChamadoDto } from './dto/create_chamado.dto';
 import { AuthGuard } from '../auth.guard';
+import { UpdateChamadoDto } from './dto/update_chamado.dto';
 @UseGuards(AuthGuard)
 @Injectable()
 export class ChamadoService {
@@ -34,7 +35,7 @@ export class ChamadoService {
     });
   }
 
-  async update(id: number, data: any) {
+  async update(id: number, data: UpdateChamadoDto) {
     return await this.prismaService.nato_chamados.update({
       where: {
         id,
