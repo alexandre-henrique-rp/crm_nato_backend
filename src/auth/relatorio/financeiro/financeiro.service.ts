@@ -91,7 +91,7 @@ export class ReFinanceiroService {
   // api
   async getEmpreedimento(id: number) {
     try {
-      const empreedimento = this.prismaService.nato_empreendimento.findFirst({
+      const empreedimento = await this.prismaService.nato_empreendimento.findFirst({
         where: {
           id,
         },
@@ -117,7 +117,7 @@ export class ReFinanceiroService {
 
   async getFinaceiro(id: number) {
     try {
-      const financeiro = this.prismaService.nato_financeiro.findFirst({
+      const financeiro = await this.prismaService.nato_financeiro.findFirst({
         where: {
           id,
         },
@@ -138,9 +138,9 @@ export class ReFinanceiroService {
     }
   };
 
-  getCorretor = async (id: number) => {
+  async getCorretor(id: number) {
     try {
-      const corretor = this.prismaService.nato_user.findFirst({
+      const corretor = await this.prismaService.nato_user.findFirst({
         where: {
           id,
         },
@@ -161,7 +161,7 @@ export class ReFinanceiroService {
     }
   };
 
-  getCertificado = async (cpf: string, inicio: string, fim: string) => {
+  async getCertificado(cpf: string, inicio: string, fim: string) {
     const gepFim = new Date(fim);
     gepFim.setMonth(gepFim.getMonth() + 3);
     const certificado = await this.prismaService.fcweb.count({
@@ -190,16 +190,24 @@ export class ReFinanceiroService {
     return certificado;
   };
 
-  getConstrutoraValor = async (id: number) => {
-    const construtora = await this.prismaService.nato_empresas.findUnique({
-      where: {
-        id,
-      },
-      select: {
-        valor_cert: true,
-      },
-    });
-    this.prismaService.$disconnect();
-    return !construtora?.valor_cert ? 100 : construtora?.valor_cert;
+  async getConstrutoraValor(id: number) {
+    try{
+      const construtora = await this.prismaService.nato_empresas.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          valor_cert: true,
+        },
+      });
+      this.prismaService.$disconnect();
+      return !construtora?.valor_cert ? 100 : construtora?.valor_cert;
+
+    } catch (error) {
+      console.log('🚀 ~ getConstrutoraValor ~ error:', error);
+      return 100
+    } finally {
+      this.prismaService.$disconnect();
+    }
   };
 }
