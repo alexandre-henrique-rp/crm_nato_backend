@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { RetornoAllDto } from './dto/RetornoAll.dto';
 
 let total = 0;
 @Injectable()
 export class ReFinanceiroService {
   constructor(private readonly prismaService: PrismaService) {}
-  async findPersonalizado(dados: any) {
+  async findPersonalizado(dados: any): Promise<RetornoAllDto> {
     try {
       const { construtora, empreendimento, inicio, fim, situacao } = dados;
       const valorConst = await this.getConstrutoraValor(construtora);
@@ -75,11 +76,13 @@ export class ReFinanceiroService {
           totalFcw: total,
           ValorTotal: total > 0 ? total * valorConst : 0,
         },
-
-        //consertar retorno
       };
     } catch (error) {
-      return error;
+      return {
+        error: true,
+        message: error.message,
+        data: null,
+      };
     } finally {
       this.prismaService.$disconnect();
     }

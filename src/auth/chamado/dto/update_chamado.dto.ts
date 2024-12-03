@@ -22,6 +22,7 @@ export class UpdateChamadoDto {
    * - Deve ser um número positivo.
    * - Obrigatório.
    */
+  @IsOptional()
   @ApiPropertyOptional({ description: 'ID da solicitação associado ao chamado', example: 123 })
   @IsNumber({}, { message: 'solicitacao_id deve ser um número' })
   @IsPositive({ message: 'solicitacao_id deve ser um número positivo' })
@@ -33,6 +34,7 @@ export class UpdateChamadoDto {
    * - Deve ser uma string.
    * - Obrigatório.
    */
+  @IsOptional()
   @ApiPropertyOptional({ description: 'Descrição do chamado (assunto)', example: 'Chamado de teste' })
   @IsString({ message: 'Descrição deve ser uma string válida' })
   @IsNotEmpty({ message: 'Descrição é obrigatória' })
@@ -44,6 +46,7 @@ export class UpdateChamadoDto {
    * - Deve ser um número positivo.
    * - Deve ser 0, 1, 2 ou 3.
    */
+  @IsOptional()
   @ApiPropertyOptional({ description: 'Status do chamado, 0 = iniciado, 1 = em andamento, 2 = enviado para NL2, 3 = concluído, 4 = cancelado', example: 0 })
   @IsNumber({}, { message: 'status deve ser um número' })
   @IsIn([0, 1, 2, 3], { message: 'O status deve ser 0, 1, 2 ou 3.' })
@@ -56,6 +59,7 @@ export class UpdateChamadoDto {
    * - Deve ser um número positivo.
    * - Obrigatório.
    */
+  @IsOptional()
   @ApiPropertyOptional({ description: 'id do usuário que abriu o chamado', example: 143 })
   @IsNumber({}, { message: 'status deve ser um número' })
   @IsPositive({ message: 'status deve ser um número positivo' })
@@ -111,6 +115,7 @@ export class UpdateChamadoDto {
    * - Deve ser uma string.
    * - Obrigatório.
    */
+  @IsOptional()
   @ApiPropertyOptional({ description: 'Resposta do chamado', example: 'Resposta do chamado' })
   @IsString({ message: 'Resposta deve ser uma string válida' })
   @IsNotEmpty({ message: 'Resposta é obrigatória' })
