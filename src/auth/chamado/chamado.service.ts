@@ -48,6 +48,7 @@ export class ChamadoService {
   }
 
   async update(id: number, data: UpdateChamadoDto) {
+    console.log(data);
     return await this.prismaService.nato_chamados.update({
       where: {
         id,
