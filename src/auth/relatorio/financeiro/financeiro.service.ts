@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RetornoAllDto } from './dto/RetornoAll.dto';
+import { resolve } from 'path';
 
 let total = 0;
 @Injectable()
@@ -8,18 +9,18 @@ export class ReFinanceiroService {
   constructor(private readonly prismaService: PrismaService) {}
   async findPersonalizado(dados: any): Promise<RetornoAllDto> {
     try {
-      const { construtora, empreendimento, inicio, fim, situacao } = dados;
-      const valorConst = await this.getConstrutoraValor(construtora);
+      const { Construtora, empreendimento, Inicio, Fim, situacao } = dados;
+      const valorConst = await this.getConstrutoraValor(Construtora);
       const List =
         await this.prismaService.nato_solicitacoes_certificado.findMany({
           where: {
             ...(empreendimento && { empreedimento: empreendimento }),
-            ...(construtora && { construtora: construtora }),
-            ...(inicio &&
-              fim && {
+            ...(Construtora && { construtora: Construtora }),
+            ...(Inicio &&
+              Fim && {
                 createdAt: {
-                  gte: new Date(inicio),
-                  lte: new Date(fim),
+                  gte: new Date(Inicio),
+                  lte: new Date(Fim),
                 },
               }),
             Andamento: {
@@ -50,27 +51,32 @@ export class ReFinanceiroService {
           },
         });
 
+        
+
       return {
         error: false,
         message: 'Success',
         data: {
           ...(List.length > 0 && {
             solicitacao: await Promise.all(
-              List.map(async (item: any) => ({
-                ...item,
-                empreedimento: await this.getEmpreedimento(item.empreedimento),
-                financeiro: await this.getFinaceiro(item.financeiro),
-                corretor: await this.getCorretor(item.corretor),
-                createdAt: new Date(item.createdAt).toISOString(),
-                dt_aprovacao: item.dt_aprovacao
-                  ? new Date(item.dt_aprovacao).toISOString()
-                  : null,
-                certificado: await this.getCertificado(
-                  item.cpf,
-                  inicio,
-                  fim,
-                ),
-              })),
+              List.map(async (item: any) => {
+                await Promise.resolve((resolve: any) =>
+                  setTimeout(resolve, 1000),
+                );
+                return {
+                  ...item,
+                  empreedimento: await this.getEmpreedimento(
+                    item.empreedimento,
+                  ),
+                  financeiro: await this.getFinaceiro(item.financeiro),
+                  corretor: await this.getCorretor(item.corretor),
+                  createdAt: new Date(item.createdAt).toISOString(),
+                  dt_aprovacao: item.dt_aprovacao
+                    ? new Date(item.dt_aprovacao).toISOString()
+                    : null,
+                  certificado: await this.getCertificado(item.cpf, Inicio, Fim),
+                };
+              }),
             ),
           }),
           totalFcw: total,
@@ -91,28 +97,27 @@ export class ReFinanceiroService {
   // api
   async getEmpreedimento(id: number) {
     try {
-      const empreedimento = await this.prismaService.nato_empreendimento.findFirst({
-        where: {
-          id,
-        },
-        select: {
-          id: true,
-          nome: true,
-          cidade: true,
-        },
-      });
+      const empreedimento =
+        await this.prismaService.nato_empreendimento.findFirst({
+          where: {
+            id,
+          },
+          select: {
+            id: true,
+            nome: true,
+            cidade: true,
+          },
+        });
       return empreedimento;
-      
     } catch (error) {
       console.log('🚀 ~ getEmpreedimento ~ error:', error);
       return {
         id: 0,
         nome: 'Não informado',
       };
-    } finally{
+    } finally {
       this.prismaService.$disconnect();
     }
-   
   }
 
   async getFinaceiro(id: number) {
@@ -136,7 +141,7 @@ export class ReFinanceiroService {
     } finally {
       this.prismaService.$disconnect();
     }
-  };
+  }
 
   async getCorretor(id: number) {
     try {
@@ -159,42 +164,68 @@ export class ReFinanceiroService {
     } finally {
       this.prismaService.$disconnect();
     }
-  };
+  }
 
-  async getCertificado(cpf: string, inicio: string, fim: string) {
-    const gepFim = new Date(fim);
-    gepFim.setMonth(gepFim.getMonth() + 3);
-    const certificado = await this.prismaService.fcweb.count({
-      where: {
-        cpf: cpf,
-        andamento: {
-          in: ['APROVADO', 'EMITIDO', 'REVOGADO'],
+  async getCertificado(
+    cpf: string,
+    Inicio: string,
+    Fim: string,
+  ): Promise<number> {
+    try {
+      const gepFim = new Date(Fim);
+      gepFim.setMonth(gepFim.getMonth() + 3);
+
+      const certificado = await this.prismaService.fcweb.count({
+        where: {
+          cpf: cpf,
+          andamento: {
+            in: ['APROVADO', 'EMITIDO', 'REVOGADO'],
+          },
+          dt_aprovacao: {
+            not: null,
+          },
+          estatos_pgto: {
+            not: 'Pago',
+          },
+          createdAt: {
+            gte: new Date(Inicio),
+            lte: gepFim,
+          },
+          tipocd: {
+            equals: 'A3PF Bird5000',
+          },
         },
-        dt_aprovacao: {
-          not: null,
-        },
-        estatos_pgto: {
-          not: 'Pago',
-        },
-        createdAt: {
-          gte: new Date(inicio),
-          lte: gepFim,
-        },
-        tipocd: {
-          equals: 'A3PF Bird5000',
-        },
-      },
-    });
-    this.prismaService.$disconnect();
-    total += certificado;
-    return certificado;
-  };
+      });
+
+      console.log('🚀 ~ ReFinanceiroService ~ certificado:', certificado);
+
+      // Opcional: Atraso de 1 segundo (se realmente necessário)
+      const delay = (ms: number) =>
+        new Promise((resolve) => setTimeout(resolve, ms));
+      await delay(1000);
+
+      // Atualize `total` corretamente, se for global
+      if (typeof total !== 'undefined') {
+        total += certificado;
+      }
+
+      return certificado;
+    } catch (error) {
+      console.error('🚀 ~ getCertificado ~ error:', error);
+
+      // Retorne 0 em caso de erro, se necessário
+      if (typeof total !== 'undefined') {
+        total += 0;
+      }
+      return 0;
+    }
+  }
 
   async getConstrutoraValor(id: number) {
-    try{
+    try {
       const construtora = await this.prismaService.nato_empresas.findUnique({
         where: {
-          id,
+          id: Number(id),
         },
         select: {
           valor_cert: true,
@@ -202,12 +233,11 @@ export class ReFinanceiroService {
       });
       this.prismaService.$disconnect();
       return !construtora?.valor_cert ? 100 : construtora?.valor_cert;
-
     } catch (error) {
       console.log('🚀 ~ getConstrutoraValor ~ error:', error);
-      return 100
+      return 100;
     } finally {
       this.prismaService.$disconnect();
     }
-  };
+  }
 }

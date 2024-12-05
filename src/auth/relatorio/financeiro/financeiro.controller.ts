@@ -8,6 +8,7 @@ export class ReFinanceiroController {
   @Post()
   async GetPersonalizado(@Body() data: any) {
     try {
+      console.log(data);
       return await this.financeiroService.findPersonalizado(data);
     } catch (error) {
       return error;
