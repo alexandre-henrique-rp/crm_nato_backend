@@ -24,14 +24,8 @@ export class ChamadoController {
 
   @Post('/create')
   async Create(@Body() data: CreateChamadoDto): Promise<ReadByIdChamadoDto> {
-    try {
-      console.log('🚀 ~ ChamadoController ~ Create ~ data:', data);
-      const req = this.chamadoService.create(data);
-      console.log('🚀 ~ ChamadoController ~ Create ~ req:', req);
-      return  req;
-    } catch (error) {
-      return error;
-    }
+    console.log('🚀 ~ ChamadoController ~ Create ~ data:', data);
+    return await this.chamadoService.create(data);
   }
 
   @Get('/')
