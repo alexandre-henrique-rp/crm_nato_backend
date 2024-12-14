@@ -16,6 +16,7 @@ import { FichaModule } from './ficha/ficha.module';
 import { BugModule } from './bug/bug.module';
 import { ChamadoModule } from './chamado/chamado.module';
 import { ReFinanceiroModule } from './relatorio/financeiro/financeiro.module';
+import { NowModule } from './now/now.module';
 
 
 @Module({
@@ -35,7 +36,8 @@ import { ReFinanceiroModule } from './relatorio/financeiro/financeiro.module';
     FichaModule,
     BugModule,
     ChamadoModule,
-    ReFinanceiroModule
+    ReFinanceiroModule,
+    NowModule
   ],
   controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],
