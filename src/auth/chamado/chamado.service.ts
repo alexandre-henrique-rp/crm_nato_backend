@@ -24,7 +24,7 @@ export class ChamadoService {
       return dados
     } catch (error) {
       console.log("🚀 ~ ChamadoService ~ create ~ error:", error)
-      return error
+      throw error
     }
   }
 
