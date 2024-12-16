@@ -31,6 +31,7 @@ export class NowService {
         },
         data: {
           alertanow: data.alertanow,
+          dt_criacao_now: data.dt_criacao_now,
         },
       });
     } catch (error) {

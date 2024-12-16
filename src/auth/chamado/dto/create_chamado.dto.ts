@@ -23,9 +23,7 @@ export class CreateChamadoDto {
    * - Obrigatório.
    */
   @ApiProperty({ description: 'ID da solicitação associado ao chamado', example: 123 })
-  @IsNumber({}, { message: 'solicitacao_id deve ser um número' })
-  @IsPositive({ message: 'solicitacao_id deve ser um número positivo' })
-  @IsNotEmpty({ message: 'solicitacao_id é obrigatório' })
+  @IsNotEmpty({ message: 'Id do cliente é obrigatório' })
   @Type(() => Number) // Garante que o valor seja transformado em número
   solicitacao: number;
 
@@ -35,7 +33,6 @@ export class CreateChamadoDto {
    * - Obrigatório.
    */
   @ApiProperty({ description: 'Descrição do chamado (assunto)', example: 'Chamado de teste' })
-  @IsString({ message: 'Descrição deve ser uma string válida' })
   @IsNotEmpty({ message: 'Descrição é obrigatória' })
   descricao: string;
 
@@ -46,8 +43,7 @@ export class CreateChamadoDto {
    * - Deve ser 0, 1, 2 ou 3.
    */
   @ApiProperty({ description: 'Status do chamado, 0 = iniciado, 1 = em andamento, 2 = enviado para NL2, 3 = concluído, 4 = cancelado', example: 0 })
-  @IsNumber({}, { message: 'status deve ser um número' })
-  @IsIn([0, 1, 2, 3, 4], { message: 'O status deve ser 0, 1, 2 ou 3.' })
+  @IsIn([0], { message: 'Para criar um chamado, o status deve ser do tipo Aberto' })
   @Type(() => Number)
   status: number;
 
@@ -58,9 +54,7 @@ export class CreateChamadoDto {
    * - Obrigatório.
    */
   @ApiProperty({ description: 'id do usuário que abriu o chamado', example: 143 })
-  @IsNumber({}, { message: 'status deve ser um número' })
-  @IsPositive({ message: 'status deve ser um número positivo' })
-  @IsNotEmpty({ message: 'status é obrigatório' })
+  @IsNotEmpty({ message: 'id do usuário é obrigatório' })
   idUser: number;
 
   /**

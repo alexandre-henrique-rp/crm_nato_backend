@@ -24,8 +24,8 @@ export class UpdateChamadoDto {
    */
   @IsOptional()
   @ApiPropertyOptional({ description: 'ID da solicitação associado ao chamado', example: 123 })
-  @IsNumber({}, { message: 'solicitacao_id deve ser um número' })
-  @IsPositive({ message: 'solicitacao_id deve ser um número positivo' })
+  @IsNumber({}, { message: 'Id do cliente ser um número' })
+  @IsPositive({ message: 'Id do cliente ser um número positivo' })
   @Type(() => Number) // Garante que o valor seja transformado em número
   solicitacao?: number;
 
@@ -124,7 +124,6 @@ export class UpdateChamadoDto {
   
 
   @ApiPropertyOptional({ description: 'id de quem respondeu', example: 0 })
-  @IsOptional()
   @IsNumber({}, { message: 'idResposta deve ser um número' })
   idResposta?: number;
 }
