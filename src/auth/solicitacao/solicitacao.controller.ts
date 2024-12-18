@@ -84,6 +84,21 @@ export class SolicitacaoController {
     }
   }
 
+  @Put('/reativar/:id')
+  async Reativar(@Param('id') id: number, @Req() req:any){
+    console.log("🚀 ~ SolicitacaoController ~ Reativar ~ id:", id)
+    try{
+      await this.solicitacaoService.updateAtivo(Number(id), req.user)
+      return{
+        error: false,
+        message: 'Solicitação Reativada com sucesso'
+      }
+    }catch (error){
+      throw error;  
+    }
+  }
+
+
   @Delete('/delete/:id')
   async Delete(@Param('id') id: number, @Req() req: any) {
     try {
