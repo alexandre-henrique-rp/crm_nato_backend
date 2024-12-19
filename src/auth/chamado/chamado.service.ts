@@ -47,14 +47,29 @@ export class ChamadoService {
     });
   }
 
-  async update(id: number, data: UpdateChamadoDto) {
-    console.log(data);
+  async update(id: number, data: UpdateChamadoDto, req: any) {
+    
+
     return await this.prismaService.nato_chamados.update({
       where: {
         id,
       },
-      data,
+      data:{
+        status: data.status,
+        idResposta: req.user.id
+      }, 
+      
     });
+  }
+  
+  async updateResposta(id: number, data: UpdateChamadoDto, req: any){
+
+    return await this.prismaService.nato_chamados.update({
+      where:{
+        id,
+      },
+      data
+    })
   }
 
   async delete(id: number) {
