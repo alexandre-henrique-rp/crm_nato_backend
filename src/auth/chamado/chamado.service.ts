@@ -58,6 +58,16 @@ export class ChamadoService {
       }
     });
   }
+  
+  async updateResposta(id: number, data: UpdateChamadoDto, req: any){
+
+    return await this.prismaService.nato_chamados.update({
+      where:{
+        id,
+      },
+      data
+    })
+  }
 
   async delete(id: number) {
     return await this.prismaService.nato_chamados.update({

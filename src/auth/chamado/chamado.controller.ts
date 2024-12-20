@@ -73,6 +73,15 @@ export class ChamadoController {
     }
   }
 
+  @Put('/atualizar/resposta/:id')
+  UdateResposta(@Param('id') id: number, @Req() req: any, @Body() data: UpdateChamadoDto){
+    try{
+      return this.chamadoService.updateResposta(id,data,req)
+    }catch(error){
+      return error
+    }
+  }
+
   @Delete('/delete/:id')
   Delete(@Param('id') id: number) {
     try {
