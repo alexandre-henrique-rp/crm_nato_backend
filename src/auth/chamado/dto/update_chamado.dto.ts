@@ -122,7 +122,7 @@ export class UpdateChamadoDto {
   resposta?: string;
 
   
-
+  @IsOptional()
   @ApiPropertyOptional({ description: 'id de quem respondeu', example: 0 })
   @IsNumber({}, { message: 'idResposta deve ser um número' })
   idResposta?: number;

@@ -7,16 +7,17 @@ import {
   Post,
   Put,
   Query,
-  // UseGuards,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ChamadoService } from './chamado.service';
 import { CreateChamadoDto } from './dto/create_chamado.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateChamadoDto } from './dto/update_chamado.dto';
 import { ReadByIdChamadoDto } from './dto/read_by_id_chamado.dto';
-// import { AuthGuard } from '../auth.guard';
+import { AuthGuard } from '../auth.guard';
 
-// @UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 @Controller('chamado')
 @ApiTags('chamado')
 export class ChamadoController {
@@ -38,6 +39,11 @@ export class ChamadoController {
       return error;
     }
   }
+  @Get('/count')
+  Count() {
+    return this.chamadoService.count();
+  }
+
 
   @Get('/:id')
   GetOne(@Param('id') id: number) {
@@ -59,9 +65,9 @@ export class ChamadoController {
   }
 
   @Put('/atualizar/:id')
-  Update(@Param('id') id: number, @Body() data: UpdateChamadoDto) {
+  Update(@Param('id') id: number, @Body() data: UpdateChamadoDto, @Req() req: any) {
     try {
-      return this.chamadoService.update(id, data);
+      return this.chamadoService.update(id, data, req);
     } catch (error) {
       return error;
     }
