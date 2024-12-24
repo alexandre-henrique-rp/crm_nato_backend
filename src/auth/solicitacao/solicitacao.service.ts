@@ -117,19 +117,22 @@ export class SolicitacaoService {
 
       const Msg = `Ola *${data.nome}*, tudo bem?!\n\nSomos a *Interface Certificadora*, e à pedido da construtora ${construtora.fantasia} estamos entrando em contato referente ao seu novo empreendimento${empreedimento?.cidade ? `, em *${empreedimento?.cidade}*` : ''}.\nPrecisamos fazer o seu certificado digital para que você possa assinar os documentos do seu financiamento imobiliário junto a CAIXA e Correspondente bancário ${financeira?.fantasia}, e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
 
-      if (sms === 'true' && data.telefone) {
-        await Promise.all([await this.SendWhatsapp(data.telefone, Msg)]);
-      }
-
-      if (sms === 'true' && data.telefone2) {
-        await Promise.all([await this.SendWhatsapp(data.telefone2, Msg)]);
-      }
-
       const req = await this.prismaService.nato_solicitacoes_certificado.create(
         {
           data: dados,
         },
       );
+
+      if (req) {
+        if (sms === 'true' && data.telefone) {
+          await Promise.all([await this.SendWhatsapp(data.telefone, Msg)]);
+        }
+
+        if (sms === 'true' && data.telefone2) {
+          await Promise.all([await this.SendWhatsapp(data.telefone2, Msg)]);
+        }
+      }
+
       return req;
     } catch (error) {
       console.error(error);
