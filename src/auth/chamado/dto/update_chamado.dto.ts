@@ -121,6 +121,7 @@ export class UpdateChamadoDto {
   @IsNotEmpty({ message: 'Resposta é obrigatória' })
   resposta?: string;
 
+  
   @IsOptional()
   @ApiPropertyOptional({ description: 'id de quem respondeu', example: 0 })
   @IsNumber({}, { message: 'idResposta deve ser um número' })

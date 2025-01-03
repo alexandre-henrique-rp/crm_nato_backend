@@ -39,6 +39,11 @@ export class ChamadoController {
       return error;
     }
   }
+  @Get('/count')
+  Count() {
+    return this.chamadoService.count();
+  }
+
 
   @Get('/:id')
   GetOne(@Param('id') id: number) {
@@ -60,7 +65,7 @@ export class ChamadoController {
   }
 
   @Put('/atualizar/:id')
-  Update(@Param('id') id: number, @Req() req: any, @Body() data: UpdateChamadoDto) {
+  Update(@Param('id') id: number, @Body() data: UpdateChamadoDto, @Req() req: any) {
     try {
       return this.chamadoService.update(id, data, req);
     } catch (error) {

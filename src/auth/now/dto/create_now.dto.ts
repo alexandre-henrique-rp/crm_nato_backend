@@ -13,9 +13,4 @@ export class CreateNowDto {
   @Type(() => Boolean)
   alertanow: boolean
 
-  @ApiProperty({ description: 'Data de criação do now', example: true })
-  @IsDate({ message: 'dt_criacao_now deve ser uma data' })
-  @Type(() => Date)
-  dt_criacao_now: Date
-
 }
