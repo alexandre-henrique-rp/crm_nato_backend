@@ -301,4 +301,25 @@ export class UserService {
       return error
     }
   }
+
+  async getCorretorByConstrutora(construtora: number) {
+    try{
+      return await this.prismaService.nato_user.findMany({
+        where: {
+          construtora: {
+            contains: construtora.toString()
+          }
+        },
+        select: {
+          id: true,
+          nome: true,
+          cargo: true,
+        }
+      })
+    }catch(error){
+      return error
+    }finally{
+      this.prismaService.$disconnect
+    }
+  }
 }

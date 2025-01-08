@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Put,
   Query,
   UseGuards,
@@ -26,6 +27,12 @@ export class UserController {
   async findOne(@Param('id') id: number) {
     const data = await this.userService.findByid(id);
     return new UserPresenter(data);
+  }
+
+  @Get('/construtora/:id')
+  async findCorretorByConstrutora(@Param('id', new ParseIntPipe()) id: number) {
+    const data = await this.userService.getCorretorByConstrutora(id);
+    return data;
   }
 
   @Put('/update/:id')
@@ -67,4 +74,5 @@ export class UserController {
     const data = await this.userService.search(empreedimento, financeiro, construtora, telefone, email, cpf, hierarquia);
     return data;
   }
+
 }
