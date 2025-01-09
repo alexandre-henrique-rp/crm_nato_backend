@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { FinanceiroService } from './financeiro.service';
 import { CreateFinanceiroDto } from './dto/create-financeiro.dto'
 import { UpdateFinanceiroDto } from './dto/update-financeiro.dto';
