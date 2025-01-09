@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { error } from 'console';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -11,7 +12,6 @@ export class EmpreendimentoService {
       const IdsConst = Construtora.map((i: any) => i.id) // Convertendo IDs para string se necessário
       const req = await this.prismaService.nato_empreendimento.findMany({
         where: {
-          ativo: true,
           ...(Hierarquia === 'CONST' && {
             OR: Ids.map((id: any) => ({
               financeiro: { contains: id },
@@ -22,10 +22,10 @@ export class EmpreendimentoService {
         select: {
           id: true,
           nome: true,
-          construtora: true,
-          dt_inicio: true,
-          dt_fim: true,
-        },
+          uf: true,
+          cidade: true,
+          ativo: true,
+      },
         orderBy: {
           nome: 'asc',
         },
@@ -44,10 +44,9 @@ export class EmpreendimentoService {
 
   async GetOne(id: number) {
     try {
-      return await this.prismaService.nato_empreendimento.findFirst({
+      return await this.prismaService.nato_empreendimento.findUnique({
         where: {
-          id: Number(id),
-          ativo: true,
+          id: id
         },
       });
     } catch (error) {
@@ -136,7 +135,7 @@ export class EmpreendimentoService {
           // dt_fim: new Date(data.dt_fim).toISOString().split('T')[0],
           uf: data.uf,
           cidade: data.cidade,
-          vendedores: JSON.stringify(data.vendedores),
+          vendedores: data.vendedores,
           ativo: true,
         },
       });
@@ -167,14 +166,22 @@ export class EmpreendimentoService {
 
   async Delete(id: number) {
     try {
-      return this.prismaService.nato_empreendimento.update({
+      const IsAtivo = await this.prismaService.nato_empreendimento.findUnique({
         where: {
-          id: Number(id),
+          id: id
+        },
+        select: {
+          ativo: true
+        }
+      })
+      return await this.prismaService.nato_empreendimento.update({
+        where: {
+          id: id
         },
         data: {
-          ativo: false,
-        },
-      });
+          ativo: (IsAtivo.ativo ? false : true)
+        }
+      })
     } catch (error) {
       return error;
     }finally{

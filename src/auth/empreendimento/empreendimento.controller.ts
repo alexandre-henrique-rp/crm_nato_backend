@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -13,6 +14,8 @@ import {
 import { AuthGuard } from '../auth.guard';
 import { EmpreendimentoService } from './empreendimento.service';
 import { EmpreendimentoPresenter } from './empreendimento.presenter';
+import { CreateEmpreendimentoDto } from './dto/create-empreendimento.dto';
+import { UpdateEmpreendimentoDto } from './dto/update-empreendimento.dto';
 
 @UseGuards(AuthGuard)
   @Controller('empreendimento')
@@ -45,25 +48,25 @@ export class EmpreendimentoController {
 
 
   @Get('/:id')
-  async GetOne(@Param('id') id: number) {
+  async GetOne(@Param('id', new ParseIntPipe()) id: number) {
     const req = await this.empreendimentoService.GetOne(id);
     return new EmpreendimentoPresenter(req);
   }
 
   @Post('/')
-  async Create(@Body() data: any) {
-    const req = await this.empreendimentoService.Create(data);
+  async Create(@Body() CreateEmpreendimentoDto: CreateEmpreendimentoDto) {
+    const req = await this.empreendimentoService.Create(CreateEmpreendimentoDto);
     return req;
   }
 
   @Put('/:id')
-  async Update(@Param('id') id: number, @Body() data: any) {
-    const req = await this.empreendimentoService.Update(id, data);
+  async Update(@Param('id') id: number, @Body() UpdateEmpreendimentoDto: UpdateEmpreendimentoDto) {
+    const req = await this.empreendimentoService.Update(id, UpdateEmpreendimentoDto);
     return new EmpreendimentoPresenter(req);
   }
 
   @Delete('/delete/:id')
-  async Delete(@Param('id') id: number) {
+  async Delete(@Param('id', new ParseIntPipe()) id: number) {
     return this.empreendimentoService.Delete(id);
   }
 
@@ -72,4 +75,5 @@ export class EmpreendimentoController {
     const req = await this.empreendimentoService.Filter(id);
     return req.map((data: any) => new EmpreendimentoPresenter(data));
   }
+
 }
