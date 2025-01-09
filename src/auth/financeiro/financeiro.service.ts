@@ -41,7 +41,7 @@ export class FinanceiroService {
       return await this.prismaService.nato_financeiro.create({
         data: {
           ...data,
-          colaboradores: JSON.stringify(data.colaboradores),
+          colaboradores: data.colaboradores,
         },
       });
     } catch (error) {
@@ -75,7 +75,7 @@ export class FinanceiroService {
     try {
       await this.prismaService.nato_financeiro.delete({
         where: {
-          id: Number(id),
+          id: id,
         },
       });
       return "Financeiro deletado com sucesso!"

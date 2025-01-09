@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { FinanceiroService } from './financeiro.service';
+import { CreateFinanceiroDto } from './dto/create-financeiro.dto'
+import { UpdateFinanceiroDto } from './dto/update-financeiro.dto';
 
 @Controller('financeiro')
 export class FinanceiroController {
@@ -24,31 +26,30 @@ export class FinanceiroController {
   }
 
   @Post('/')
-  async Create(@Body() data: any) {
+  async Create(@Body() CreateFinanceiroDto: CreateFinanceiroDto) {
     try {
-      return await this.financeiroService.create(data);
+      return await this.financeiroService.create(CreateFinanceiroDto);
     } catch (error) {
       throw error;
     }
   }
 
   @Put('/update/:id')
-  async Update(@Param('id') id: number, @Body() data: any) {
+  async Update(@Param('id') id: number, @Body() UpdateFinanceiroDto: UpdateFinanceiroDto) {
     try {
-      return await this.financeiroService.update(id, data);
+      return await this.financeiroService.update(id, UpdateFinanceiroDto);
     } catch (error) {
       throw error;
     }
   }
 
   @Delete('/delete/:id')
-  async Delete(@Param('id') id: number) {
+  async Delete(@Param('id', new ParseIntPipe()) id: number) {
     try {
       return await this.financeiroService.delete(id);
     } catch (error) {
       throw error;
     }
   }
-
  
 }
