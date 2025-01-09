@@ -8,6 +8,10 @@ export class GetInfosController {
   @Get('/checkcpf/:cpf')
   async CheckCpf(@Param('cpf') cpf: string) {
     return await this.GetInfosService.CheckCpf(cpf);
-   
+  }
+
+  @Get('/termos/')
+  async GetTermos(){
+    return await this.GetInfosService.GetTermos()
   }
 }

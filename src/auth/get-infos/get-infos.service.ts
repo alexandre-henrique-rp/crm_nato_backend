@@ -18,4 +18,18 @@ export class GetInfosService {
       this.prismaService.$disconnect
     }
   }
+
+  async GetTermos() {
+    try{
+      return await this.prismaService.nato_termos.findFirst({
+        orderBy: {
+          id: 'desc'
+        }
+      })
+    }catch (error) {
+      return error
+    }finally{
+      this.prismaService.$disconnect
+    }
+  }
 }
