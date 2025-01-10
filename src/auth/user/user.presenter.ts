@@ -14,6 +14,7 @@ export class UserPresenter {
       construtora: JSON.parse(this.user.construtora),
       empreendimento: JSON.parse(this.user.empreendimento),
       hierarquia: this.user.hierarquia,
+      Financeira: JSON.parse(this.user.Financeira),
       cargo: this.user.cargo,
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt,

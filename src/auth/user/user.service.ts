@@ -322,4 +322,50 @@ export class UserService {
       this.prismaService.$disconnect
     }
   }
+
+  async userTermo(id: number) {
+    try{
+      return await this.prismaService.nato_user.findUnique({
+        where: {
+          id: id,
+      },
+      select:{
+          termos: true,
+      }
+      })
+    }catch(error){
+      return error
+    }finally{
+      this.prismaService.$disconnect
+    }
+}
+
+  async updateTermo(id: number, data: any) {
+    try{
+      if(!data.termo){
+        return {error: true,
+          message: "Termo não Aceito",
+          data:null
+        }
+      }
+      const res = await this.prismaService.nato_user.update({
+        where:{
+          id: id
+      },
+      data:{
+          termos: data.termo
+      }
+      })
+
+      return {error: false,
+        message: "Política de Privacidade e Termo de uso aceito",
+        data: res
+      }
+
+    }catch(error){
+      return error
+    }finally{
+      this.prismaService.$disconnect
+    }
+  }
 }

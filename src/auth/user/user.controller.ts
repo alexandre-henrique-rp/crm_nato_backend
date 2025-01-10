@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Post,
   Put,
   Query,
   UseGuards,
@@ -12,6 +13,7 @@ import {
 import { UserPresenter } from './user.presenter';
 import { UserService } from './user.service';
 import { AuthGuard } from '../auth.guard';
+import { TermoUserDto } from './dto/termo-user.dto';
 
 @UseGuards(AuthGuard)
 @Controller('user')
@@ -75,4 +77,13 @@ export class UserController {
     return data;
   }
 
+  @Get('/termo/:id')
+  async userTermo(@Param('id') id: number) {
+    return await this.userService.userTermo(+id);
+}
+
+  @Put('/termo/:id')
+  async updateTermo(@Param('id') id: number, @Body() data: TermoUserDto) {
+    return await this.userService.updateTermo(+id, data);
+  }
 }
