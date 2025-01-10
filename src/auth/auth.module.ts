@@ -20,6 +20,7 @@ import { NowModule } from './now/now.module';
 import { ChecktelModule } from './checktel/checktel.module';
 import { ConstrutorasModule } from './construtoras/construtoras.module';
 import { GetInfosModule } from './get-infos/get-infos.module';
+import { SuporteModule } from './suporte/suporte.module';
 
 
 @Module({
@@ -43,7 +44,8 @@ import { GetInfosModule } from './get-infos/get-infos.module';
     NowModule,
     ChecktelModule,
     ConstrutorasModule,
-    GetInfosModule
+    GetInfosModule,
+    SuporteModule
   ],
   controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],
