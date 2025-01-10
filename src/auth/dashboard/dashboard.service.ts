@@ -142,4 +142,54 @@ export class DashboardService {
       this.prismaService.$disconnect
     }
   }
+
+  async GetConstrutoras(){
+    try {
+      return await this.prismaService.nato_empresas.findMany({
+        where:{
+          id: {
+              gt: 1
+          }
+      },
+      select:{
+          id: true,
+          fantasia: true
+      }
+      })
+  }catch(error){
+    return error
+  }finally{
+    this.prismaService.$disconnect
+  }
+  }
+
+  async GetEmpreendimento(){
+    try{
+      return await this.prismaService.nato_empreendimento.findMany({
+        select:{
+          id: true,
+          nome:true
+      }
+      })
+    }catch(error){
+      return error
+    }finally{
+      this.prismaService.$disconnect
+    }
+  }
+
+  async GetFinanceira(){
+    try{
+      return await this.prismaService.nato_financeiro.findMany({
+        select:{
+          id: true,
+          fantasia: true
+      }
+      })
+    }catch(error){
+      return error
+    }finally{
+      this.prismaService.$disconnect
+    }
+  }
 }

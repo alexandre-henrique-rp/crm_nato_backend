@@ -11,4 +11,19 @@ export class DashboardController {
   async GetDashboard() {
     return await this.dashboardService.getDashboard();
   }
+
+  @Get('/empreendimentos')
+  async GetEmpreendimentos() {
+    return await this.dashboardService.GetEmpreendimento();
+  }
+
+  @Get('/construtoras')
+  async GetConstrutoras() {
+    return await this.dashboardService.GetConstrutoras();
+  }
+
+  @Get('/financeiras')
+  async GetFinanceiras() {
+    return await this.dashboardService.GetFinanceira();
+  }
 }
