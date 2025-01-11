@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -131,6 +132,11 @@ export class SolicitacaoController {
       throw error;
     }
   }
+
+  @Put('/atendimento/:id')
+  async Atendimento(@Param('id', new ParseIntPipe())id : number){
+      return await this.solicitacaoService.Atendimento(id)
+  }
   // @Get('/filter/date')
   // async FilterDate(@Body() data: any) {
   //   try {
@@ -139,4 +145,9 @@ export class SolicitacaoController {
   //     throw error;
   //   }
   // }
+
+  @Post('/posttags')
+  async PostTags(@Body() data: any, @Req() req: any) {
+    return this.solicitacaoService.PostTags(data, req.user);
+  }
 }

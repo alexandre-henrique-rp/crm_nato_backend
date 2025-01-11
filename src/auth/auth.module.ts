@@ -18,6 +18,9 @@ import { ChamadoModule } from './chamado/chamado.module';
 import { ReFinanceiroModule } from './relatorio/financeiro/financeiro.module';
 import { NowModule } from './now/now.module';
 import { ChecktelModule } from './checktel/checktel.module';
+import { ConstrutorasModule } from './construtoras/construtoras.module';
+import { GetInfosModule } from './get-infos/get-infos.module';
+import { SuporteModule } from './suporte/suporte.module';
 
 
 @Module({
@@ -39,7 +42,10 @@ import { ChecktelModule } from './checktel/checktel.module';
     ChamadoModule,
     ReFinanceiroModule,
     NowModule,
-    ChecktelModule
+    ChecktelModule,
+    ConstrutorasModule,
+    GetInfosModule,
+    SuporteModule
   ],
   controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],

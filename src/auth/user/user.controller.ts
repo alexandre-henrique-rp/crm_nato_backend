@@ -4,6 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
+  Post,
   Put,
   Query,
   UseGuards,
@@ -11,6 +13,8 @@ import {
 import { UserPresenter } from './user.presenter';
 import { UserService } from './user.service';
 import { AuthGuard } from '../auth.guard';
+import { TermoUserDto } from './dto/termo-user.dto';
+import { CreateUserDto } from './dto/create_user.dto';
 
 @UseGuards(AuthGuard)
 @Controller('user')
@@ -26,6 +30,12 @@ export class UserController {
   async findOne(@Param('id') id: number) {
     const data = await this.userService.findByid(id);
     return new UserPresenter(data);
+  }
+
+  @Get('/construtora/:id')
+  async findCorretorByConstrutora(@Param('id', new ParseIntPipe()) id: number) {
+    const data = await this.userService.getCorretorByConstrutora(id);
+    return data;
   }
 
   @Put('/update/:id')
@@ -66,5 +76,20 @@ export class UserController {
     const { empreedimento, financeiro, construtora,telefone, email, cpf, hierarquia} = query
     const data = await this.userService.search(empreedimento, financeiro, construtora, telefone, email, cpf, hierarquia);
     return data;
+  }
+
+  @Get('/termo/:id')
+  async userTermo(@Param('id') id: number) {
+    return await this.userService.userTermo(+id);
+}
+
+  @Put('/termo/:id')
+  async updateTermo(@Param('id') id: number, @Body() data: TermoUserDto) {
+    return await this.userService.updateTermo(+id, data);
+  }
+
+  @Post('/create')
+  async create(@Body() CreateUserDto: CreateUserDto) {
+    return await this.userService.create(CreateUserDto);
   }
 }

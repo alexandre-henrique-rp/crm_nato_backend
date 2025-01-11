@@ -23,15 +23,32 @@ export class NowService {
     }
   }
 
-  async GetCreate(data: any) {
+  async GetCreate(id: number, data: any) {
+    const dataAtual = new Date()
+
     try {
+
+      const req = await this.prismaService.nato_solicitacoes_certificado.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          uploadCnh: true,
+          uploadRg: true,
+        },
+      })
+      
+      if ((req.uploadCnh === '' && req.uploadRg === '')){
+        throw new Error('Os documentos RG ou CNH são obrigatórios')
+      }
+
       return await this.prismaService.nato_solicitacoes_certificado.update({
         where: {
-          id: data.id,
+          id: id,
         },
         data: {
           alertanow: data.alertanow,
-          dt_criacao_now: data.dt_criacao_now,
+          dt_criacao_now: dataAtual,
         },
       });
     } catch (error) {

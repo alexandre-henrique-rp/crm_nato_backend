@@ -48,17 +48,14 @@ export class ChamadoService {
   }
 
   async update(id: number, data: UpdateChamadoDto, req: any) {
-    
-
     return await this.prismaService.nato_chamados.update({
       where: {
         id,
       },
       data:{
-        status: data.status,
+        ...data,
         idResposta: req.user.id
-      }, 
-      
+      }
     });
   }
   
@@ -84,10 +81,32 @@ export class ChamadoService {
   }
 
   async search(pesquisa: any) {
-    return await this.prismaService.nato_chamados.findMany({
-      where: {
-       ...(pesquisa && pesquisa),
+    try {
+      const whereClause = { ...pesquisa }
+
+      if(whereClause.idUser){
+        whereClause.idUser = Number(whereClause.idUser)
       }
-    });
+      return await this.prismaService.nato_chamados.findMany({
+        where: whereClause
+      });
+    } catch (error) {
+      
+    }
+  }
+
+  async count() { 
+    try { 
+      return await this.prismaService.nato_chamados.count({
+        where:{
+          status: {
+            not: 3,
+        },
+        }
+      })
+    }catch (error) {
+      console.log(error)
+      throw error
+    }
   }
 }

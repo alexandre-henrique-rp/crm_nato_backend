@@ -813,4 +813,62 @@ export class SolicitacaoService {
       this.prismaService.$disconnect;
     }
   }
+
+  async Atendimento(id: number) {
+    try{
+      const status = await this.prismaService.nato_solicitacoes_certificado.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          statusAtendimento: true,
+        },
+      })
+
+       await this.prismaService.nato_solicitacoes_certificado.update({
+        where: {
+          id: id,
+        },
+        data: {
+          statusAtendimento: !status.statusAtendimento,
+        },
+      })
+
+      return !status.statusAtendimento
+    }catch(error){
+      return error;
+    }finally{
+      this.prismaService.$disconnect;
+    }
+  }
+
+  async PostTags(data: any, user: any) {
+    try {
+      const tags = JSON.parse(data.tags); 
+      if(data){
+        for (let i = 0; i < tags.length; i++) {
+          const tag = tags[i];
+          if (tag.label && user.hierarquia === "ADM") {
+            const verifique = await this.prismaService.nato_tags.findFirst({
+              where: {
+                descricao: tag.label,
+                solicitacao: data.id,
+              }
+            });
+            const filtro = verifique ? false : true;
+        if (filtro) {
+          await this.prismaService.nato_tags.create({
+            data: {
+              descricao: tag.label,
+              solicitacao: data.id,
+            }
+          });
+        }
+      }
+      }
+    }
+    } catch (error) {
+      return error;
+    }
+  }
 }

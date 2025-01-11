@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put } from '@nestjs/common';
 import { NowService } from './now.service';
+import { CreateNowDto } from './dto/create_now.dto';
 
 @Controller('now')
 export class NowController {
@@ -9,9 +10,9 @@ export class NowController {
   async get(@Param('id') id: number) {
     return this.nowService.GetUpdate(id)
   }
-  @Post("/")
-  async post(@Body() data: any) {
-    return this.nowService.GetCreate(data)
+  @Put("/:id")
+  async post(@Param('id') id: number, @Body() data: CreateNowDto) {
+    return this.nowService.GetCreate(id, data)
   }
-
+  
 }
