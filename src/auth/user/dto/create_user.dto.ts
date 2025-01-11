@@ -43,28 +43,26 @@ export class CreateUserDto {
   cargo: string;
 
   @ApiPropertyOptional({ description: 'Construtora do usuário', example: ['1', '2'] })
-  @IsOptional()
-  @IsArray({ message: 'Construtora deve ser um array de strings' })
-  @IsString({ each: true, message: 'Selecionar pelo menos uma construtora' })
-  @ArrayMinSize(1, { message: 'Deve haver pelo menos uma construtora' })
-  construtora?: string[];
+  @IsOptional() 
+  construtora?: string;
 
   @ApiPropertyOptional({ description: 'Empreendimento do usuário', example: ['1', '2'] })
   @IsOptional()
-  @IsArray({ message: 'Empreendimento deve ser um array de strings' })
-  @IsString({ each: true, message: 'Selecionar pelo menos um empreendimento' })
-  @ArrayMinSize(1, { message: 'Deve haver pelo menos um empreendimento' })
-  empreendimento?: string[];
+  empreendimento: string;
 
   @ApiPropertyOptional({ description: 'Hierarquia do usuário', example: 'ADM' })
   @IsOptional()
   @IsString({ message: 'Selecionar uma hierarquia' })
   hierarquia?: string;
 
-  @ApiPropertyOptional({ description: 'Financeira do usuário', example: ['1', '2'] })
+  @ApiPropertyOptional({ description: 'Financeira do usuário', example: [1, 2] })
   @IsOptional()
-  @IsArray({ message: 'Financeira deve ser um array de strings' })
-  @IsString({ each: true, message: 'Selecionar pelo menos um item financeiro' })
-  @ArrayMinSize(1, { message: 'Deve haver pelo menos um item financeiro' })
-  financeira?: string[];
+  Financeira: string;
+
+  @ApiProperty({ description: 'Confirmação de senha do usuário', example: '123456' })
+  @IsNotEmpty({ message: 'Confirmação de senha é obrigatória' })
+  @IsString({ message: 'Confirmação de senha deve ser uma string válida' })
+  @Transform(({ value }) => value?.trim())
+  passwordConfir: string
+
 }

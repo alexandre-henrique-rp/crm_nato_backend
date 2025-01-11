@@ -7,25 +7,55 @@ import { CreateUserDto } from './dto/create_user.dto';
 export class UserService {
   constructor(private prismaService: PrismaService) { }
 
-  create(dados: CreateUserDto) {
+  async create(dados: CreateUserDto) {
     try {
-      return this.prismaService.nato_user.create({
+      const UsuarioExist = await this.prismaService.nato_user.findFirst({
+        where: {
+          username: dados.username
+        }
+      })
+
+      if (UsuarioExist) {
+        return {error: true, message: 'Usuário já cadastrado', data: null}
+      }
+
+      if(dados.password != dados.passwordConfir){
+        return {error: true, message: 'Senhas não conferem', data: null}
+      }
+
+      const cpfExist = await this.prismaService.nato_user.findFirst({
+        where:{
+          cpf: dados.cpf
+        }
+      })
+
+      if (cpfExist) {
+        return {error: true, message: 'CPF já cadastrado', data: null}
+      }
+
+      const req =  await this.prismaService.nato_user.create({
         data: {
-          ...dados,
-          username: dados.username.toUpperCase(),
-          password: dados.password,
-          password_key: this.generateHash(dados.password),
-          email: dados.email,
-          telefone: dados.telefone,
           cpf: dados.cpf,
           nome: dados.nome.toUpperCase(),
-          construtora: JSON.stringify(dados.construtora),
-          empreendimento: JSON.stringify(dados.empreendimento),
+          username: dados.username.toUpperCase(),
+          telefone: dados.telefone,
+          email: dados.email,
+          construtora: dados.construtora,
+          empreendimento: dados.empreendimento,
+          Financeira: dados.Financeira,
           hierarquia: dados.hierarquia,
+          password: dados.password,
+          status: false,
           cargo: dados.cargo,
-          Financeira: JSON.stringify(dados.financeira),
+          password_key: this.generateHash(dados.password),
+          reset_password: true, 
         },
       });
+      return {
+        error: false,
+        message: 'Usuário cadastrado com sucesso',
+        data: req
+      }
     } catch (error) {
       throw error;
     }

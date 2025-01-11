@@ -14,6 +14,7 @@ import { UserPresenter } from './user.presenter';
 import { UserService } from './user.service';
 import { AuthGuard } from '../auth.guard';
 import { TermoUserDto } from './dto/termo-user.dto';
+import { CreateUserDto } from './dto/create_user.dto';
 
 @UseGuards(AuthGuard)
 @Controller('user')
@@ -85,5 +86,10 @@ export class UserController {
   @Put('/termo/:id')
   async updateTermo(@Param('id') id: number, @Body() data: TermoUserDto) {
     return await this.userService.updateTermo(+id, data);
+  }
+
+  @Post('/create')
+  async create(@Body() CreateUserDto: CreateUserDto) {
+    return await this.userService.create(CreateUserDto);
   }
 }
