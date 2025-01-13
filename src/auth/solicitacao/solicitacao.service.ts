@@ -871,4 +871,53 @@ export class SolicitacaoService {
       return error;
     }
   }
+
+  async app(data: any) {
+    try{
+      const solicitacao = await this.prismaService.nato_solicitacoes_certificado.findFirst({
+        where:{
+          cpf: data.cpf,
+        },
+        select:{
+          id: true,
+          email: true,
+          nome: true,
+          cpf: true,
+          Andamento: true
+        }
+      })
+
+      if(!solicitacao){
+        return {status: 404, message: 'Usuário não encontrado', data: null}
+      }
+
+      const email = solicitacao.email === data.email ? true : false;
+      
+      if(!email){
+        const update = await this.prismaService.nato_solicitacoes_certificado.update({
+          where:{
+            id: solicitacao.id
+          },
+          data: {
+            email: data.email
+          },
+          select: {
+            id: true,
+            email: true,
+            nome: true,
+            cpf: true,
+            Andamento: true
+          }
+        })
+        return {status: 202, message: 'Usuário encontrado e atualizado com sucesso', data: update}
+      }
+
+      return {status: 200, message: 'Usuário encontrado', data: solicitacao}
+      
+    }catch(error){
+      return error;
+    }finally{
+      this.prismaService.$disconnect;
+    }
+  }
 }
