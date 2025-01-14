@@ -467,6 +467,7 @@ export class SolicitacaoService {
             construtora: true,
             alertanow: true,
             statusAtendimento: true,
+            pause: true,
           },
           skip: Offset,
           take: Limite,
