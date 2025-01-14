@@ -104,6 +104,7 @@ export class ChamadoService {
         },
         }
       })
+      
     }catch (error) {
       console.log(error)
       throw error
