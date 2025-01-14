@@ -134,8 +134,8 @@ export class SolicitacaoController {
   }
 
   @Put('/atendimento/:id')
-  async Atendimento(@Param('id', new ParseIntPipe())id : number){
-      return await this.solicitacaoService.Atendimento(id)
+  async Atendimento(@Param('id', new ParseIntPipe())id : number, @Req() req: any) {
+      return await this.solicitacaoService.Atendimento(id, req.user)
   }
   // @Get('/filter/date')
   // async FilterDate(@Body() data: any) {
@@ -152,8 +152,8 @@ export class SolicitacaoController {
   }
 
   @Put('/pause/:id')
-  async pause(@Body() body: any, @Param('id', new ParseIntPipe()) id: number) {
-    return this.solicitacaoService.pause(body, id);
+  async pause(@Body() body: any, @Param('id', new ParseIntPipe()) id: number, @Req() req: any) {
+    return this.solicitacaoService.pause(body, id, req.user);
   }
 
 }

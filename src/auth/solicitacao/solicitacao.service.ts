@@ -815,7 +815,7 @@ export class SolicitacaoService {
     }
   }
 
-  async Atendimento(id: number) {
+  async Atendimento(id: number, user: any) {
     try{
       const status = await this.prismaService.nato_solicitacoes_certificado.findUnique({
         where: {
@@ -823,6 +823,7 @@ export class SolicitacaoService {
         },
         select: {
           statusAtendimento: true,
+          logDelete: true,
         },
       })
 
@@ -832,6 +833,7 @@ export class SolicitacaoService {
         },
         data: {
           statusAtendimento: !status.statusAtendimento,
+          logDelete: `${status.logDelete}\nO usuário: ${user?.nome}, id: ${user?.id} ${status.statusAtendimento ? 'cancelou o atendimento' : 'iniciou o atendimento'} a esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}`,
         },
       })
 
@@ -922,13 +924,27 @@ export class SolicitacaoService {
     }
   }
 
-  async pause(body: any, id: number) {
+  async pause(body: any, id: number, user: any) {
     try{
+      const logDelete = await this.prismaService.nato_solicitacoes_certificado.findFirst({
+        where: {
+          id: id,
+        },
+        select: {
+          logDelete: true,
+        }
+      })
+
       return await this.prismaService.nato_solicitacoes_certificado.update({
         where: {
           id: id,
         },
-        data: body,
+        data: {
+          ...body,
+          ...(body.pause ? { statusAtendimento: false } : { statusAtendimento: true }),
+          logDelete: `${logDelete.logDelete}\nO usuário: ${user?.nome}, id: ${user?.id} ${body.pause ? 'pausou' : 'retomou'} esse registro em: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}`,
+        },
+
       })
     }catch(error){
     return error;
