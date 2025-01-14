@@ -389,6 +389,7 @@ model nato_solicitacoes_certificado {
   alertanow         Boolean?  @default(false)
   dt_criacao_now    DateTime? @db.DateTime(0)
   statusAtendimento Boolean   @default(false)
+  pause             Boolean   @default(false)
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")
   @@index([construtora], map: "nato_solicitacoes_certificado_nato_empresas_FK")
