@@ -39,7 +39,7 @@ export class ChamadoController {
       return error;
     }
   }
-  @Get('/count')
+  @Get('/count/total')
   Count() {
     return this.chamadoService.count();
   }
