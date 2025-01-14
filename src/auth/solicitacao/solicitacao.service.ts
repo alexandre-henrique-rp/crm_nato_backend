@@ -920,4 +920,19 @@ export class SolicitacaoService {
       this.prismaService.$disconnect;
     }
   }
+
+  async pause(body: any, id: number) {
+    try{
+      return await this.prismaService.nato_solicitacoes_certificado.update({
+        where: {
+          id: id,
+        },
+        data: body,
+      })
+    }catch(error){
+    return error;
+  }finally{
+    this.prismaService.$disconnect;
+  }
+}
 }

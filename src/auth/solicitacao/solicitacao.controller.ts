@@ -150,4 +150,10 @@ export class SolicitacaoController {
   async PostTags(@Body() data: any, @Req() req: any) {
     return this.solicitacaoService.PostTags(data, req.user);
   }
+
+  @Put('/pause/:id')
+  async pause(@Body() body: any, @Param('id', new ParseIntPipe()) id: number) {
+    return this.solicitacaoService.pause(body, id);
+  }
+
 }
