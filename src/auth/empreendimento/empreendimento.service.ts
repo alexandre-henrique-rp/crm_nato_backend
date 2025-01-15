@@ -44,11 +44,13 @@ export class EmpreendimentoService {
 
   async GetOne(id: number) {
     try {
-      return await this.prismaService.nato_empreendimento.findUnique({
+      const req = await this.prismaService.nato_empreendimento.findUnique({
         where: {
           id: id
         },
       });
+      console.log(req)
+      return req
     } catch (error) {
       console.error(error.message);
       return error.message;
@@ -128,16 +130,19 @@ export class EmpreendimentoService {
   async Create(data: any) {
     try {
       const req = await this.prismaService.nato_empreendimento.create({
-        data: {
-          nome: data.nome,
-          construtora: data.construtora,
-          dt_inicio: new Date(data.dt_inicio).toISOString(),
-          // dt_fim: new Date(data.dt_fim).toISOString().split('T')[0],
-          uf: data.uf,
-          cidade: data.cidade,
-          vendedores: data.vendedores,
-          ativo: true,
-        },
+        data: data
+        // {
+        //   // nome: data.nome,
+        //   // construtora: data.construtora,
+        //   // financeiro: data.financeiro,
+        //   // dt_inicio: new Date(data.dt_inicio).toISOString(),
+        //   // // dt_fim: new Date(data.dt_fim).toISOString().split('T')[0],
+        //   // uf: data.uf,
+        //   // cidade: data.cidade,
+        //   // vendedores: data.vendedores,
+        //   // ativo: true,
+        //   // tag: 'NATO_'
+        // },
       });
       return req;
     } catch (error) {
