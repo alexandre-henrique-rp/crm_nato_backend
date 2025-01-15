@@ -17,6 +17,7 @@ export class EmpreendimentoPresenter {
       ativo: this.empreendimento.ativo,
       createdAt: this.empreendimento.createdAt,
       updatedAt: this.empreendimento.updatedAt,
+      financeiro: JSON.parse(this.empreendimento.financeiro),
     };
   }
 }
