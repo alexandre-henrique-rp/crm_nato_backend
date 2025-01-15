@@ -847,7 +847,8 @@ export class SolicitacaoService {
 
   async PostTags(data: any, user: any) {
     try {
-      const tags = JSON.parse(data.tags); 
+      const tags = data.tags
+      
       if(data){
         for (let i = 0; i < tags.length; i++) {
           const tag = tags[i];
@@ -855,7 +856,7 @@ export class SolicitacaoService {
             const verifique = await this.prismaService.nato_tags.findFirst({
               where: {
                 descricao: tag.label,
-                solicitacao: data.id,
+                solicitacao: data.solicitacao,
               }
             });
             const filtro = verifique ? false : true;
@@ -863,7 +864,7 @@ export class SolicitacaoService {
           await this.prismaService.nato_tags.create({
             data: {
               descricao: tag.label,
-              solicitacao: data.id,
+              solicitacao: data.solicitacao,
             }
           });
         }
@@ -872,6 +873,8 @@ export class SolicitacaoService {
     }
     } catch (error) {
       return error;
+    }finally{
+      this.prismaService.$disconnect;
     }
   }
 
