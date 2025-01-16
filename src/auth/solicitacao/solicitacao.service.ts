@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSolicitacaoDto } from './dto/create_solicitacao.dto';
 import { CheckCpfDto } from './dto/check_cpf.dto';
@@ -934,4 +934,27 @@ export class SolicitacaoService {
     this.prismaService.$disconnect;
   }
 }
+
+  async deletesolicitacao(id: number, password: string) {
+    console.log("🚀 ~ SolicitacaoService ~ deletesolicitacao ~ password:", password)
+    console.log("🚀 ~ SolicitacaoService ~ deletesolicitacao ~ id:", id)
+    try{
+      const pass: any = password
+
+      if(pass !== process.env.PASSWORD){
+        throw new UnauthorizedException('Senha inválida');
+      }
+
+      return await this.prismaService.nato_solicitacoes_certificado.delete({
+        where: {
+          id: id,
+        },
+      })
+
+    }catch(error){
+      return error;
+    }finally{
+      this.prismaService.$disconnect;
+    }
+  }
 }
