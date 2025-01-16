@@ -936,8 +936,6 @@ export class SolicitacaoService {
 }
 
   async deletesolicitacao(id: number, password: string) {
-    console.log("🚀 ~ SolicitacaoService ~ deletesolicitacao ~ password:", password)
-    console.log("🚀 ~ SolicitacaoService ~ deletesolicitacao ~ id:", id)
     try{
       const pass: any = password
 
