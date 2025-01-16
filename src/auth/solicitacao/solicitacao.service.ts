@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSolicitacaoDto } from './dto/create_solicitacao.dto';
+import { CheckCpfDto } from './dto/check_cpf.dto';
 
 @Injectable()
 export class SolicitacaoService {
@@ -878,7 +879,7 @@ export class SolicitacaoService {
     }
   }
 
-  async app(data: any) {
+  async app(data: CheckCpfDto) {
     try{
       const solicitacao = await this.prismaService.nato_solicitacoes_certificado.findFirst({
         where:{
@@ -896,28 +897,6 @@ export class SolicitacaoService {
       if(!solicitacao){
         return {status: 404, message: 'Usuário não encontrado', data: null}
       }
-
-      const email = solicitacao.email === data.email ? true : false;
-      
-      if(!email){
-        const update = await this.prismaService.nato_solicitacoes_certificado.update({
-          where:{
-            id: solicitacao.id
-          },
-          data: {
-            email: data.email
-          },
-          select: {
-            id: true,
-            email: true,
-            nome: true,
-            cpf: true,
-            Andamento: true
-          }
-        })
-        return {status: 202, message: 'Usuário encontrado e atualizado com sucesso', data: update}
-      }
-
       return {status: 200, message: 'Usuário encontrado', data: solicitacao}
       
     }catch(error){

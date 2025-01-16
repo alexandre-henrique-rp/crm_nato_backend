@@ -7,11 +7,17 @@ export class GetInfosService {
 
   async CheckCpf(cpf: string) {
     try{
-      return await this.prismaService.nato_solicitacoes_certificado.findFirst({
+      const req = await this.prismaService.nato_solicitacoes_certificado.findFirst({
         where:{
           cpf: cpf
         }
       })
+
+      if(req){
+        return {error: true, message: 'CPF já cadastrado', data: null}
+      }
+
+      return {error: false, message: 'OK', data: null}
     }catch (error) {
       return error
     }finally{
