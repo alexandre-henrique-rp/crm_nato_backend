@@ -21,6 +21,7 @@ import { ChecktelModule } from './checktel/checktel.module';
 import { ConstrutorasModule } from './construtoras/construtoras.module';
 import { GetInfosModule } from './get-infos/get-infos.module';
 import { SuporteModule } from './suporte/suporte.module';
+import { DiretoModule } from './direto/direto.module';
 
 
 @Module({
@@ -45,7 +46,8 @@ import { SuporteModule } from './suporte/suporte.module';
     ChecktelModule,
     ConstrutorasModule,
     GetInfosModule,
-    SuporteModule
+    SuporteModule,
+    DiretoModule
   ],
   controllers: [UserController, AuthController, UserController2],
   providers: [UserService, AuthService],
