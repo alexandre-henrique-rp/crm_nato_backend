@@ -205,71 +205,72 @@ model erp_log {
 }
 
 model fcweb {
-  id                  Int          @id @default(autoincrement())
-  s_alerta            String?      @db.VarChar(150)
-  referencia          String?      @db.VarChar(150)
-  id_boleto           String?      @db.VarChar(150)
-  id_cancelar_bol_rem String?      @db.VarChar(150)
-  unidade             String?      @db.VarChar(150)
-  responsavel         String?      @db.VarChar(150)
-  criou_fc            String       @db.VarChar(150)
-  andamento           String?      @db.VarChar(150)
-  prioridade          String?      @db.VarChar(150)
-  solicitacao         String?      @db.VarChar(150)
-  venda               String?      @db.VarChar(150)
-  cpf                 String?      @db.VarChar(150)
-  cnpj                String?      @db.VarChar(150)
-  nome                String?      @db.VarChar(150)
-  razaosocial         String?      @db.VarChar(150)
-  vectoboleto         DateTime?    @db.Date
-  unico               String?      @db.VarChar(150)
-  contador            String?      @db.VarChar(150)
-  obscont             String?      @db.VarChar(150)
-  comissaoparceiro    Float?       @db.Float
-  scp                 String?      @db.VarChar(10)
-  tipocd              String?      @db.VarChar(150)
-  valorcd             String?      @db.VarChar(150)
-  custocd             String?      @db.VarChar(150)
-  custoCdpar          String?      @db.VarChar(150)
-  estatos_pgto        String?      @db.VarChar(150)
-  pgto_efi            String?      @db.VarChar(100)
-  formapgto           String?      @db.VarChar(150)
-  vouchersoluti       String?      @db.VarChar(150)
-  ct_parcela          String?      @db.VarChar(150)
-  telefone            String?      @db.VarChar(150)
-  telefone2           String?      @db.VarChar(150)
-  email               String?      @db.VarChar(150)
-  dtnascimento        String?      @db.VarChar(150)
-  rg                  String?      @db.VarChar(150)
-  cei                 String?      @db.VarChar(150)
-  endereco            String?      @db.VarChar(150)
-  nrua                String?      @db.VarChar(150)
-  bairro              String?      @db.VarChar(150)
-  complemento         String?      @db.VarChar(150)
-  cep                 String?      @db.VarChar(150)
-  uf                  String?      @db.VarChar(150)
-  im                  Int?
-  cidade              String?      @db.VarChar(150)
-  observacao          String?      @db.LongText
-  vctoCD              DateTime?    @db.Date
-  historico           String?      @db.LongText
-  arquivo             String?      @db.VarChar(100)
-  nomearquivo         String?      @db.VarChar(100)
-  obsrenovacao        String?      @db.VarChar(150)
-  dt_aprovacao        DateTime?    @db.Date
-  hr_aprovacao        DateTime?    @db.Time(0)
-  comicao             Float?       @db.Float
-  validacao           String?      @db.VarChar(150)
-  nfe                 String?      @db.VarChar(150)
-  urlnota             String?      @db.Text
-  id_fcw_soluti       String?      @db.VarChar(11)
-  dt_agenda           DateTime?    @db.Date
-  hr_agenda           DateTime?    @db.Time(0)
-  obs_agenda          String?      @db.VarChar(150)
-  reg_cnh             String?      @db.VarChar(150)
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime?
-  price_cert          price_cert[]
+  id                       Int                        @id @default(autoincrement())
+  s_alerta                 String?                    @db.VarChar(150)
+  referencia               String?                    @db.VarChar(150)
+  id_boleto                String?                    @db.VarChar(150)
+  id_cancelar_bol_rem      String?                    @db.VarChar(150)
+  unidade                  String?                    @db.VarChar(150)
+  responsavel              String?                    @db.VarChar(150)
+  criou_fc                 String                     @db.VarChar(150)
+  andamento                String?                    @db.VarChar(150)
+  prioridade               String?                    @db.VarChar(150)
+  solicitacao              String?                    @db.VarChar(150)
+  venda                    String?                    @db.VarChar(150)
+  cpf                      String?                    @db.VarChar(150)
+  cnpj                     String?                    @db.VarChar(150)
+  nome                     String?                    @db.VarChar(150)
+  razaosocial              String?                    @db.VarChar(150)
+  vectoboleto              DateTime?                  @db.Date
+  unico                    String?                    @db.VarChar(150)
+  contador                 String?                    @db.VarChar(150)
+  obscont                  String?                    @db.VarChar(150)
+  comissaoparceiro         Float?                     @db.Float
+  scp                      String?                    @db.VarChar(10)
+  tipocd                   String?                    @db.VarChar(150)
+  valorcd                  String?                    @db.VarChar(150)
+  custocd                  String?                    @db.VarChar(150)
+  custoCdpar               String?                    @db.VarChar(150)
+  estatos_pgto             String?                    @db.VarChar(150)
+  pgto_efi                 String?                    @db.VarChar(100)
+  formapgto                String?                    @db.VarChar(150)
+  vouchersoluti            String?                    @db.VarChar(150)
+  ct_parcela               String?                    @db.VarChar(150)
+  telefone                 String?                    @db.VarChar(150)
+  telefone2                String?                    @db.VarChar(150)
+  email                    String?                    @db.VarChar(150)
+  dtnascimento             String?                    @db.VarChar(150)
+  rg                       String?                    @db.VarChar(150)
+  cei                      String?                    @db.VarChar(150)
+  endereco                 String?                    @db.VarChar(150)
+  nrua                     String?                    @db.VarChar(150)
+  bairro                   String?                    @db.VarChar(150)
+  complemento              String?                    @db.VarChar(150)
+  cep                      String?                    @db.VarChar(150)
+  uf                       String?                    @db.VarChar(150)
+  im                       Int?
+  cidade                   String?                    @db.VarChar(150)
+  observacao               String?                    @db.LongText
+  vctoCD                   DateTime?                  @db.Date
+  historico                String?                    @db.LongText
+  arquivo                  String?                    @db.VarChar(100)
+  nomearquivo              String?                    @db.VarChar(100)
+  obsrenovacao             String?                    @db.VarChar(150)
+  dt_aprovacao             DateTime?                  @db.Date
+  hr_aprovacao             DateTime?                  @db.Time(0)
+  comicao                  Float?                     @db.Float
+  validacao                String?                    @db.VarChar(150)
+  nfe                      String?                    @db.VarChar(150)
+  urlnota                  String?                    @db.Text
+  id_fcw_soluti            String?                    @db.VarChar(11)
+  dt_agenda                DateTime?                  @db.Date
+  hr_agenda                DateTime?                  @db.Time(0)
+  obs_agenda               String?                    @db.VarChar(150)
+  reg_cnh                  String?                    @db.VarChar(150)
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime?
+  nato_direto_solicitacoes nato_direto_solicitacoes[]
+  price_cert               price_cert[]
 
   @@index([id], map: "id")
 }
@@ -319,23 +320,24 @@ model metadata {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model nato_empresas {
-  id                  Int                   @unique(map: "nato_empresas_unique") @default(autoincrement())
-  cnpj                String                @db.VarChar(100)
-  razaosocial         String                @db.VarChar(100)
-  tel                 String?               @db.LongText
-  email               String?               @db.VarChar(100)
-  colaboradores       String?               @db.LongText
-  responsavel         String?               @db.VarChar(100)
-  tipo                String?               @db.VarChar(100)
-  createdAt           DateTime              @default(now()) @db.DateTime(0)
-  updatedAt           DateTime?             @db.DateTime(0)
-  obs                 String?               @db.Text
-  financeiro          String?               @db.LongText
-  atividade           String?               @db.VarChar(100)
-  fantasia            String?               @db.VarChar(100)
-  status              Boolean               @default(true)
-  valor_cert          Float?                @db.Float
-  nato_empreendimento nato_empreendimento[]
+  id                       Int                        @unique(map: "nato_empresas_unique") @default(autoincrement())
+  cnpj                     String                     @db.VarChar(100)
+  razaosocial              String                     @db.VarChar(100)
+  tel                      String?                    @db.LongText
+  email                    String?                    @db.VarChar(100)
+  colaboradores            String?                    @db.LongText
+  responsavel              String?                    @db.VarChar(100)
+  tipo                     String?                    @db.VarChar(100)
+  createdAt                DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt                DateTime?                  @db.DateTime(0)
+  obs                      String?                    @db.Text
+  financeiro               String?                    @db.LongText
+  atividade                String?                    @db.VarChar(100)
+  fantasia                 String?                    @db.VarChar(100)
+  status                   Boolean                    @default(true)
+  valor_cert               Float?                     @db.Float
+  nato_direto_solicitacoes nato_direto_solicitacoes[]
+  nato_empreendimento      nato_empreendimento[]
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -389,7 +391,7 @@ model nato_solicitacoes_certificado {
   alertanow         Boolean?  @default(false)
   dt_criacao_now    DateTime? @db.DateTime(0)
   statusAtendimento Boolean   @default(false)
-  pause             Boolean   @default(false)
+  pause             Boolean?  @default(false)
 
   @@index([id_fcw], map: "nato_solicitacoes_certificado_fcweb_FK")
   @@index([construtora], map: "nato_solicitacoes_certificado_nato_empresas_FK")
@@ -397,26 +399,28 @@ model nato_solicitacoes_certificado {
 }
 
 model nato_user {
-  id             Int           @id @default(autoincrement())
-  username       String        @unique(map: "nato_user_unique") @db.VarChar(100)
-  password       String        @db.VarChar(100)
-  password_key   String        @db.VarChar(100)
-  telefone       String?       @db.VarChar(100)
-  email          String?       @unique(map: "nato_user_unique_1") @db.VarChar(100)
-  cpf            String?       @db.VarChar(100)
-  nome           String?       @db.VarChar(100)
-  empreendimento String?       @db.LongText
-  construtora    String?       @db.LongText
-  cargo          String?       @db.VarChar(100)
-  hierarquia     String?       @db.LongText
-  createdAt      DateTime      @default(now()) @db.DateTime(0)
-  updatedAt      DateTime?     @db.DateTime(0)
-  reset_password Boolean?      @default(true)
-  status         Boolean?      @default(false)
-  Financeira     String?       @db.LongText
-  sms_relat      Boolean?      @default(false)
-  termos         Boolean?      @default(false)
-  nato_alerta    nato_alerta[]
+  id                       Int                        @id @default(autoincrement())
+  username                 String                     @unique(map: "nato_user_unique") @db.VarChar(100)
+  password                 String                     @db.VarChar(100)
+  password_key             String                     @db.VarChar(100)
+  telefone                 String?                    @db.VarChar(100)
+  email                    String?                    @unique(map: "nato_user_unique_1") @db.VarChar(100)
+  cpf                      String?                    @db.VarChar(100)
+  nome                     String?                    @db.VarChar(100)
+  empreendimento           String?                    @db.LongText
+  construtora              String?                    @db.LongText
+  cargo                    String?                    @db.VarChar(100)
+  hierarquia               String?                    @db.LongText
+  createdAt                DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt                DateTime?                  @db.DateTime(0)
+  reset_password           Boolean?                   @default(true)
+  status                   Boolean?                   @default(false)
+  Financeira               String?                    @db.LongText
+  sms_relat                Boolean?                   @default(false)
+  termos                   Boolean?                   @default(false)
+  nato_direto              Boolean?                   @default(false)
+  nato_alerta              nato_alerta[]
+  nato_direto_solicitacoes nato_direto_solicitacoes[]
 }
 
 model notanfe {
@@ -640,6 +644,7 @@ model usuariosfcw {
   A3PF_12             String?   @map("A3PF-12") @db.VarChar(150)
   A3PF_24             String?   @map("A3PF-24") @db.VarChar(150)
   A3PF                String?   @db.VarChar(150)
+  A3PF_Bird5000       String    @map("A3PF Bird5000") @db.VarChar(10)
   A3PF_HSM_1ano       String?   @map("A3PF-HSM-1ano") @db.VarChar(150)
   A1PJ                String?   @db.VarChar(150)
   A3PJ_12             String?   @map("A3PJ-12") @db.VarChar(150)
@@ -674,11 +679,13 @@ model visitas {
 }
 
 model voucher {
-  id         Int    @id @default(autoincrement())
-  voucher    String @db.VarChar(150)
-  estatos    String @db.VarChar(150)
-  dt_resgate Int
-  id_fcw     String @db.VarChar(150)
+  id           Int      @id @default(autoincrement())
+  tipo         String   @db.Text
+  voucher      String   @db.VarChar(150)
+  estatos      String   @db.VarChar(150)
+  dt_resgate   DateTime @db.DateTime(0)
+  id_fcw       String   @db.VarChar(150)
+  dt_aprovacao DateTime @db.Date
 }
 
 model nato_alerta {
@@ -693,31 +700,32 @@ model nato_alerta {
   createdAt           DateTime            @default(now()) @db.DateTime(0)
   updatedAt           DateTime?           @db.DateTime(0)
   status              Boolean?            @default(true)
-  nato_empreendimento nato_empreendimento @relation(fields: [empreendimento], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "nato_alerta_nato_empreendimento_FK")
-  nato_user           nato_user?          @relation(fields: [corretor], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "nato_alerta_nato_user_FK")
+  nato_empreendimento nato_empreendimento @relation(fields: [empreendimento], references: [id], onUpdate: Restrict, map: "nato_alerta_nato_empreendimento_FK")
+  nato_user           nato_user?          @relation(fields: [corretor], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_alerta_nato_user_FK")
 
   @@index([empreendimento], map: "nato_alerta_nato_empreendimento_FK")
   @@index([corretor], map: "nato_alerta_nato_user_FK")
 }
 
 model nato_empreendimento {
-  id            Int            @id @default(autoincrement())
-  nome          String?        @db.VarChar(100)
-  construtora   Int?
-  dt_inicio     DateTime?      @db.Date
-  dt_fim        DateTime?      @db.Date
-  uf            String?        @db.VarChar(100)
-  cidade        String?        @db.VarChar(100)
-  chave         String?        @db.LongText
-  createdAt     DateTime       @default(now()) @db.DateTime(0)
-  updatedAt     DateTime?      @db.DateTime(0)
-  vendedores    String?        @db.LongText
-  ativo         Boolean?       @default(true)
-  obs           String?        @db.Text
-  financeiro    String?        @db.LongText
-  tag           String?        @db.VarChar(100)
-  nato_alerta   nato_alerta[]
-  nato_empresas nato_empresas? @relation(fields: [construtora], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "nato_empreendimento_nato_empresas_FK")
+  id                       Int                        @id @default(autoincrement())
+  nome                     String?                    @db.VarChar(100)
+  construtora              Int?
+  dt_inicio                DateTime?                  @db.Date
+  dt_fim                   DateTime?                  @db.Date
+  uf                       String?                    @db.VarChar(100)
+  cidade                   String?                    @db.VarChar(100)
+  chave                    String?                    @db.LongText
+  createdAt                DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt                DateTime?                  @db.DateTime(0)
+  vendedores               String?                    @db.LongText
+  ativo                    Boolean?                   @default(true)
+  obs                      String?                    @db.Text
+  financeiro               String?                    @db.LongText
+  tag                      String?                    @db.VarChar(100)
+  nato_alerta              nato_alerta[]
+  nato_direto_solicitacoes nato_direto_solicitacoes[]
+  nato_empresas            nato_empresas?             @relation(fields: [construtora], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "nato_empreendimento_nato_empresas_FK")
 
   @@index([construtora], map: "nato_empreendimento_nato_empresas_FK")
 }
@@ -741,18 +749,21 @@ model client_ssl {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model nato_financeiro {
-  id            Int       @unique(map: "nato_empresas_unique") @default(autoincrement())
-  cnpj          String    @unique(map: "nato_empresas_unique_1") @db.VarChar(100)
-  razaosocial   String    @db.VarChar(100)
-  tel           String?   @db.VarChar(100)
-  email         String?   @db.VarChar(100)
-  colaboradores String?   @db.LongText
-  responsavel   String?   @db.VarChar(100)
-  tipo          String?   @db.VarChar(100)
-  createdAt     DateTime  @default(now()) @db.DateTime(0)
-  updatedAt     DateTime? @db.DateTime(0)
-  obs           String?   @db.Text
-  fantasia      String?   @db.VarChar(100)
+  id                       Int                        @unique(map: "nato_empresas_unique") @default(autoincrement())
+  cnpj                     String                     @unique(map: "nato_empresas_unique_1") @db.VarChar(100)
+  razaosocial              String                     @db.VarChar(100)
+  tel                      String?                    @db.VarChar(100)
+  email                    String?                    @db.VarChar(100)
+  colaboradores            String?                    @db.LongText
+  responsavel              String?                    @db.VarChar(100)
+  tipo                     String?                    @db.VarChar(100)
+  createdAt                DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt                DateTime?                  @db.DateTime(0)
+  obs                      String?                    @db.Text
+  fantasia                 String?                    @db.VarChar(100)
+  nato_direto_solicitacoes nato_direto_solicitacoes[]
+
+  @@index([id], map: "id")
 }
 
 model nato_bug_alert {
@@ -816,20 +827,83 @@ model nato_chamados {
 }
 
 model suporte {
-  id             Int            @id @default(autoincrement())
-  status         String         @db.Text
-  id_fcw         String         @db.VarChar(50)
-  nome           String         @db.VarChar(100)
-  telefone       String         @db.VarChar(20)
-  email          String         @db.VarChar(100)
-  origem         suporte_origem
-  descricao      String         @db.Text
-  data_submissao DateTime       @default(now()) @db.Timestamp(0)
+  id             Int      @id @default(autoincrement())
+  status         String   @db.Text
+  usuario        String   @db.VarChar(50)
+  id_fcw         String   @db.VarChar(50)
+  nome           String   @db.VarChar(100)
+  telefone       String   @db.VarChar(20)
+  email          String   @db.VarChar(100)
+  origem         String   @db.Text
+  descricao      String   @db.LongText
+  data_submissao DateTime @default(now()) @db.Timestamp(0)
+  tempo          DateTime @db.Time(0)
 }
 
-enum suporte_origem {
-  Interface
-  SisNATO
-  Parceiro
-  Outro
+model nato_direto_solicitacoes {
+  id                  Int                  @id @default(autoincrement())
+  nome                String               @db.VarChar(100)
+  cpf                 String               @unique(map: "nato_direto_clientes_cpf_key") @db.VarChar(100)
+  email               String               @db.VarChar(100)
+  dt_solicitacao      DateTime             @db.Date
+  corretor            Int?
+  construtora         Int?
+  telefone            String?              @db.VarChar(100)
+  dt_nascimento       DateTime?            @db.Date
+  ass_doc             String?              @db.Text
+  link_doc            String?              @db.Text
+  id_fcw              Int?
+  obs                 String?              @db.LongText
+  alert               String?              @db.VarChar(100)
+  empreedimento       Int?
+  cnh                 String?              @db.VarChar(100)
+  ativo               Boolean              @default(true)
+  uploadCnh           String?              @db.LongText
+  relacionamento      String?              @db.LongText
+  createdAt           DateTime             @default(now()) @db.DateTime(0)
+  updatedAt           DateTime?            @db.DateTime(0)
+  telefone2           String?              @db.VarChar(100)
+  uploadRg            String?              @db.LongText
+  rela_quest          Boolean?             @default(false)
+  voucher             String?              @db.VarChar(100)
+  link_planilha       String?              @db.Text
+  financeiro          Int?
+  distrato            Boolean?             @default(false)
+  logDelete           String?              @db.LongText
+  distrato_dt         DateTime?            @db.DateTime(0)
+  status_aprovacao    Boolean?             @default(false)
+  distrato_id         Int?
+  Andamento           String?              @db.VarChar(100)
+  dt_aprovacao        DateTime?            @db.Date
+  type_validacao      String?              @db.VarChar(100)
+  dt_agendamento      DateTime?            @db.Date
+  hr_agendamento      DateTime?            @db.Time(0)
+  mult_link           String?              @db.LongText
+  mult_ass_doc        String?              @db.LongText
+  hr_aprovacao        DateTime?            @db.Time(0)
+  status_pgto         String?              @db.VarChar(100)
+  valorcd             Float?               @db.Float
+  situacao_pg         Int?                 @default(0) @db.TinyInt
+  freqSms             Int?                 @default(0)
+  docSuspenso         String?              @db.VarChar(100)
+  alertanow           Boolean?             @default(false)
+  dt_criacao_now      DateTime?            @db.DateTime(0)
+  statusAtendimento   Boolean              @default(false)
+  pause               Boolean?             @default(false)
+  imagemQrcode        String?              @db.Text
+  pixCopiaECola       String?              @db.Text
+  qrcode              String?              @db.Text
+  txid                String?              @db.VarChar(100)
+  valor               Float?               @db.Float
+  nato_empresas       nato_empresas?       @relation(fields: [construtora], references: [id], map: "nato_direto_clientes_construtora_fkey")
+  nato_user           nato_user?           @relation(fields: [corretor], references: [id], map: "nato_direto_clientes_corretor_fkey")
+  nato_empreendimento nato_empreendimento? @relation(fields: [empreedimento], references: [id], map: "nato_direto_clientes_empreedimento_fkey")
+  nato_financeiro     nato_financeiro?     @relation(fields: [financeiro], references: [id], map: "nato_direto_clientes_financeiro_fkey")
+  fcweb               fcweb?               @relation(fields: [id_fcw], references: [id], map: "nato_direto_clientes_id_fcw_fkey")
+
+  @@index([construtora], map: "idx_construtora")
+  @@index([corretor], map: "idx_corretor")
+  @@index([empreedimento], map: "idx_empreedimento")
+  @@index([id_fcw], map: "idx_id_fcw")
+  @@index([financeiro], map: "nato_direto_clientes_financeiro_fkey")
 }
